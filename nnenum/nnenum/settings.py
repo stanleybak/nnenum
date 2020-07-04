@@ -74,7 +74,7 @@ class Settings(metaclass=FreezableMeta):
 
         cls.SAVE_BRANCH_TUPLES_FILENAME = None
         cls.SAVE_BRANCH_TUPLES_TIMES = True # when saving branch tuples, also include runtimes
-        cls.BRANCH_MODE = cls.BRANCH_EGO
+        cls.BRANCH_MODE = cls.BRANCH_OVERAPPROX
         cls.PRINT_BRANCH_TUPLES = False
 
         cls.TRY_QUICK_OVERAPPROX = True
