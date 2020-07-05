@@ -1,0 +1,717 @@
+Loading images...
+
+========
+Checking robustness of image 1 for output class 7, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 433.6ms, 0.03574 from blended and 0.06824 from orig with attack class: LinfinityBasicIterativeAttack
+(17.6 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 375.0ms, 0.03637 from blended and 0.06887 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 285.1ms, 0.03771 from blended and 0.07021 from orig with attack class: LinfinityBasicIterativeAttack
+(33.1 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 364.4ms, 0.03527 from blended and 0.06777 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 378.7ms, 0.03745 from blended and 0.06995 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 349.3ms, 0.03645 from blended and 0.06895 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 350.5ms, 0.0374 from blended and 0.0699 from orig with attack class: LinfinityBasicIterativeAttack
+(51.8 sec) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 796.1ms, 0.03469 from blended and 0.06719 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 726.1ms, 0.03695 from blended and 0.06945 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 548.5ms, 0.03469 from blended and 0.06719 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 651.7ms, 0.03513 from blended and 0.06763 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 480.0ms, 0.03557 from blended and 0.06807 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 415.7ms, 0.03589 from blended and 0.06839 from orig with attack class: LinfinityBasicIterativeAttack
+(13.83 min) Q: 1, Sets: 0/14  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 650.1ms, 0.03564 from blended and 0.06814 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 537.5ms, 0.0338 from blended and 0.0663 from orig with attack class: LinfinityBasicIterativeAttack
+(15.0 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 1: timeout in 901.1103 sec
+
+========
+Checking robustness of image 2 for output class 2, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 411.6ms, 0.07953 from blended and 0.11203 from orig with attack class: LinfinityBasicIterativeAttack
+(12.1 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 326.8ms, 0.08044 from blended and 0.11294 from orig with attack class: LinfinityBasicIterativeAttack
+(22.9 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 382.1ms, 0.08158 from blended and 0.11408 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 304.4ms, 0.0805 from blended and 0.113 from orig with attack class: LinfinityBasicIterativeAttack
+(36.7 sec) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 300.7ms, 0.07935 from blended and 0.11185 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 382.5ms, 0.08256 from blended and 0.11506 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 441.7ms, 0.07981 from blended and 0.11231 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 820.5ms, 0.08528 from blended and 0.11778 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 585.0ms, 0.08157 from blended and 0.11407 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 462.0ms, 0.08011 from blended and 0.11261 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 391.2ms, 0.08431 from blended and 0.11681 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 456.7ms, 0.08504 from blended and 0.11754 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 579.3ms, 0.08221 from blended and 0.11471 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 587.6ms, 0.08003 from blended and 0.11253 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 496.7ms, 0.08244 from blended and 0.11494 from orig with attack class: LinfinityBasicIterativeAttack
+(3.41 min) Q: 1, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 587.5ms, 0.08138 from blended and 0.11388 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 754.0ms, 0.08035 from blended and 0.11285 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 614.2ms, 0.07976 from blended and 0.11226 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 749.3ms, 0.0816 from blended and 0.1141 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 690.8ms, 0.08487 from blended and 0.11737 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 776.1ms, 0.08503 from blended and 0.11753 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 690.4ms, 0.08219 from blended and 0.11469 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 552.5ms, 0.08286 from blended and 0.11536 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 535.1ms, 0.08449 from blended and 0.11699 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 688.2ms, 0.0819 from blended and 0.1144 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 752.8ms, 0.08064 from blended and 0.11314 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 695.3ms, 0.08157 from blended and 0.11407 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 466.5ms, 0.08008 from blended and 0.11258 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 723.4ms, 0.08435 from blended and 0.11685 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 408.5ms, 0.08494 from blended and 0.11744 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 604.3ms, 0.08266 from blended and 0.11516 from orig with attack class: LinfinityBasicIterativeAttack
+(8.18 min) Q: 1, Sets: 0/32  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 719.5ms, 0.08198 from blended and 0.11448 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 619.1ms, 0.0795 from blended and 0.112 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 770.3ms, 0.08492 from blended and 0.11742 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 858.0ms, 0.07925 from blended and 0.11175 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 813.9ms, 0.08054 from blended and 0.11304 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 754.7ms, 0.08111 from blended and 0.11361 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 816.1ms, 0.08122 from blended and 0.11372 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 414.5ms, 0.08435 from blended and 0.11685 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 801.3ms, 0.08438 from blended and 0.11688 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 914.3ms, 0.07919 from blended and 0.11169 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 689.4ms, 0.08451 from blended and 0.11701 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 832.9ms, 0.08439 from blended and 0.11689 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 849.3ms, 0.07911 from blended and 0.11161 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 696.2ms, 0.08497 from blended and 0.11747 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 815.5ms, 0.08133 from blended and 0.11383 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 772.0ms, 0.08216 from blended and 0.11466 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 858.9ms, 0.08173 from blended and 0.11423 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 922.4ms, 0.08023 from blended and 0.11273 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 685.1ms, 0.08544 from blended and 0.11794 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 721.8ms, 0.07938 from blended and 0.11188 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 739.1ms, 0.08319 from blended and 0.11569 from orig with attack class: LinfinityBasicIterativeAttack
+(15.02 min) Q: 0, Sets: 0/53  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 39
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 2: timeout in 901.9862 sec
+
+========
+Checking robustness of image 3 for output class 1, with ep=0.05
+try_quick_adversarial found violation image on iteration 0 with ep=0.04999899864196777
+try_quick_adversarial found unsafe image
+Original label: 1, output argmax: 7
+counterexample was confirmed: True. Gen: 301.6ms, Exec: 0.8ms
+Initial quick adversarial search found unsafe image.
+result 3: unsafe in 0.3217 sec
+
+========
+Checking robustness of image 4 for output class 0, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 361.3ms, 0.05732 from blended and 0.08982 from orig with attack class: LinfinityBasicIterativeAttack
+(15.1 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 369.5ms, 0.06198 from blended and 0.09448 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 293.6ms, 0.05795 from blended and 0.09045 from orig with attack class: LinfinityBasicIterativeAttack
+(29.8 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 279.8ms, 0.05896 from blended and 0.09146 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 369.9ms, 0.0575 from blended and 0.09 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 325.4ms, 0.06037 from blended and 0.09287 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 479.8ms, 0.06337 from blended and 0.09587 from orig with attack class: LinfinityBasicIterativeAttack
+(43.8 sec) Q: 1, Sets: 0/7  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 329.1ms, 0.05923 from blended and 0.09173 from orig with attack class: LinfinityBasicIterativeAttack
+(10.05 min) Q: 1, Sets: 0/9  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 429.1ms, 0.05992 from blended and 0.09242 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 398.9ms, 0.05889 from blended and 0.09139 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 389.5ms, 0.05597 from blended and 0.08847 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 319.5ms, 0.05676 from blended and 0.08926 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 405.1ms, 0.06001 from blended and 0.09251 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 547.6ms, 0.05669 from blended and 0.08919 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 507.4ms, 0.05685 from blended and 0.08935 from orig with attack class: LinfinityBasicIterativeAttack
+(15.11 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 4: timeout in 906.965 sec
+
+========
+Checking robustness of image 5 for output class 4, with ep=0.05
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 397.7ms, 0.03549 from blended and 0.06799 from orig with attack class: LinfinityBasicIterativeAttack
+(14.5 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 362.0ms, 0.03111 from blended and 0.06361 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 284.8ms, 0.03323 from blended and 0.06573 from orig with attack class: LinfinityBasicIterativeAttack
+(30.0 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 255.8ms, 0.03214 from blended and 0.06464 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 255.6ms, 0.03385 from blended and 0.06635 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 449.9ms, 0.03368 from blended and 0.06618 from orig with attack class: LinfinityBasicIterativeAttack
+(43.5 sec) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 373.7ms, 0.03152 from blended and 0.06402 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 617.8ms, 0.03267 from blended and 0.06517 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 391.4ms, 0.03631 from blended and 0.06881 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 401.7ms, 0.03301 from blended and 0.06551 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 289.7ms, 0.03595 from blended and 0.06845 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 436.3ms, 0.03204 from blended and 0.06454 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 359.1ms, 0.03541 from blended and 0.06791 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 425.1ms, 0.03281 from blended and 0.06531 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 416.3ms, 0.03331 from blended and 0.06581 from orig with attack class: LinfinityBasicIterativeAttack
+(12.9 min) Q: 1, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   (15.01 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 5: timeout in 901.8087 sec
+
+========
+Checking robustness of image 6 for output class 1, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 363.2ms, 0.03456 from blended and 0.06706 from orig with attack class: LinfinityBasicIterativeAttack
+(20.4 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 370.0ms, 0.0344 from blended and 0.0669 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 290.8ms, 0.03452 from blended and 0.06702 from orig with attack class: LinfinityBasicIterativeAttack
+(38.0 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 285.9ms, 0.03458 from blended and 0.06708 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 295.4ms, 0.03438 from blended and 0.06688 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 376.4ms, 0.03395 from blended and 0.06645 from orig with attack class: LinfinityBasicIterativeAttack
+(55.2 sec) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 524.5ms, 0.0345 from blended and 0.067 from orig with attack class: LinfinityBasicIterativeAttack
+(15.01 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 6: timeout in 903.1271 sec
+
+========
+Checking robustness of image 7 for output class 4, with ep=0.05
+try_quick_adversarial found violation image on iteration 0 with ep=0.04999899864196777
+try_quick_adversarial found unsafe image
+Original label: 4, output argmax: 8
+counterexample was confirmed: True. Gen: 298.8ms, Exec: 0.9ms
+Initial quick adversarial search found unsafe image.
+result 7: unsafe in 0.321 sec
+
+========
+Checking robustness of image 8 for output class 9, with ep=0.05
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 385.8ms, 0.02481 from blended and 0.05731 from orig with attack class: LinfinityBasicIterativeAttack
+(17.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 363.3ms, 0.02467 from blended and 0.05717 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 274.3ms, 0.02401 from blended and 0.05651 from orig with attack class: LinfinityBasicIterativeAttack
+(32.9 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 279.1ms, 0.02232 from blended and 0.05482 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 285.6ms, 0.02328 from blended and 0.05578 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 388.5ms, 0.02483 from blended and 0.05733 from orig with attack class: LinfinityBasicIterativeAttack
+(47.8 sec) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 379.4ms, 0.02553 from blended and 0.05803 from orig with attack class: LinfinityBasicIterativeAttack
+(15.04 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 8: timeout in 903.3889 sec
+
+========
+Checking robustness of image 9 for output class 5, with ep=0.05
+try_quick_adversarial found violation image on iteration 0 with ep=0.04999899864196777
+try_quick_adversarial found unsafe image
+Original label: 5, output argmax: 6
+counterexample was confirmed: True. Gen: 290.4ms, Exec: 0.9ms
+Initial quick adversarial search found unsafe image.
+result 9: unsafe in 0.3124 sec
+
+========
+Checking robustness of image 10 for output class 9, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: 
+(14.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: 
+SEED-FAILED: 
+(27.2 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: 
+(40.6 sec) Q: 1, Sets: 0/7  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: (0.65) 758.4ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: 
+SEED-FAILED: (0.65) 854.7ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: (0.65) 641.7ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+(6.3 min) Q: 1, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: 
+(15.02 min) Q: 0, Sets: 0/20  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: 
+
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 19
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 10: timeout in 903.2604 sec
+
+========
+Checking robustness of image 11 for output class 0, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 388.8ms, 0.06384 from blended and 0.09634 from orig with attack class: LinfinityBasicIterativeAttack
+(16.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 328.5ms, 0.06368 from blended and 0.09618 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 397.3ms, 0.06358 from blended and 0.09608 from orig with attack class: LinfinityBasicIterativeAttack
+(30.1 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 300.1ms, 0.06482 from blended and 0.09732 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 307.2ms, 0.06459 from blended and 0.09709 from orig with attack class: LinfinityBasicIterativeAttack
+(45.1 sec) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 395.0ms, 0.06083 from blended and 0.09333 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 413.5ms, 0.06092 from blended and 0.09342 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 816.6ms, 0.06021 from blended and 0.09271 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 549.5ms, 0.06112 from blended and 0.09362 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 577.5ms, 0.05973 from blended and 0.09223 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 308.6ms, 0.06283 from blended and 0.09533 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 490.1ms, 0.05996 from blended and 0.09246 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 412.0ms, 0.06042 from blended and 0.09292 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 467.3ms, 0.06401 from blended and 0.09651 from orig with attack class: LinfinityBasicIterativeAttack
+(8.26 min) Q: 1, Sets: 0/15  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 659.4ms, 0.06043 from blended and 0.09293 from orig with attack class: LinfinityBasicIterativeAttack
+(15.02 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 11: timeout in 902.6004 sec
+
+========
+Checking robustness of image 12 for output class 6, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 296.6ms, 0.07734 from blended and 0.10984 from orig with attack class: LinfinityBasicIterativeAttack
+(17.5 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 181.0ms, 0.07756 from blended and 0.11006 from orig with attack class: LinfinityBasicIterativeAttack
+(31.9 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 240.8ms, 0.07779 from blended and 0.11029 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 223.1ms, 0.07767 from blended and 0.11017 from orig with attack class: LinfinityBasicIterativeAttack
+(49.1 sec) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 355.3ms, 0.02187 from blended and 0.05437 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 200.1ms, 0.0772 from blended and 0.1097 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 465.1ms, 0.07823 from blended and 0.11073 from orig with attack class: LinfinityBasicIterativeAttack
+(15.0 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 12: timeout in 905.0073 sec
+
+========
+Checking robustness of image 13 for output class 9, with ep=0.05
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 352.8ms, 0.01997 from blended and 0.05247 from orig with attack class: LinfinityBasicIterativeAttack
+(17.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 362.4ms, 0.02113 from blended and 0.05363 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 320.4ms, 0.03462 from blended and 0.06712 from orig with attack class: LinfinityBasicIterativeAttack
+(32.6 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 283.0ms, 0.03967 from blended and 0.07217 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 300.5ms, 0.0365 from blended and 0.069 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 369.0ms, 0.02053 from blended and 0.05303 from orig with attack class: LinfinityBasicIterativeAttack
+(47.2 sec) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 527.4ms, 0.02078 from blended and 0.05328 from orig with attack class: LinfinityBasicIterativeAttack
+(15.01 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 13: timeout in 902.8486 sec
+
+========
+Checking robustness of image 14 for output class 0, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 370.5ms, 0.03678 from blended and 0.06928 from orig with attack class: LinfinityBasicIterativeAttack
+(14.0 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 281.3ms, 0.03343 from blended and 0.06593 from orig with attack class: LinfinityBasicIterativeAttack
+(23.7 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 372.1ms, 0.03587 from blended and 0.06837 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 374.1ms, 0.03519 from blended and 0.06769 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 276.2ms, 0.03808 from blended and 0.07058 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 288.6ms, 0.03388 from blended and 0.06638 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 400.2ms, 0.03681 from blended and 0.06931 from orig with attack class: LinfinityBasicIterativeAttack
+(36.4 sec) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 573.6ms, 0.03753 from blended and 0.07003 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 572.6ms, 0.03797 from blended and 0.07047 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 630.8ms, 0.0376 from blended and 0.0701 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 543.4ms, 0.03795 from blended and 0.07045 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 615.8ms, 0.03274 from blended and 0.06524 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 708.1ms, 0.03314 from blended and 0.06564 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 570.7ms, 0.03319 from blended and 0.06569 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 511.6ms, 0.03423 from blended and 0.06673 from orig with attack class: LinfinityBasicIterativeAttack
+(10.64 min) Q: 1, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   (15.0 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 14: timeout in 901.6458 sec
+
+========
+Checking robustness of image 15 for output class 1, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 355.3ms, 0.02567 from blended and 0.05817 from orig with attack class: LinfinityBasicIterativeAttack
+(22.6 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 351.3ms, 0.02515 from blended and 0.05765 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 271.7ms, 0.02559 from blended and 0.05809 from orig with attack class: LinfinityBasicIterativeAttack
+(42.6 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 372.0ms, 0.02565 from blended and 0.05815 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 265.2ms, 0.02578 from blended and 0.05828 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 292.2ms, 0.02562 from blended and 0.05812 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 384.6ms, 0.0256 from blended and 0.0581 from orig with attack class: LinfinityBasicIterativeAttack
+(1.06 min) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+(15.01 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 15: timeout in 902.4844 sec
+
+========
+Checking robustness of image 16 for output class 5, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 381.5ms, 0.05621 from blended and 0.08871 from orig with attack class: LinfinityBasicIterativeAttack
+(18.7 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 370.6ms, 0.05668 from blended and 0.08918 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 296.1ms, 0.05735 from blended and 0.08985 from orig with attack class: LinfinityBasicIterativeAttack
+(35.3 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 291.1ms, 0.05629 from blended and 0.08879 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 384.4ms, 0.0574 from blended and 0.0899 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 376.3ms, 0.05644 from blended and 0.08894 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 307.4ms, 0.0579 from blended and 0.0904 from orig with attack class: LinfinityBasicIterativeAttack
+(53.3 sec) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 409.3ms, 0.05756 from blended and 0.09006 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 501.5ms, 0.05712 from blended and 0.08962 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 493.9ms, 0.05673 from blended and 0.08923 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 358.2ms, 0.05734 from blended and 0.08984 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 488.2ms, 0.05646 from blended and 0.08896 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 405.1ms, 0.05716 from blended and 0.08966 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 572.5ms, 0.05769 from blended and 0.09019 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 453.3ms, 0.0577 from blended and 0.0902 from orig with attack class: LinfinityBasicIterativeAttack
+(12.09 min) Q: 1, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   (15.0 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 16: timeout in 902.9628 sec
+
+========
+Checking robustness of image 17 for output class 9, with ep=0.05
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SUCCESS: seed succeeded with factor 0.65.
+SEED-SUCCESS: (0.65) 358.0ms, 0.01183 from blended and 0.04433 from orig with attack class: LinfinityBasicIterativeAttack
+try_seeded_adversarial found violation image with ep=0.04432606399059291
+Original label: 9, output argmax: 4
+counterexample was confirmed: True
+Found unsafe from adversarial search near abstract counterexample
+
+violation star found adversarial was a confirmed counterexample.
+
+Unsafe Base Branch:  (Mode: 0)
+(16.3 sec) Q: 0, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is UNSAFE with confirmed counterexample in result.cinput and result.coutput
+result 17: unsafe in 16.3997 sec
+
+========
+Checking robustness of image 18 for output class 7, with ep=0.05
+Running in parallel with 40 processes
+(1.3 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 497.4ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+(16.9 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 503.4ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 401.4ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+(33.6 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 507.4ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 460.0ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 449.7ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 543.0ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+(50.0 sec) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 421.8ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+(7.76 min) Q: 1, Sets: 0/9  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 543.1ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 518.0ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 540.0ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 400.9ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 468.4ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 612.5ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 502.7ms, 1.0 from blended and 1.0 from orig with attack class: LinfinityBasicIterativeAttack
+(15.01 min) Q: 0, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 15
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 18: timeout in 901.8115 sec
+
+========
+Checking robustness of image 19 for output class 3, with ep=0.05
+try_quick_adversarial found violation image on iteration 6 with ep=0.04999899864196777
+try_quick_adversarial found unsafe image
+Original label: 3, output argmax: 5
+counterexample was confirmed: True. Gen: 843.5ms, Exec: 0.9ms
+Initial quick adversarial search found unsafe image.
+result 19: unsafe in 0.867 sec
+
+========
+Checking robustness of image 20 for output class 4, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 368.6ms, 0.02877 from blended and 0.06127 from orig with attack class: LinfinityBasicIterativeAttack
+(16.8 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 352.5ms, 0.02861 from blended and 0.06111 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 271.2ms, 0.0285 from blended and 0.061 from orig with attack class: LinfinityBasicIterativeAttack
+(33.0 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 277.6ms, 0.02866 from blended and 0.06116 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 353.6ms, 0.02875 from blended and 0.06125 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 399.6ms, 0.02816 from blended and 0.06066 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 384.4ms, 0.02844 from blended and 0.06094 from orig with attack class: LinfinityBasicIterativeAttack
+(51.0 sec) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+(15.04 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 20: timeout in 902.8449 sec
+
+========
+Checking robustness of image 21 for output class 9, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 379.1ms, 0.04841 from blended and 0.08091 from orig with attack class: LinfinityBasicIterativeAttack
+(16.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 395.0ms, 0.051 from blended and 0.0835 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 304.0ms, 0.05114 from blended and 0.08364 from orig with attack class: LinfinityBasicIterativeAttack
+(31.4 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 311.8ms, 0.04991 from blended and 0.08241 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 381.9ms, 0.04581 from blended and 0.07831 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 337.1ms, 0.04772 from blended and 0.08022 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 432.4ms, 0.04818 from blended and 0.08068 from orig with attack class: LinfinityBasicIterativeAttack
+(46.2 sec) Q: 1, Sets: 0/7  (0.0%) ETA: - (expected 1 stars)   
+(15.04 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 21: timeout in 905.618 sec
+
+========
+Checking robustness of image 22 for output class 6, with ep=0.05
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 335.2ms, 0.1228 from blended and 0.1553 from orig with attack class: LinfinityBasicIterativeAttack
+(16.7 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 284.2ms, 0.12211 from blended and 0.15461 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 205.6ms, 0.12227 from blended and 0.15477 from orig with attack class: LinfinityBasicIterativeAttack
+(31.4 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 201.8ms, 0.12428 from blended and 0.15678 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 181.4ms, 0.12194 from blended and 0.15444 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 306.5ms, 0.1223 from blended and 0.1548 from orig with attack class: LinfinityBasicIterativeAttack
+(46.2 sec) Q: 1, Sets: 0/6  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 323.6ms, 0.12149 from blended and 0.15399 from orig with attack class: LinfinityBasicIterativeAttack
+(15.01 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 22: timeout in 905.0936 sec
+
+========
+Checking robustness of image 23 for output class 6, with ep=0.05
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 330.9ms, 0.26006 from blended and 0.29256 from orig with attack class: LinfinityBasicIterativeAttack
+(15.1 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 257.3ms, 0.26002 from blended and 0.29252 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 311.1ms, 0.27026 from blended and 0.30276 from orig with attack class: LinfinityBasicIterativeAttack
+(35.8 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 234.2ms, 0.26043 from blended and 0.29293 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 359.6ms, 0.0875 from blended and 0.12 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 448.8ms, 0.27026 from blended and 0.30276 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 466.4ms, 0.27422 from blended and 0.30672 from orig with attack class: LinfinityBasicIterativeAttack
+(56.5 sec) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+(15.02 min) Q: 0, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 23: timeout in 904.8232 sec
+
+========
+Checking robustness of image 24 for output class 5, with ep=0.05
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 373.0ms, 0.04636 from blended and 0.07886 from orig with attack class: LinfinityBasicIterativeAttack
+(15.5 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 293.8ms, 0.04646 from blended and 0.07896 from orig with attack class: LinfinityBasicIterativeAttack
+(29.9 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 373.5ms, 0.04645 from blended and 0.07895 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 292.9ms, 0.04649 from blended and 0.07899 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 374.6ms, 0.0465 from blended and 0.079 from orig with attack class: LinfinityBasicIterativeAttack
+(47.1 sec) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 389.8ms, 0.04635 from blended and 0.07885 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 353.4ms, 0.04642 from blended and 0.07892 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 437.0ms, 0.0469 from blended and 0.0794 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 368.6ms, 0.04716 from blended and 0.07966 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 291.9ms, 0.04716 from blended and 0.07966 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 288.6ms, 0.04721 from blended and 0.07971 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 368.3ms, 0.0473 from blended and 0.0798 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 307.0ms, 0.04773 from blended and 0.08023 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 377.2ms, 0.04712 from blended and 0.07962 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 286.5ms, 0.04749 from blended and 0.07999 from orig with attack class: LinfinityBasicIterativeAttack
+(15.14 min) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 10
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 24: timeout in 908.2627 sec
+
+========
+Checking robustness of image 25 for output class 4, with ep=0.05
+try_quick_adversarial found violation image on iteration 0 with ep=0.04999899864196777
+try_quick_adversarial found unsafe image
+Original label: 4, output argmax: 9
+counterexample was confirmed: True. Gen: 300.7ms, Exec: 0.9ms
+Initial quick adversarial search found unsafe image.
+result 25: unsafe in 0.324 sec
+[0.3123909719979565, 'unsafe', 9]
+[0.32095584900162066, 'unsafe', 7]
+[0.32173045800300315, 'unsafe', 3]
+[0.32401217500591883, 'unsafe', 25]
+[0.8669568140030606, 'unsafe', 19]
+[16.3997273030036, 'unsafe', 17]
+safe: 0, unsafe: 6, unknown: 19

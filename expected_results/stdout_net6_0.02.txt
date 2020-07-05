@@ -1,0 +1,468 @@
+Loading images...
+
+========
+Checking robustness of image 1 for output class 7, with ep=0.02
+result 1: safe in 0.0314 sec
+
+========
+Checking robustness of image 2 for output class 2, with ep=0.02
+result 2: safe in 0.0299 sec
+
+========
+Checking robustness of image 3 for output class 1, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 430.6ms, 0.03266 from blended and 0.04566 from orig with attack class: LinfinityBasicIterativeAttack
+(1.14 min) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 377.5ms, 0.03224 from blended and 0.04524 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 318.8ms, 0.03257 from blended and 0.04557 from orig with attack class: LinfinityBasicIterativeAttack
+(2.57 min) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 440.8ms, 0.03221 from blended and 0.04521 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 426.3ms, 0.03239 from blended and 0.04539 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 311.3ms, 0.03228 from blended and 0.04528 from orig with attack class: LinfinityBasicIterativeAttack
+(4.36 min) Q: 1, Sets: 0/7  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 612.0ms, 0.03212 from blended and 0.04512 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 973.8ms, 0.03237 from blended and 0.04537 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 412.9ms, 0.03211 from blended and 0.04511 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 381.1ms, 0.03245 from blended and 0.04545 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 512.1ms, 0.03221 from blended and 0.04521 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 368.6ms, 0.03224 from blended and 0.04524 from orig with attack class: LinfinityBasicIterativeAttack
+(7.89 min) Q: 1, Sets: 0/13  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 469.5ms, 0.03229 from blended and 0.04529 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 424.5ms, 0.03227 from blended and 0.04527 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 576.7ms, 0.03209 from blended and 0.04509 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 684.4ms, 0.03287 from blended and 0.04587 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 828.4ms, 0.03264 from blended and 0.04564 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 567.9ms, 0.03236 from blended and 0.04536 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 799.3ms, 0.03237 from blended and 0.04537 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 677.0ms, 0.03284 from blended and 0.04584 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 629.9ms, 0.03235 from blended and 0.04535 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 556.0ms, 0.03228 from blended and 0.04528 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 626.0ms, 0.03212 from blended and 0.04512 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 657.0ms, 0.03231 from blended and 0.04531 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 750.2ms, 0.03265 from blended and 0.04565 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 678.1ms, 0.03236 from blended and 0.04536 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 580.9ms, 0.03229 from blended and 0.04529 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 586.7ms, 0.03238 from blended and 0.04538 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 736.4ms, 0.03223 from blended and 0.04523 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 576.0ms, 0.03278 from blended and 0.04578 from orig with attack class: LinfinityBasicIterativeAttack
+(14.88 min) Q: 1, Sets: 0/31  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 628.7ms, 0.0323 from blended and 0.0453 from orig with attack class: LinfinityBasicIterativeAttack
+(15.0 min) Q: 0, Sets: 0/27  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 30
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 3: timeout in 901.1319 sec
+
+========
+Checking robustness of image 4 for output class 0, with ep=0.02
+result 4: safe in 0.0342 sec
+
+========
+Checking robustness of image 5 for output class 4, with ep=0.02
+result 5: safe in 0.0346 sec
+
+========
+Checking robustness of image 6 for output class 1, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+(13.6 sec) Q: 0, Sets: 1/1  (100.0%) ETA: 0.0 sec (expected 1 stars)   
+
+
+
+Total Stars: 1 (0 exact, 1 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 6: safe in 13.6299 sec
+
+========
+Checking robustness of image 7 for output class 4, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 363.1ms, 0.02261 from blended and 0.03561 from orig with attack class: LinfinityBasicIterativeAttack
+(27.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 277.3ms, 0.02265 from blended and 0.03565 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 416.9ms, 0.02267 from blended and 0.03567 from orig with attack class: LinfinityBasicIterativeAttack
+(52.3 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 361.5ms, 0.02273 from blended and 0.03573 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 366.0ms, 0.02263 from blended and 0.03563 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 284.5ms, 0.02263 from blended and 0.03563 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 322.4ms, 0.02282 from blended and 0.03582 from orig with attack class: LinfinityBasicIterativeAttack
+(1.38 min) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 435.0ms, 0.02248 from blended and 0.03548 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 606.5ms, 0.02265 from blended and 0.03565 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 492.8ms, 0.02267 from blended and 0.03567 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 434.0ms, 0.02244 from blended and 0.03544 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 325.8ms, 0.0225 from blended and 0.0355 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 311.7ms, 0.02254 from blended and 0.03554 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 467.1ms, 0.02249 from blended and 0.03549 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 372.6ms, 0.02259 from blended and 0.03559 from orig with attack class: LinfinityBasicIterativeAttack
+(2.02 min) Q: 1, Sets: 0/16  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 639.7ms, 0.02272 from blended and 0.03572 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 462.9ms, 0.0231 from blended and 0.0361 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 528.6ms, 0.02261 from blended and 0.03561 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 462.7ms, 0.02317 from blended and 0.03617 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 355.5ms, 0.02262 from blended and 0.03562 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 426.2ms, 0.02279 from blended and 0.03579 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 393.1ms, 0.02245 from blended and 0.03545 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 298.7ms, 0.02301 from blended and 0.03601 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 422.0ms, 0.02272 from blended and 0.03572 from orig with attack class: LinfinityBasicIterativeAttack
+(2.82 min) Q: 1, Sets: 4/24  (25.0%) ETA: 8.47 min (expected 16 stars)   SEED-FAILED: (0.65) 336.6ms, 0.02261 from blended and 0.03561 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 410.0ms, 0.0226 from blended and 0.0356 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 437.5ms, 0.02242 from blended and 0.03542 from orig with attack class: LinfinityBasicIterativeAttack
+(3.36 min) Q: 0, Sets: 12/28  (50.0%) ETA: 3.36 min (expected 24 stars)   (3.36 min) Q: 0, Sets: 12/28  (50.0%) ETA: 3.36 min (expected 24 stars)   
+(3.36 min) Q: 0, Sets: 13/28  (53.125%) ETA: 2.97 min (expected 24 stars)   (3.37 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.62 min (expected 25 stars)   (3.37 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.62 min (expected 25 stars)   (3.37 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.62 min (expected 25 stars)   (3.37 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.62 min (expected 25 stars)   (3.37 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.62 min (expected 25 stars)   (3.37 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.62 min (expected 25 stars)   (3.38 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.63 min (expected 25 stars)   
+(3.38 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.63 min (expected 25 stars)   (3.38 min) Q: 0, Sets: 14/28  (56.25%) ETA: 2.63 min (expected 25 stars)   (3.38 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.31 min (expected 25 stars)   (3.38 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.31 min (expected 25 stars)   (3.39 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.39 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.39 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.39 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.39 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.39 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.4 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.4 min) Q: 0, Sets: 15/28  (59.375%) ETA: 2.32 min (expected 25 stars)   (3.4 min) Q: 0, Sets: 16/28  (62.5%) ETA: 2.04 min (expected 26 stars)   (3.4 min) Q: 0, Sets: 16/28  (62.5%) ETA: 2.04 min (expected 26 stars)   (3.4 min) Q: 0, Sets: 16/28  (62.5%) ETA: 2.04 min (expected 26 stars)   (3.4 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.78 min (expected 26 stars)   
+(3.41 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.78 min (expected 26 stars)   (3.41 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.78 min (expected 26 stars)   (3.41 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.41 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.41 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.41 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.42 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.42 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.42 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.42 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.42 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.42 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.43 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.79 min (expected 26 stars)   (3.43 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.43 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.43 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.43 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.43 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.44 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.44 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.44 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.44 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.44 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.44 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.8 min (expected 26 stars)   (3.45 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.45 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.45 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.45 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.45 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.45 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.46 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.46 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   
+(3.46 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.46 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.46 min) Q: 0, Sets: 17/28  (65.625%) ETA: 1.81 min (expected 26 stars)   (3.47 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.47 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.47 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.47 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.47 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.47 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.48 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.48 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.48 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.48 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.48 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.48 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.49 min) Q: 0, Sets: 18/28  (68.75%) ETA: 1.58 min (expected 26 stars)   (3.49 min) Q: 0, Sets: 19/28  (71.875%) ETA: 1.36 min (expected 26 stars)   (3.49 min) Q: 0, Sets: 19/28  (71.875%) ETA: 1.37 min (expected 26 stars)   (3.49 min) Q: 0, Sets: 19/28  (71.875%) ETA: 1.37 min (expected 26 stars)   (3.49 min) Q: 0, Sets: 19/28  (71.875%) ETA: 1.37 min (expected 26 stars)   (3.49 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.16 min (expected 27 stars)   (3.5 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.5 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.5 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.5 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.5 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.5 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.51 min) Q: 0, Sets: 20/28  (75.0%) ETA: 1.17 min (expected 27 stars)   (3.51 min) Q: 0, Sets: 21/28  (78.125%) ETA: 58.9 sec (expected 27 stars)   (3.51 min) Q: 0, Sets: 21/28  (78.125%) ETA: 59.0 sec (expected 27 stars)   (3.51 min) Q: 0, Sets: 21/28  (78.125%) ETA: 59.0 sec (expected 27 stars)   (3.51 min) Q: 0, Sets: 21/28  (78.125%) ETA: 59.0 sec (expected 27 stars)   (3.51 min) Q: 0, Sets: 21/28  (78.125%) ETA: 59.0 sec (expected 27 stars)   (3.52 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.7 sec (expected 27 stars)   (3.52 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.7 sec (expected 27 stars)   (3.52 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.7 sec (expected 27 stars)   (3.52 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.8 sec (expected 27 stars)   (3.52 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.8 sec (expected 27 stars)   (3.52 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.8 sec (expected 27 stars)   (3.53 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.8 sec (expected 27 stars)   (3.53 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.9 sec (expected 27 stars)   (3.53 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.9 sec (expected 27 stars)   (3.53 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.9 sec (expected 27 stars)   (3.53 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.9 sec (expected 27 stars)   (3.53 min) Q: 0, Sets: 22/28  (81.25%) ETA: 48.9 sec (expected 27 stars)   (3.54 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.0 sec (expected 27 stars)   (3.54 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.0 sec (expected 27 stars)   (3.54 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.0 sec (expected 27 stars)   (3.54 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.0 sec (expected 27 stars)   (3.54 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.1 sec (expected 27 stars)   (3.55 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.1 sec (expected 27 stars)   (3.55 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.1 sec (expected 27 stars)   (3.55 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.1 sec (expected 27 stars)   (3.55 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.2 sec (expected 27 stars)   (3.55 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.2 sec (expected 27 stars)   (3.55 min) Q: 0, Sets: 22/28  (81.25%) ETA: 49.2 sec (expected 27 stars)   (3.56 min) Q: 0, Sets: 23/28  (84.375%) ETA: 39.5 sec (expected 27 stars)   (3.56 min) Q: 0, Sets: 23/28  (84.375%) ETA: 39.5 sec (expected 27 stars)   (3.56 min) Q: 0, Sets: 23/28  (84.375%) ETA: 39.5 sec (expected 27 stars)   (3.56 min) Q: 0, Sets: 23/28  (84.375%) ETA: 39.6 sec (expected 27 stars)   (3.56 min) Q: 0, Sets: 23/28  (84.375%) ETA: 39.6 sec (expected 27 stars)   (3.56 min) Q: 0, Sets: 23/28  (84.375%) ETA: 39.6 sec (expected 27 stars)   (3.57 min) Q: 0, Sets: 24/28  (87.5%) ETA: 30.6 sec (expected 27 stars)   (3.57 min) Q: 0, Sets: 24/28  (87.5%) ETA: 30.6 sec (expected 27 stars)   
+(3.57 min) Q: 0, Sets: 24/28  (87.5%) ETA: 30.6 sec (expected 27 stars)   (3.57 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.57 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.57 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.58 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.58 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.58 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.58 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.58 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.58 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.2 sec (expected 28 stars)   (3.59 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.3 sec (expected 28 stars)   (3.59 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.3 sec (expected 28 stars)   (3.59 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.3 sec (expected 28 stars)   (3.59 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.3 sec (expected 28 stars)   (3.59 min) Q: 0, Sets: 25/28  (90.625%) ETA: 22.3 sec (expected 28 stars)   (3.59 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.6 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.6 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.6 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.6 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.6 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.6 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.61 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.61 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.61 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.61 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.4 sec (expected 28 stars)   (3.61 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.61 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.62 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.62 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.62 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.62 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.62 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.62 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.63 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.63 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.63 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.63 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.63 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.64 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.64 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.5 sec (expected 28 stars)   (3.64 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.64 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.64 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.64 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.65 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.65 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.65 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.65 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.65 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.65 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.66 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.66 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.66 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.66 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.66 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.6 sec (expected 28 stars)   (3.66 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.67 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.67 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.67 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.67 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.67 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.67 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.68 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.68 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.68 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.68 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.68 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.68 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.69 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.7 sec (expected 28 stars)   (3.69 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.69 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.69 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.69 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.69 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.7 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.7 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.7 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.7 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.7 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.7 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.71 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.71 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.71 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.71 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.8 sec (expected 28 stars)   (3.71 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.9 sec (expected 28 stars)   (3.71 min) Q: 0, Sets: 26/28  (93.75%) ETA: 14.9 sec (expected 28 stars)   (3.72 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.72 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.72 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.72 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.72 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.73 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.73 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.73 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.73 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.73 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.73 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.74 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.74 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.74 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.74 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.74 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.74 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.75 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.2 sec (expected 28 stars)   (3.75 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.3 sec (expected 28 stars)   (3.75 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.3 sec (expected 28 stars)   (3.75 min) Q: 0, Sets: 27/28  (96.875%) ETA: 7.3 sec (expected 28 stars)   
+
+
+Total Stars: 28 (0 exact, 28 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 27
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 7: safe in 225.183 sec
+
+========
+Checking robustness of image 8 for output class 9, with ep=0.02
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+(7.8 sec) Q: 0, Sets: 1/1  (100.0%) ETA: 0.0 sec (expected 1 stars)   
+
+
+
+Total Stars: 1 (0 exact, 1 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 8: safe in 8.6251 sec
+
+========
+Checking robustness of image 9 for output class 5, with ep=0.02
+try_quick_adversarial found violation image on iteration 0 with ep=0.019999027252197266
+try_quick_adversarial found unsafe image
+Original label: 5, output argmax: 6
+counterexample was confirmed: True. Gen: 298.8ms, Exec: 0.9ms
+Initial quick adversarial search found unsafe image.
+result 9: unsafe in 0.3193 sec
+
+========
+Checking robustness of image 10 for output class 9, with ep=0.02
+result 10: safe in 0.0311 sec
+
+========
+Checking robustness of image 11 for output class 0, with ep=0.02
+result 11: safe in 0.0316 sec
+
+========
+Checking robustness of image 12 for output class 6, with ep=0.02
+result 12: safe in 0.0352 sec
+
+========
+Checking robustness of image 13 for output class 9, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: 
+(18.1 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: 
+SEED-FAILED: 
+(37.4 sec) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: 
+SEED-FAILED: 
+(1.03 min) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+(1.42 min) Q: 0, Sets: 8/8  (100.0%) ETA: 0.0 sec (expected 8 stars)   
+
+
+Total Stars: 8 (0 exact, 8 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 13: safe in 85.5043 sec
+
+========
+Checking robustness of image 14 for output class 0, with ep=0.02
+result 14: safe in 0.0341 sec
+
+========
+Checking robustness of image 15 for output class 1, with ep=0.02
+result 15: safe in 0.0353 sec
+
+========
+Checking robustness of image 16 for output class 5, with ep=0.02
+result 16: safe in 0.0326 sec
+
+========
+Checking robustness of image 17 for output class 9, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 347.1ms, 0.25682 from blended and 0.26982 from orig with attack class: LinfinityBasicIterativeAttack
+(29.1 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 251.6ms, 0.01139 from blended and 0.02439 from orig with attack class: LinfinityBasicIterativeAttack
+(1.02 min) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 313.0ms, 0.26377 from blended and 0.27677 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 251.3ms, 0.01132 from blended and 0.02432 from orig with attack class: LinfinityBasicIterativeAttack
+(1.81 min) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 366.6ms, 0.26154 from blended and 0.27454 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 418.9ms, 0.22077 from blended and 0.23377 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 259.0ms, 0.01135 from blended and 0.02435 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 717.2ms, 0.01124 from blended and 0.02424 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 506.6ms, 0.26546 from blended and 0.27846 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 383.7ms, 0.22478 from blended and 0.23778 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 345.1ms, 0.0111 from blended and 0.0241 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 453.2ms, 0.01134 from blended and 0.02434 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 324.7ms, 0.01091 from blended and 0.02391 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 293.0ms, 0.01134 from blended and 0.02434 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 334.5ms, 0.01127 from blended and 0.02427 from orig with attack class: LinfinityBasicIterativeAttack
+(3.31 min) Q: 1, Sets: 0/15  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 704.4ms, 0.21926 from blended and 0.23226 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 671.4ms, 0.0114 from blended and 0.0244 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 483.3ms, 0.33789 from blended and 0.35089 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 636.7ms, 0.01132 from blended and 0.02432 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 489.6ms, 0.27701 from blended and 0.29001 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 569.2ms, 0.0113 from blended and 0.0243 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 501.6ms, 0.01115 from blended and 0.02415 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 511.0ms, 0.28997 from blended and 0.30297 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 307.4ms, 0.29541 from blended and 0.30841 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 497.5ms, 0.01087 from blended and 0.02387 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 473.0ms, 0.26294 from blended and 0.27594 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 621.0ms, 0.01124 from blended and 0.02424 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 596.2ms, 0.0113 from blended and 0.0243 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 393.5ms, 0.27488 from blended and 0.28788 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 505.8ms, 0.01142 from blended and 0.02442 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 488.5ms, 0.01154 from blended and 0.02454 from orig with attack class: LinfinityBasicIterativeAttack
+(6.55 min) Q: 1, Sets: 0/32  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 686.4ms, 0.01104 from blended and 0.02404 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 501.3ms, 0.01138 from blended and 0.02438 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 452.6ms, 0.01116 from blended and 0.02416 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 497.2ms, 0.01121 from blended and 0.02421 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 519.8ms, 0.28939 from blended and 0.30239 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 483.1ms, 0.01071 from blended and 0.02371 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 536.6ms, 0.01107 from blended and 0.02407 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 588.6ms, 0.01105 from blended and 0.02405 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 535.1ms, 0.01123 from blended and 0.02423 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 691.0ms, 0.01087 from blended and 0.02387 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 532.9ms, 0.01111 from blended and 0.02411 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 703.2ms, 0.01127 from blended and 0.02427 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 527.7ms, 0.0107 from blended and 0.0237 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 680.8ms, 0.01133 from blended and 0.02433 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 663.2ms, 0.01114 from blended and 0.02414 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 722.5ms, 0.01074 from blended and 0.02374 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 694.8ms, 0.01085 from blended and 0.02385 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 733.4ms, 0.01104 from blended and 0.02404 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 699.7ms, 0.01094 from blended and 0.02394 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 534.2ms, 0.01089 from blended and 0.02389 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 490.0ms, 0.01063 from blended and 0.02363 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 754.5ms, 0.28526 from blended and 0.29826 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 716.5ms, 0.01067 from blended and 0.02367 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 596.4ms, 0.01111 from blended and 0.02411 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 764.4ms, 0.01113 from blended and 0.02413 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 761.5ms, 0.01097 from blended and 0.02397 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 736.6ms, 0.01134 from blended and 0.02434 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 612.2ms, 0.0111 from blended and 0.0241 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 560.7ms, 0.01115 from blended and 0.02415 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 706.6ms, 0.01121 from blended and 0.02421 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 711.6ms, 0.01136 from blended and 0.02436 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 564.0ms, 0.01149 from blended and 0.02449 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 688.9ms, 0.01144 from blended and 0.02444 from orig with attack class: LinfinityBasicIterativeAttack
+(14.98 min) Q: 0, Sets: 0/64  (0.0%) ETA: - (expected 1 stars)   (15.0 min) Q: 0, Sets: 0/60  (0.0%) ETA: - (expected 1 stars)   
+
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 39
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 17: timeout in 901.5779 sec
+
+========
+Checking robustness of image 18 for output class 7, with ep=0.02
+result 18: safe in 0.0346 sec
+
+========
+Checking robustness of image 19 for output class 3, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 354.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+(47.4 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 368.0ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 265.7ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+(1.76 min) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 347.2ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 379.7ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 328.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 345.8ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+(3.23 min) Q: 1, Sets: 0/7  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 843.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 411.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 459.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 591.9ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 486.3ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 409.8ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 397.8ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+(5.81 min) Q: 1, Sets: 0/14  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 614.7ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 736.4ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 735.3ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 457.6ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 687.0ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 610.4ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 474.4ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 648.2ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 503.6ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 534.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 666.1ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 551.0ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 425.9ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+(10.94 min) Q: 1, Sets: 0/28  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 592.3ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 597.4ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 690.5ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 533.7ms, 0.025 from blended and 0.038 from orig with attack class: LinfinityBasicIterativeAttack
+(15.02 min) Q: 0, Sets: 0/32  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 31
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 19: timeout in 901.9027 sec
+
+========
+Checking robustness of image 20 for output class 4, with ep=0.02
+result 20: safe in 0.0338 sec
+
+========
+Checking robustness of image 21 for output class 9, with ep=0.02
+Running in parallel with 40 processes
+(1.1 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+(9.1 sec) Q: 0, Sets: 1/1  (100.0%) ETA: 0.0 sec (expected 1 stars)   
+
+
+
+Total Stars: 1 (0 exact, 1 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 21: safe in 9.3824 sec
+
+========
+Checking robustness of image 22 for output class 6, with ep=0.02
+result 22: safe in 0.0339 sec
+
+========
+Checking robustness of image 23 for output class 6, with ep=0.02
+result 23: safe in 0.0348 sec
+
+========
+Checking robustness of image 24 for output class 5, with ep=0.02
+result 24: safe in 0.0327 sec
+
+========
+Checking robustness of image 25 for output class 4, with ep=0.02
+Running in parallel with 40 processes
+(1.2 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 356.2ms, 0.02166 from blended and 0.03466 from orig with attack class: LinfinityBasicIterativeAttack
+(59.2 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 353.8ms, 0.02162 from blended and 0.03462 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 286.5ms, 0.02217 from blended and 0.03517 from orig with attack class: LinfinityBasicIterativeAttack
+(2.28 min) Q: 1, Sets: 0/4  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 651.8ms, 0.02282 from blended and 0.03582 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 643.2ms, 0.02364 from blended and 0.03664 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 538.7ms, 0.02197 from blended and 0.03497 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 519.3ms, 0.02272 from blended and 0.03572 from orig with attack class: LinfinityBasicIterativeAttack
+(4.09 min) Q: 1, Sets: 0/8  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 821.0ms, 0.02288 from blended and 0.03588 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 417.8ms, 0.02256 from blended and 0.03556 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 537.5ms, 0.02315 from blended and 0.03615 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 566.7ms, 0.02292 from blended and 0.03592 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 810.6ms, 0.02152 from blended and 0.03452 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 412.1ms, 0.02285 from blended and 0.03585 from orig with attack class: LinfinityBasicIterativeAttack
+(6.89 min) Q: 1, Sets: 0/14  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 378.0ms, 0.02235 from blended and 0.03535 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 683.7ms, 0.02162 from blended and 0.03462 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 718.9ms, 0.0232 from blended and 0.0362 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 556.9ms, 0.02317 from blended and 0.03617 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 765.6ms, 0.02316 from blended and 0.03616 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 573.2ms, 0.02293 from blended and 0.03593 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 530.4ms, 0.02345 from blended and 0.03645 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 774.9ms, 0.0234 from blended and 0.0364 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 472.1ms, 0.02276 from blended and 0.03576 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 650.2ms, 0.02319 from blended and 0.03619 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 695.9ms, 0.02142 from blended and 0.03442 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 542.6ms, 0.02233 from blended and 0.03533 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 672.1ms, 0.02236 from blended and 0.03536 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 673.4ms, 0.02146 from blended and 0.03446 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 537.6ms, 0.02232 from blended and 0.03532 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 683.0ms, 0.02148 from blended and 0.03448 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 489.3ms, 0.022 from blended and 0.035 from orig with attack class: LinfinityBasicIterativeAttack
+(12.56 min) Q: 1, Sets: 0/31  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 564.4ms, 0.02169 from blended and 0.03469 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 530.6ms, 0.02325 from blended and 0.03625 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 602.9ms, 0.02322 from blended and 0.03622 from orig with attack class: LinfinityBasicIterativeAttack
+(15.0 min) Q: 0, Sets: 0/34  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 33
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Timeout (900.0) reached during execution
+result 25: timeout in 901.0308 sec
+[0.029894429000705713, 'safe', 2]
+[0.031052427002578042, 'safe', 10]
+[0.031439292997674784, 'safe', 1]
+[0.031636519997846335, 'safe', 11]
+[0.03257619499709108, 'safe', 16]
+[0.032706317000702256, 'safe', 24]
+[0.033837823997600935, 'safe', 20]
+[0.033935630999621935, 'safe', 22]
+[0.03408446499815909, 'safe', 14]
+[0.034188518999144435, 'safe', 4]
+[0.03455406000284711, 'safe', 18]
+[0.034642697999515804, 'safe', 5]
+[0.034780193000187865, 'safe', 23]
+[0.03518132200042601, 'safe', 12]
+[0.03528399800052284, 'safe', 15]
+[0.3192798420022882, 'unsafe', 9]
+[8.625117710998893, 'safe', 8]
+[9.382442630998412, 'safe', 21]
+[13.629923552001856, 'safe', 6]
+[85.50433276900003, 'safe', 13]
+[225.18304527999862, 'safe', 7]
+safe: 20, unsafe: 1, unknown: 4

@@ -1,0 +1,304 @@
+Loading images...
+
+========
+Checking robustness of image 1 for output class 7, with ep=0.02
+try_quick_adversarial found violation image on iteration 0 with ep=0.019999027252197266
+try_quick_adversarial found unsafe image
+Original label: 7, output argmax: 2
+counterexample was confirmed: True. Gen: 179.3ms, Exec: 0.5ms
+Initial quick adversarial search found unsafe image.
+result 1: unsafe in 0.1936 sec
+
+========
+Checking robustness of image 2 for output class 2, with ep=0.02
+result 2: safe in 0.0153 sec
+
+========
+Checking robustness of image 3 for output class 1, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+Found unsafe from concrete execution of abstract counterexample
+
+violation star found adversarial was a confirmed counterexample.
+
+Unsafe Base Branch:  (Mode: 0)
+(2.6 sec) Q: 0, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is UNSAFE with confirmed counterexample in result.cinput and result.coutput
+result 3: unsafe in 2.7065 sec
+
+========
+Checking robustness of image 4 for output class 0, with ep=0.02
+result 4: safe in 0.0159 sec
+
+========
+Checking robustness of image 5 for output class 4, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 260.2ms, 0.00776 from blended and 0.02076 from orig with attack class: LinfinityBasicIterativeAttack
+(2.6 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+Found unsafe from concrete execution of abstract counterexample
+
+violation star found adversarial was a confirmed counterexample.
+
+Unsafe Base Branch: - (Mode: 0)
+Found unsafe from concrete execution of abstract counterexample
+
+violation star found adversarial was a confirmed counterexample.
+
+Unsafe Base Branch: + (Mode: 0)
+(3.7 sec) Q: 0, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+
+
+Total Stars: 0 (0 exact, 0 approx)
+Runtime: 0.0 sec
+Completed work frac: 0.0
+Num Stars Copied Between Processes: 1
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is UNSAFE with confirmed counterexample in result.cinput and result.coutput
+result 5: unsafe in 3.7792 sec
+
+========
+Checking robustness of image 6 for output class 1, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+(1.8 sec) Q: 0, Sets: 1/1  (100.0%) ETA: 0.0 sec (expected 1 stars)   
+
+
+
+Total Stars: 1 (0 exact, 1 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 6: safe in 2.9163 sec
+
+========
+Checking robustness of image 7 for output class 4, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 250.6ms, 0.00783 from blended and 0.02083 from orig with attack class: LinfinityBasicIterativeAttack
+(2.5 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+(3.1 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.1 sec (expected 2 stars)   (3.2 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.2 sec (expected 2 stars)   
+(3.3 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.3 sec (expected 2 stars)   (3.4 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.4 sec (expected 2 stars)   (3.5 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.5 sec (expected 2 stars)   SEED-FAILED: (0.65) 251.9ms, 0.00784 from blended and 0.02084 from orig with attack class: LinfinityBasicIterativeAttack
+(3.6 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.6 sec (expected 2 stars)   
+(3.7 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.7 sec (expected 2 stars)   (3.8 sec) Q: 0, Sets: 1/2  (50.0%) ETA: 3.8 sec (expected 2 stars)   (3.9 sec) Q: 0, Sets: 1/3  (50.0%) ETA: 3.9 sec (expected 2 stars)   (4.0 sec) Q: 0, Sets: 1/3  (50.0%) ETA: 4.0 sec (expected 2 stars)   (4.1 sec) Q: 0, Sets: 1/3  (50.0%) ETA: 4.1 sec (expected 2 stars)   (4.2 sec) Q: 0, Sets: 1/3  (50.0%) ETA: 4.2 sec (expected 2 stars)   (4.4 sec) Q: 0, Sets: 1/3  (50.0%) ETA: 4.4 sec (expected 2 stars)   (4.5 sec) Q: 0, Sets: 1/3  (50.0%) ETA: 4.5 sec (expected 2 stars)   
+(4.6 sec) Q: 0, Sets: 2/3  (75.0%) ETA: 1.5 sec (expected 3 stars)   (4.7 sec) Q: 0, Sets: 2/3  (75.0%) ETA: 1.6 sec (expected 3 stars)   (4.8 sec) Q: 0, Sets: 2/3  (75.0%) ETA: 1.6 sec (expected 3 stars)   SEED-FAILED: (0.65) 255.0ms, 0.00783 from blended and 0.02083 from orig with attack class: LinfinityBasicIterativeAttack
+(4.9 sec) Q: 0, Sets: 2/3  (75.0%) ETA: 1.6 sec (expected 3 stars)   (5.0 sec) Q: 0, Sets: 2/3  (75.0%) ETA: 1.7 sec (expected 3 stars)   (5.1 sec) Q: 0, Sets: 2/3  (75.0%) ETA: 1.7 sec (expected 3 stars)   (5.2 sec) Q: 0, Sets: 2/4  (75.0%) ETA: 1.7 sec (expected 3 stars)   (5.3 sec) Q: 0, Sets: 2/4  (75.0%) ETA: 1.8 sec (expected 3 stars)   (5.4 sec) Q: 0, Sets: 2/4  (75.0%) ETA: 1.8 sec (expected 3 stars)   (5.5 sec) Q: 0, Sets: 2/4  (75.0%) ETA: 1.8 sec (expected 3 stars)   (5.6 sec) Q: 0, Sets: 2/4  (75.0%) ETA: 1.9 sec (expected 3 stars)   (5.7 sec) Q: 0, Sets: 2/4  (75.0%) ETA: 1.9 sec (expected 3 stars)   (5.8 sec) Q: 0, Sets: 3/4  (87.5%) ETA: 0.8 sec (expected 3 stars)   (5.9 sec) Q: 0, Sets: 3/4  (87.5%) ETA: 0.8 sec (expected 3 stars)   (6.0 sec) Q: 0, Sets: 3/4  (87.5%) ETA: 0.9 sec (expected 3 stars)   (6.1 sec) Q: 0, Sets: 3/4  (87.5%) ETA: 0.9 sec (expected 3 stars)   
+SEED-FAILED: (0.65) 254.7ms, 0.00783 from blended and 0.02083 from orig with attack class: LinfinityBasicIterativeAttack
+(6.2 sec) Q: 0, Sets: 3/4  (87.5%) ETA: 0.9 sec (expected 3 stars)   (6.3 sec) Q: 0, Sets: 3/4  (87.5%) ETA: 0.9 sec (expected 3 stars)   (6.4 sec) Q: 0, Sets: 3/5  (87.5%) ETA: 0.9 sec (expected 3 stars)   (6.5 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.4 sec (expected 4 stars)   (6.6 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.4 sec (expected 4 stars)   (6.7 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.4 sec (expected 4 stars)   (6.8 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   (6.9 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   (7.0 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   (7.1 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   (7.2 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   SEED-FAILED: (0.65) 252.5ms, 0.0078 from blended and 0.0208 from orig with attack class: LinfinityBasicIterativeAttack
+(7.3 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   (7.4 sec) Q: 0, Sets: 4/5  (93.75%) ETA: 0.5 sec (expected 4 stars)   (7.5 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.2 sec (expected 5 stars)   (7.6 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.2 sec (expected 5 stars)   (7.7 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.2 sec (expected 5 stars)   (7.8 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (7.9 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   SEED-FAILED: (0.65) 210.8ms, 0.0078 from blended and 0.0208 from orig with attack class: LinfinityBasicIterativeAttack
+(8.0 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (8.1 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (8.2 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (8.3 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (8.4 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (8.5 sec) Q: 0, Sets: 5/6  (96.875%) ETA: 0.3 sec (expected 5 stars)   (8.6 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (8.7 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (8.8 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (8.9 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (9.0 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (9.1 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (9.2 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (9.3 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   
+(9.4 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.1 sec (expected 6 stars)   (9.6 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (9.7 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (9.8 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   SEED-FAILED: (0.65) 206.5ms, 0.0078 from blended and 0.0208 from orig with attack class: LinfinityBasicIterativeAttack
+(9.9 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.0 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.1 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.2 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.3 sec) Q: 0, Sets: 6/7  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.4 sec) Q: 0, Sets: 6/8  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.5 sec) Q: 0, Sets: 6/8  (98.438%) ETA: 0.2 sec (expected 6 stars)   (10.6 sec) Q: 0, Sets: 7/8  (99.219%) ETA: 0.1 sec (expected 7 stars)   
+
+
+Total Stars: 8 (0 exact, 8 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 7: safe in 10.7233 sec
+
+========
+Checking robustness of image 8 for output class 9, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 291.8ms, 0.02574 from blended and 0.03874 from orig with attack class: LinfinityBasicIterativeAttack
+(2.4 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+(3.0 sec) Q: 0, Sets: 2/2  (100.0%) ETA: 0.0 sec (expected 2 stars)   
+
+
+Total Stars: 2 (0 exact, 2 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 1
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 8: safe in 3.0613 sec
+
+========
+Checking robustness of image 9 for output class 5, with ep=0.02
+try_quick_adversarial found violation image on iteration 0 with ep=0.019999027252197266
+try_quick_adversarial found unsafe image
+Original label: 5, output argmax: 6
+counterexample was confirmed: True. Gen: 184.6ms, Exec: 0.5ms
+Initial quick adversarial search found unsafe image.
+result 9: unsafe in 0.2056 sec
+
+========
+Checking robustness of image 10 for output class 9, with ep=0.02
+result 10: safe in 0.0172 sec
+
+========
+Checking robustness of image 11 for output class 0, with ep=0.02
+result 11: safe in 0.0168 sec
+
+========
+Checking robustness of image 12 for output class 6, with ep=0.02
+result 12: safe in 0.0162 sec
+
+========
+Checking robustness of image 13 for output class 9, with ep=0.02
+result 13: safe in 0.0165 sec
+
+========
+Checking robustness of image 14 for output class 0, with ep=0.02
+result 14: safe in 0.0166 sec
+
+========
+Checking robustness of image 15 for output class 1, with ep=0.02
+result 15: safe in 0.0171 sec
+
+========
+Checking robustness of image 16 for output class 5, with ep=0.02
+result 16: safe in 0.0162 sec
+
+========
+Checking robustness of image 17 for output class 9, with ep=0.02
+result 17: safe in 0.0164 sec
+
+========
+Checking robustness of image 18 for output class 7, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+(1.5 sec) Q: 0, Sets: 1/1  (100.0%) ETA: 0.0 sec (expected 1 stars)   
+
+
+
+Total Stars: 1 (0 exact, 1 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 18: safe in 1.7411 sec
+
+========
+Checking robustness of image 19 for output class 3, with ep=0.02
+try_quick_adversarial found violation image on iteration 0 with ep=0.019999027252197266
+try_quick_adversarial found unsafe image
+Original label: 3, output argmax: 9
+counterexample was confirmed: True. Gen: 160.8ms, Exec: 0.5ms
+Initial quick adversarial search found unsafe image.
+result 19: unsafe in 0.1799 sec
+
+========
+Checking robustness of image 20 for output class 4, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+(1.4 sec) Q: 0, Sets: 1/1  (100.0%) ETA: 0.0 sec (expected 1 stars)   
+
+
+
+Total Stars: 1 (0 exact, 1 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 0
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 20: safe in 1.4663 sec
+
+========
+Checking robustness of image 21 for output class 9, with ep=0.02
+result 21: safe in 0.0171 sec
+
+========
+Checking robustness of image 22 for output class 6, with ep=0.02
+Running in parallel with 40 processes
+(0.9 sec) Q: 0, Sets: 0/1  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 284.0ms, 0.01769 from blended and 0.03069 from orig with attack class: LinfinityBasicIterativeAttack
+(2.7 sec) Q: 1, Sets: 0/2  (0.0%) ETA: - (expected 1 stars)   
+SEED-FAILED: (0.65) 235.6ms, 0.01804 from blended and 0.03104 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 272.0ms, 0.01766 from blended and 0.03066 from orig with attack class: LinfinityBasicIterativeAttack
+(4.2 sec) Q: 1, Sets: 0/3  (0.0%) ETA: - (expected 1 stars)   SEED-FAILED: (0.65) 242.5ms, 0.01867 from blended and 0.03167 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 234.9ms, 0.01817 from blended and 0.03117 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 271.0ms, 0.01769 from blended and 0.03069 from orig with attack class: LinfinityBasicIterativeAttack
+SEED-FAILED: (0.65) 285.8ms, 0.01804 from blended and 0.03104 from orig with attack class: LinfinityBasicIterativeAttack
+(5.8 sec) Q: 1, Sets: 0/5  (0.0%) ETA: - (expected 1 stars)   
+(7.2 sec) Q: 0, Sets: 7/8  (87.5%) ETA: 1.0 sec (expected 8 stars)   
+
+
+Total Stars: 8 (0 exact, 8 approx)
+Runtime: 0.0 sec
+Completed work frac: 1.0
+Num Stars Copied Between Processes: 7
+Num Lps During Enumeration: 0
+Incorrect Overapproximation Time: 0.0 sec (count: 0)
+Total Num Lps: 0
+
+Result: network is SAFE
+result 22: safe in 7.3663 sec
+
+========
+Checking robustness of image 23 for output class 6, with ep=0.02
+result 23: safe in 0.018 sec
+
+========
+Checking robustness of image 24 for output class 5, with ep=0.02
+result 24: safe in 0.0164 sec
+
+========
+Checking robustness of image 25 for output class 4, with ep=0.02
+try_quick_adversarial found violation image on iteration 0 with ep=0.019999027252197266
+try_quick_adversarial found unsafe image
+Original label: 4, output argmax: 9
+counterexample was confirmed: True. Gen: 180.2ms, Exec: 0.5ms
+Initial quick adversarial search found unsafe image.
+result 25: unsafe in 0.1963 sec
+[0.015343479999955889, 'safe', 2]
+[0.01590537300012329, 'safe', 4]
+[0.016192661999866687, 'safe', 12]
+[0.0162380059998668, 'safe', 16]
+[0.016402422999817645, 'safe', 17]
+[0.016447013999822957, 'safe', 24]
+[0.01651146099993639, 'safe', 13]
+[0.016587197999797354, 'safe', 14]
+[0.016792766000207848, 'safe', 11]
+[0.017078077000178382, 'safe', 15]
+[0.01712295000015729, 'safe', 21]
+[0.01721697499988295, 'safe', 10]
+[0.018008485999871482, 'safe', 23]
+[0.17988769500016133, 'unsafe', 19]
+[0.19362743800002136, 'unsafe', 1]
+[0.19625107499996375, 'unsafe', 25]
+[0.20560896000006323, 'unsafe', 9]
+[1.466256969999904, 'safe', 20]
+[1.741071368999883, 'safe', 18]
+[2.706457949999958, 'unsafe', 3]
+[2.9162848240000585, 'safe', 6]
+[3.061292172000094, 'safe', 8]
+[3.779172090000202, 'unsafe', 5]
+[7.3663368149998405, 'safe', 22]
+[10.723340289999896, 'safe', 7]
+safe: 19, unsafe: 6, unknown: 0
