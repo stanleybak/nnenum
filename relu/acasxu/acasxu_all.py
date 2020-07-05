@@ -54,6 +54,8 @@ def main():
                    ["1", "9", "7"],
                    ["3", "3", "9"]]
 
+    instances = [["1", "9", "7"]]
+
     with open(hard_filename, "w") as h:
         with open(full_filename, "w") as f:
             for instance in instances:
@@ -68,10 +70,32 @@ def main():
                 if spec == "7":
                     # ego is better at finding deep counterexamples
                     Settings.BRANCH_MODE = Settings.BRANCH_EGO
+
+                    # property 7 is nondeterministic due to work sharing among processes... use median of 10 runs
+                    pretimeout = Settings.TIMEOUT
+                    Settings.TIMEOUT = 5 # smaller timeout to make it go faster
+                    runs = 10
+                    print(f"\nTrying median of {runs} quick runs")
+                    results = []
+
+                    for i in range(runs):
+                        print(f"\nTrial {i+1}/{runs}:")
+                        res_str, secs = verify_acasxu(net_pair, spec)
+                        results.append((secs, res_str))
+
+                    results.sort()
+                    print(f"results: {results}")
+                    secs, res_str = results[runs // 2] # median
+
+                    Settings.TIMEOUT = pretimeout
+
+                    if res_str == "timeout":
+                        # median was timeout; run full
+                        res_str, secs = verify_acasxu(net_pair, spec)
                 else:
                     Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
                     
-                res_str, secs = verify_acasxu(net_pair, spec)
+                    res_str, secs = verify_acasxu(net_pair, spec)
 
                 s = f"{a_prev}_{tau}\t{spec}\t{res_str}\t{secs}"
                 f.write(s + "\n")
