@@ -16,3 +16,4 @@ __pycache__
 *.dat
 stdout*
 *.swp
+results.tar.gz

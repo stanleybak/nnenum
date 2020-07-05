@@ -1,0 +1,43 @@
+#!/bin/bash
+# meaure all script for VNN2020 ReLU. you can exeute this inside docker or locally
+
+# if running remotely use tmux in case ssh disconnects so the process doesn't get killed:
+# tmux new -s measure
+# <run command>
+
+# then, if ssh disconnects you can reconnect to the tmux session with:
+# tmux a -t measure
+
+TIMEOUT=0.025 # default timeout: 1.5 secs
+
+if [ $# -gt 0 ]
+then
+    TIMEOUT=$1
+fi
+
+echo "Running with $TIMEOUT min timeout (you can change this by passing a command-line argument)"
+
+# make results folder and clear results
+rm -f ./results/*
+mkdir -p ./results
+
+# acas xu
+pushd relu/acasxu
+python3 acasxu_all.py $TIMEOUT
+popd
+cp relu/acasxu/*.dat results
+
+# pat676 networks
+pushd relu/pat
+./run_pat
+popd
+cp relu/pat/results/*.dat results
+
+echo "All done. Result .dat files should be in the './results' folder"
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+#!/bin/bash
+# meaure all script for nnenum 2020 vnn-comp relu
+
+TIMEOUT=0.025 # default timeout: 1.5 secs
+
+if [ $# -gt 0 ]
+then
+    TIMEOUT=$1
+fi
+
+echo "Running with $TIMEOUT min timeout (you can change this by passing a command-line argument)"
+sleep 2
+echo "Starting..."
+
+docker kill nnenum_container
+docker stop nnenum_container
+docker rm nnenum_container
+
+docker build . -t nnenum_image
+
+docker run -d --name nnenum_container nnenum_image tail -f /dev/null
+
+# "docker ps" should now list the image as running
+
+# to get a shell, remove the lines at the end that delete the container and do: "docker exec -it nnenum_container bash"
+
+docker exec nnenum_container ./run_all $TIMEOUT
+docker exec nnenum_container tar cvfz results.tar.gz ./results
+docker cp nnenum_container:/work/results.tar.gz results.tar.gz
+
+docker kill nnenum_container
+docker stop nnenum_container
+docker rm nnenum_container
+
+echo "Done. results.tar.gz should now be in the local folder."

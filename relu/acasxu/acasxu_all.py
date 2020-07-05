@@ -19,8 +19,8 @@ def main():
 
     full_filename = 'full_acasxu.dat'
     hard_filename = 'hard_acasxu.dat'
-    accumulated_filename = 'accumulated_full.dat'
-    hard_accumulated_filename = 'accumulated_hard.dat'
+    accumulated_filename = 'accumulated_full_acasxu.dat'
+    hard_accumulated_filename = 'accumulated_hard_acasxu.dat'
 
     if len(sys.argv) > 1:
         Settings.TIMEOUT = 60 * float(sys.argv[1])
@@ -73,7 +73,7 @@ def main():
 
                     # property 7 is nondeterministic due to work sharing among processes... use median of 10 runs
                     pretimeout = Settings.TIMEOUT
-                    Settings.TIMEOUT = 5 # smaller timeout to make it go faster
+                    Settings.TIMEOUT = min(5, pretimeout) # smaller timeout to make it go faster
                     runs = 10
                     print(f"\nTrying median of {runs} quick runs")
                     results = []

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#timeout in mins
+TIMEOUT=0.025
+
+echo "num args: $#"
+if [ $# -gt 0 ]
+then
+    echo "arg 1: $1"
+    TIMEOUT=$1
+fi
+
+echo "Running with timeout: $TIMEOUT"
+
+# make results folder and clear results
+mkdir -p ./results
+rm ./results/*
+
+# 3 neural networks
+for net in 2 4 6
+do 
+	# 2 epsilon values
+	for ep in 0.02 0.05
+	do 
+		printf "\n===========\nRunning with params: $net $ep $TIMEOUT\n"
+		time python3 -u pat_check.py $net $ep $TIMEOUT | tee results/stdout_net${net}_${ep}.txt
+	done
+done
