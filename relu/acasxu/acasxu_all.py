@@ -55,8 +55,6 @@ def main():
                    ["1", "9", "7"],
                    ["3", "3", "9"]]
 
-    instances = [["1", "9", "7"]]
-
     with open(hard_filename, "w") as h:
         with open(full_filename, "w") as f:
             for instance in instances:
@@ -69,7 +67,7 @@ def main():
                 cprint(f"\nRunning net {a_prev}-{tau} with spec {spec}", "grey", "on_green")
 
                 if spec == "7":
-                    # ego is better at finding deep counterexamples
+                    # ego / 10 processes is beter for deep counterexamples in prop 7
                     Settings.BRANCH_MODE = Settings.BRANCH_EGO
                     Settings.NUM_PROCESSES = 10
 
