@@ -14,7 +14,6 @@ def main():
 
     Settings.TIMING_STATS = False
     Settings.PARALLEL_ROOT_LP = False
-    Settings.SPLIT_IF_IDLE = False
 
     full_filename = 'full_acasxu.dat'
     hard_filename = 'hard_acasxu.dat'
@@ -70,6 +69,7 @@ def main():
                 if spec == "7":
                     # ego is better at finding deep counterexamples
                     Settings.BRANCH_MODE = Settings.BRANCH_EGO
+                    Settings.SPLIT_IF_IDLE = True
 
                     # property 7 is nondeterministic due to work sharing among processes... use median of 10 runs
                     pretimeout = Settings.TIMEOUT
@@ -87,6 +87,8 @@ def main():
                     print(f"results: {results}")
                     secs, res_str = results[runs // 2] # median
 
+                    print("Median: {secs}, {res_str}")
+
                     Settings.TIMEOUT = pretimeout
 
                     if res_str == "timeout":
@@ -94,6 +96,7 @@ def main():
                         res_str, secs = verify_acasxu(net_pair, spec)
                 else:
                     Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
+                    Settings.SPLIT_IF_IDLE = False
                     
                     res_str, secs = verify_acasxu(net_pair, spec)
 
