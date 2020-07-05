@@ -38,6 +38,8 @@ class DisjunctiveSpec(Freezable):
 
             s += str(spec)
 
+        return s
+
     def get_num_expected_variables(self):
         'get the number of expected variables for this spec'
 

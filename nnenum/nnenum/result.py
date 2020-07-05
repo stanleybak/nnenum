@@ -23,7 +23,7 @@ class Result(Freezable):
         self.result_str = "none"
 
         # total verification time, in seconds
-        self.total_secs = 0
+        self.total_secs = None
 
         # total number of times LP solver was called during enumeration (statistic)
         self.total_lps_enum = 0

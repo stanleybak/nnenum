@@ -1,5 +1,5 @@
 '''
-Utilities for testing
+Utilities
 
 Stanley Bak, 2018
 '''

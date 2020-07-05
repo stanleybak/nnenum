@@ -86,7 +86,7 @@ def enumerate_network(init, network, spec=None):
         check_openblas_threads()
 
     Timers.reset()
-    Timers.tic('ego_enumerate')
+    Timers.tic('enumerate_network')
     start = time.perf_counter()
 
     if Settings.BRANCH_MODE != Settings.BRANCH_EXACT:
@@ -190,11 +190,13 @@ def enumerate_network(init, network, spec=None):
                 Timers.toc('run workers')
 
             rv = shared.result
+            rv.total_secs = time.perf_counter() - start
             process_result(shared)
-        
-    rv.total_secs = time.perf_counter() - start
 
-    Timers.toc('ego_enumerate')
+    if rv.total_secs is None:
+        rv.total_secs = time.perf_counter() - start
+    
+    Timers.toc('enumerate_network')
 
     if Settings.TIMING_STATS and Settings.PRINT_OUTPUT and rv.result_str != 'error':
         Timers.print_stats()
@@ -238,9 +240,9 @@ def process_result(shared):
             print(f"Completed work frac: {shared.finished_work_frac.value}")
             print(f"Num Stars Copied Between Processes: {shared.num_offloaded.value}")
             print(f"Num Lps During Enumeration: {shared.num_lps_enum.value}")
-            count = shared.incorrect_overapprox_count.value
-            t = round(shared.incorrect_overapprox_time.value, 3)
-            print(f"Incorrect Overapproximation Time: {round(t/1000, 1)} sec (count: {count})")
+            #count = shared.incorrect_overapprox_count.value
+            #t = round(shared.incorrect_overapprox_time.value, 3)
+            #print(f"Incorrect Overapproximation Time: {round(t/1000, 1)} sec (count: {count})")
             print(f"Total Num Lps: {shared.num_lps.value}")
             print("")
 
@@ -248,8 +250,11 @@ def process_result(shared):
                 print(f"Timeout ({Settings.TIMEOUT}) reached during execution")
             elif shared.result.found_confirmed_counterexample.value:
                 print(f"Result: network is UNSAFE with confirmed counterexample in result.cinput and result.coutput")
-                #print(f"Input: {list(shared.result.cinput)}")
-                #print(f"Output: {list(shared.result.coutput)}")
+                if len(shared.result.cinput) <= 10:
+                    print(f"Input: {list(shared.result.cinput)}")
+
+                if len(shared.result.coutput) <= 10:
+                    print(f"Output: {list(shared.result.coutput)}")
             elif shared.result.found_counterexample.value:
                 print(f"Result: network seems UNSAFE, but not confirmed counterexamples (possible numerial " + \
                       "precision issues)")
