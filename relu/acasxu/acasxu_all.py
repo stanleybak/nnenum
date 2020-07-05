@@ -2,6 +2,7 @@
 Measurement script for ACAS Xu networks
 '''
 
+import os
 import sys
 import time
 from termcolor import cprint
@@ -14,6 +15,7 @@ def main():
 
     Settings.TIMING_STATS = False
     Settings.PARALLEL_ROOT_LP = False
+    Settings.SPLIT_IF_IDLE = False
 
     full_filename = 'full_acasxu.dat'
     hard_filename = 'hard_acasxu.dat'
@@ -69,7 +71,7 @@ def main():
                 if spec == "7":
                     # ego is better at finding deep counterexamples
                     Settings.BRANCH_MODE = Settings.BRANCH_EGO
-                    Settings.SPLIT_IF_IDLE = True
+                    Settings.NUM_PROCESSES = 10
 
                     # property 7 is nondeterministic due to work sharing among processes... use median of 10 runs
                     pretimeout = Settings.TIMEOUT
@@ -87,7 +89,7 @@ def main():
                     print(f"results: {results}")
                     secs, res_str = results[runs // 2] # median
 
-                    print("Median: {secs}, {res_str}")
+                    print(f"Median: {secs}, {res_str}")
 
                     Settings.TIMEOUT = pretimeout
 
@@ -96,7 +98,7 @@ def main():
                         res_str, secs = verify_acasxu(net_pair, spec)
                 else:
                     Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
-                    Settings.SPLIT_IF_IDLE = False
+                    Settings.NUM_PROCESSES = len(os.sched_getaffinity(0))
                     
                     res_str, secs = verify_acasxu(net_pair, spec)
 
