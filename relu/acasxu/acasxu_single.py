@@ -247,6 +247,12 @@ def main():
         Settings.NUM_PROCESSES = cores
         print(f"Override num cores: {cores}")
 
+    if spec == "7":
+        # ego is better at finding deep counterexamples
+        Settings.BRANCH_MODE = Settings.BRANCH_EGO
+    else:
+        Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
+
     print(f"\nRunning with network {net1}-{net2} and spec {spec_str}")
 
     result_str, runtime = verify_acasxu((net1, net2), spec_str)
