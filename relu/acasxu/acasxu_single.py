@@ -230,9 +230,7 @@ def main():
     'main entry point'
 
     # change default settings for improved speed with ACAS Xu
-    #Settings.CONTRACT_ZONOTOPE_LP = True
-    #Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
-    #Settings.SPLIT_IF_IDLE = False
+    Settings.SPLIT_IF_IDLE = False
     Settings.PARALLEL_ROOT_LP = False
     
     if len(sys.argv) < 4:
