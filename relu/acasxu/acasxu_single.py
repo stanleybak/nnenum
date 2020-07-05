@@ -241,17 +241,18 @@ def main():
     net2 = int(sys.argv[2])
     spec_str = sys.argv[3]
 
+    if spec_str == "7":
+        # ego is better at finding deep counterexamples
+        Settings.BRANCH_MODE = Settings.BRANCH_EGO
+        Settings.NUM_PROCESSES = 10
+    else:
+        Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
+
     if len(sys.argv) > 4:
         cores = int(sys.argv[4])
         
         Settings.NUM_PROCESSES = cores
         print(f"Override num cores: {cores}")
-
-    if spec == "7":
-        # ego is better at finding deep counterexamples
-        Settings.BRANCH_MODE = Settings.BRANCH_EGO
-    else:
-        Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
 
     print(f"\nRunning with network {net1}-{net2} and spec {spec_str}")
 
