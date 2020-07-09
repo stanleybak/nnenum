@@ -1,0 +1,3 @@
+the python files here undo the scaling in the ETH models and convert them to tensorflow1 .pb files (needed for aversarial generation).
+
+First use onnx_remove_scaling.py and then onnx_to_tensorflow1.py

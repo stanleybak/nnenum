@@ -14,12 +14,16 @@ from nnenum.network import ReluLayer, FullyConnectedLayer, nn_flatten, nn_unflat
 
 def try_quick_overapprox(ss, network, spec):
     'try a quick overapproximation, return True if safe'
+
+    Timers.tic('try_quick_overapprox')
     
     overapprox_types = Settings.QUICK_OVERAPPROX_TYPES
 
     prerelu_sims = make_prerelu_sims(ss, network)
 
     rr = do_overapprox_rounds(ss, network, spec, prerelu_sims, overapprox_types=overapprox_types)
+
+    Timers.toc('try_quick_overapprox')
 
     return rr.is_safe
 

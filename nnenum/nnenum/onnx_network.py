@@ -92,6 +92,7 @@ class LinearOnnxSubnetworkLayer(Freezable):
         cols = []
 
         for col in range(star.a_mat.shape[1]):
+            #print(f".transforming star: {col} / {star.a_mat.shape[1]})")
             vec = star.a_mat[:, col]
             vec = nn_unflatten(vec, self.input_shape)
             
@@ -114,6 +115,7 @@ class LinearOnnxSubnetworkLayer(Freezable):
         cols = []
 
         for col in range(zono.mat_t.shape[1]):
+            #print(f".transforming zono: {col} / {zono.mat_t.shape[1]})")
             vec = zono.mat_t[:, col]
             vec = nn_unflatten(vec, self.input_shape)
             
@@ -647,6 +649,7 @@ def get_io_shapes(model):
 
     for inp in inputs:            
         shape = tuple(d.dim_value if d.dim_value != 0 else 1 for d in inp.type.tensor_type.shape.dim)
+        
         input_map[inp.name] = np.zeros(shape, dtype=dtype)
 
         # also save it's shape

@@ -33,6 +33,33 @@ class NeuralNetwork(Freezable):
         return f'[NeuralNetwork with {len(self.layers)} layers with {self.layers[0].get_input_shape()} input and ' + \
           f'{self.get_output_shape()} output]'
 
+    def num_relu_layers(self):
+        'count the number of relu layers'
+
+        rv = 0
+
+        for l in self.layers:
+            if isinstance(l, ReluLayer):
+                rv += 1
+
+        return rv
+
+    def num_relu_neurons(self):
+        'count the number of relu neurons'
+
+        rv = 0
+
+        for l in self.layers:
+            if isinstance(l, ReluLayer):
+                count = 1
+
+                for dim in l.shape:
+                    count *= dim
+
+                rv += count
+
+        return rv
+
     def get_input_shape(self):
         'get the input shape to the first layer'
 

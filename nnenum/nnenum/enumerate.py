@@ -102,24 +102,36 @@ def enumerate_network(init, network, spec=None):
         Timers.disable()
 
     # adversarial generation process and queue
+    concrete_io_tuple = None
     q = None
     p = None
 
     if Settings.ADVERSARIAL_ONNX_PATH is not None and Settings.ADVERSARIAL_TRY_QUICK:
-        q = multiprocessing.Queue()
-        p = multiprocessing.Process(target=gen_adv, args=(q, network))
-        p.start()
-        # we'll process the result later
+        if not Settings.ADVERSARIAL_INIT_NEW_THREAD:
+            concrete_io_tuple = gen_adv_single_threaded(network)
+        else:
+            q = multiprocessing.Queue()
+            p = multiprocessing.Process(target=gen_adv, args=(q, network))
+            p.start()
+            # we'll process the result later
 
-    init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
+    if concrete_io_tuple is None:
+        init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
 
-    proven_safe = False
-    try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
+        proven_safe = False
+        try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
 
-    if init_ss is not None and try_quick and spec is not None:
-        proven_safe = try_quick_overapprox(init_ss, network, spec)
+        if init_ss is not None and try_quick and spec is not None:
+            proven_safe = try_quick_overapprox(init_ss, network, spec)
 
-    if init_ss is None:
+    if concrete_io_tuple is not None:
+        # non-parallel adversarial example was generated
+        rv = Result(network, quick=True)
+        rv.result_str = 'unsafe'
+
+        rv.cinput = concrete_io_tuple[0]
+        rv.coutput = concrete_io_tuple[1]
+    elif init_ss is None:
         rv = Result(network, quick=True)
         rv.result_str = 'timeout'
 
@@ -639,10 +651,20 @@ def worker_func(worker_index, shared):
 
 def gen_adv(q, network):
     '''try a quick adversarial
+
     puts concrete_io_tuple or None into the queue
     '''
 
+    concrete_io_tuple = gen_adv_single_threaded(network)
+
+    q.put(concrete_io_tuple)
+    q.close()
+
+def gen_adv_single_threaded(network):
+    'gen adversarial without multiprocessing interface'
+
     concrete_io_tuple = None
+        
     start = time.perf_counter()
     _, aimage = try_quick_adversarial(Settings.ADVERSARIAL_QUICK_NUM_ATTEMPTS)
     gen_time = time.perf_counter() - start
@@ -652,7 +674,6 @@ def gen_adv(q, network):
             print("try_quick_adversarial found unsafe image")
 
         start = time.perf_counter()
-        #flat_image = np.ravel(aimage)
 
         output = network.execute(aimage)
         flat_output = np.ravel(output)
@@ -671,5 +692,4 @@ def gen_adv(q, network):
         if confirmed:
             concrete_io_tuple = (np.ravel(aimage), flat_output)
 
-    q.put(concrete_io_tuple)
-    q.close()
+    return concrete_io_tuple

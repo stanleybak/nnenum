@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#timeout in mins
+TIMEOUT=0.025
+
+echo "num args: $#"
+if [ $# -gt 0 ]
+then
+    echo "arg 1: $1"
+    TIMEOUT=$1
+fi
+
+echo "Running with timeout: $TIMEOUT"
+
+# make results folder and clear results
+mkdir -p ./results
+rm ./results/*
+
+# 4 neural networks
+for netname in "mnist_0.1" "mnist_0.3" "cifar10_2_255" "cifar10_8_255"
+do 
+	printf "\n===========\nRunning with params: $netname $TIMEOUT\n"
+	time python3 -u eth_check.py $netname $TIMEOUT | tee results/stdout_${netname}.txt
+done

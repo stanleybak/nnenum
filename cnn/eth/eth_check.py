@@ -91,7 +91,6 @@ def make_init(nn, image_filename, epsilon, specific_image=None):
 
     rv = []
 
-    print("loading images")
     images, labels = load_unscaled_images(image_filename, specific_image=specific_image)
     min_images, _ = load_unscaled_images(image_filename, specific_image=specific_image, epsilon=-epsilon)
     max_images, _ = load_unscaled_images(image_filename, specific_image=specific_image, epsilon=epsilon)
@@ -99,6 +98,7 @@ def make_init(nn, image_filename, epsilon, specific_image=None):
     print("making init states")
     
     for image_id, (image, classification) in enumerate(zip(images, labels)):
+        
         output = nn.execute(image)
         flat_output = nn_flatten(output)
         num_outputs = flat_output.shape[0]
@@ -130,6 +130,9 @@ def make_init(nn, image_filename, epsilon, specific_image=None):
             init_box = np.array(init_box, dtype=np.float32)
             init_state = LpStarState(init_box, spec)
 
+            if specific_image is not None:
+                image_id = specific_image
+
             rv.append((image_id, image, label, init_state, spec))
 
     return rv
@@ -152,8 +155,15 @@ def main():
         epsilon = 0.1
     elif '0.3' in netname:
         epsilon = 0.3
+    elif '2_255' in netname:
+        epsilon = 2.0 / 255.0
+    else:
+        assert '8_255' in netname
+        epsilon = 8.0 / 255.0
 
     timeout_mins = float(sys.argv[2])
+
+    print(f"Using a timeout of {round(timeout_mins * 60, 1)} seconds")
 
     onnx_filename = f'data/{onnx_filename}'
 
@@ -180,11 +190,12 @@ def main():
     #nn = load_onnx_network(onnx_filename)
     print(f"loading onnx network from {onnx_filename}")
     nn = load_onnx_network(onnx_filename)
+    print(f"loaded network with {nn.num_relu_layers()} ReLU layers and {nn.num_relu_neurons()} ReLU neurons")
 
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
-
     Settings.ADVERSARIAL_FROM_ABSTRACT_VIO = True
+    Settings.ADVERSARIAL_INIT_NEW_THREAD = False
 
     #if epsilon == 0.05:
         # speed up splitting near root
@@ -197,7 +208,11 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = 8
+    print("todo: check the counterexample found from image 0 on original network")
+
+    # "image 2 doesn't respect the timeout........"
+
+    specific_image = 2
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")
@@ -211,7 +226,7 @@ def main():
     with open(filename, 'w') as f:
 
         start = time.perf_counter()
-        
+
         for image_id, image_data, classification, init_state, spec in tup_list:
             print(f"\n========\nChecking robustness of image {image_id} for output class {classification}, with ep={epsilon}")
 
@@ -230,7 +245,7 @@ def main():
             else:
                 if r == 'error':
                     error_count += 1
-                    
+
                 unknown_count += 1
 
             if r != "timeout":
