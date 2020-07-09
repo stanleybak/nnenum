@@ -219,7 +219,7 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
         #print(f"safe after round: {rv.is_safe}, runtime: {diff * 1000} ms, check: {check_diff * 1000} ms")
 
         if rv.is_safe:
-             break
+            break
 
         if vstars and try_seeded_adversarial is not None and Settings.ADVERSARIAL_ONNX_PATH and \
                       Settings.ADVERSARIAL_FROM_ABSTRACT_VIO:
@@ -238,6 +238,7 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
 
                 trimmed_inputs = cinput[:dims]
                 shaped_input = nn_unflatten(trimmed_inputs, Settings.ADVERSARIAL_ORIG_IMAGE.shape)
+                    
                 exec_output = network.execute(shaped_input)
                 flat_output = np.ravel(exec_output)
                 

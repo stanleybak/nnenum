@@ -112,53 +112,6 @@ class LpStar(Freezable):
 
         return rv
 
-    def input_box_bounds_old(self, cur_box, max_dim=np.inf, count_lps=True):
-        '''get input box bounds on this set, compared with the current bounds using lp
-
-        returns a list of 3-tuples for each of the bounds that was adjusted:
-        (dim, lb, ub)
-        '''
-
-        dims = min(max_dim, self.lpi.get_num_cols())
-        rv = []
-        tol = 1e-8
-
-        Timers.tic("star.input_box_bounds")
-
-        for dim in range(dims):
-            
-            # adjust lb
-            vec = np.array([1 if i == dim else 0 for i in range(dims)], dtype=float)
-            Timers.tic('lpi.minimize')
-            res = self.lpi.minimize(vec)
-            Timers.toc('lpi.minimize')
-
-            if count_lps:
-                self.num_lps += 1
-
-            if cur_box is None or abs(res[dim] - cur_box[dim][0]) >= tol:
-                rv.append([dim, res[dim], np.inf])
-
-            # adjust ub
-            vec = np.array([-1 if i == dim else 0 for i in range(dims)], dtype=float)
-
-            Timers.tic('lpi.minimize')
-            res = self.lpi.minimize(vec)
-            Timers.toc('lpi.minimize')
-
-            if count_lps:
-                self.num_lps += 1
-
-            if cur_box is None or abs(res[dim] - cur_box[dim][1]) >= tol:
-                if not rv or rv[-1][0] != dim:
-                    rv.append([dim, -np.inf, res[dim]])
-                else:
-                    rv[-1][2] = res[dim]
-
-        Timers.toc("star.input_box_bounds")
-
-        return rv
-
     def input_box_bounds(self, cur_box, max_dim=np.inf, count_lps=True):
         '''get input box bounds on this set, compared with the current bounds using lp
 
@@ -322,14 +275,19 @@ class LpStar(Freezable):
 
         Timers.tic('star.minimize_vec')
 
+        if self.a_mat is not None:
+            dtype = self.a_mat.dtype
+        else:
+            dtype = float
+
         if self.a_mat.size == 0:
             rv = self.bias
-            self.last_lp_result = lp_result = np.array([], dtype=float)
+            self.last_lp_result = lp_result = np.array([], dtype=dtype)
         else:
             assert len(self.a_mat.shape) == 2, f"a_mat shape was {self.a_mat.shape}"
 
             if vec is None:
-                vec = np.zeros((self.a_mat.shape[0],), dtype=float)
+                vec = np.zeros((self.a_mat.shape[0],), dtype=dtype)
 
             assert len(vec) == self.a_mat.shape[0], f"minimize called with vector with {len(vec)} elements, " + \
                 f"but set has {self.a_mat.shape[0]} outputs"
@@ -345,7 +303,11 @@ class LpStar(Freezable):
             #Timers.toc('setup')
 
             #Timers.tic('lpi.minimize')
-            self.last_lp_result = lp_result = self.lpi.minimize(lp_vec)
+            lp_result = self.lpi.minimize(lp_vec)
+            if lp_result.dtype != dtype:
+                lp_result = lp_result.astype(dtype)
+            
+            self.last_lp_result = lp_result
             
             self.num_lps += 1
             #Timers.toc('lpi.minimize')

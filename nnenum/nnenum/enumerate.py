@@ -652,9 +652,9 @@ def gen_adv(q, network):
             print("try_quick_adversarial found unsafe image")
 
         start = time.perf_counter()
-        flat_image = np.ravel(aimage)
+        #flat_image = np.ravel(aimage)
 
-        output = network.execute(flat_image)
+        output = network.execute(aimage)
         flat_output = np.ravel(output)
 
         olabel = np.argmax(output)
@@ -669,7 +669,7 @@ def gen_adv(q, network):
             print(f"counterexample was confirmed: {confirmed}. Gen: {gen_ms}, Exec: {exec_ms}")
 
         if confirmed:
-            concrete_io_tuple = (flat_image, flat_output)
+            concrete_io_tuple = (np.ravel(aimage), flat_output)
 
     q.put(concrete_io_tuple)
     q.close()
