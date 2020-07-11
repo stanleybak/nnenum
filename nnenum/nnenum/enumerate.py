@@ -111,8 +111,7 @@ def enumerate_network(init, network, spec=None):
 
     if Settings.ADVERSARIAL_ONNX_PATH is not None and Settings.ADVERSARIAL_TRY_QUICK:
         q = multiprocessing.Queue()
-        remaining_secs = Settings.TIMEOUT # close enough since this is the first thing we do
-        p = multiprocessing.Process(target=gen_adv, args=(q, network, remaining_secs))
+        p = multiprocessing.Process(target=gen_adv, args=(q, network, Settings.TIMEOUT))
         p.start()
             
         if not Settings.ADVERSARIAL_INIT_PARALLEL:
@@ -127,7 +126,7 @@ def enumerate_network(init, network, spec=None):
 
     init_ss = None
     
-    if concrete_io_tuple is None and remaining_secs > 0:
+    if concrete_io_tuple is None and time.perf_counter() - start < Settings.TIMEOUT:
         init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
 
         proven_safe = False
@@ -510,6 +509,7 @@ def worker_func(worker_index, shared):
         priv.agen, aimage = try_quick_adversarial(1)
             
         for i in range(Settings.ADVERSARIAL_WORKERS_MAX_ITER):
+            
             if aimage is not None:
                 if Settings.PRINT_OUTPUT:
                     print(f"mixed_adversarial worker {worker_index} found unsafe image after on iteration {i}")

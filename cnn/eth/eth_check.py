@@ -196,7 +196,7 @@ def main():
 
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
-    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = True
+    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = False # true
     Settings.ADVERSARIAL_INIT_PARALLEL = True
 
     #if epsilon == 0.05:
@@ -210,7 +210,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = None
+    specific_image = None #38
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")

@@ -16,7 +16,7 @@ import swiglpk as glpk
 from nnenum.util import Freezable
 from nnenum.timerutil import Timers
 
-def get_lp_params():
+def get_lp_params(alternate_lp_params=False):
     'get the lp params object'
 
     if not hasattr(get_lp_params, 'obj'):
@@ -28,10 +28,24 @@ def get_lp_params():
 
         params.msg_lev = glpk.GLP_MSG_ERR
 
-        params.tm_lim = int(60 * 1000) # set 60 sec timeout
-        params.out_dly = 10 * 1000 # star printing to terminal status after 10 secs
+        params.tm_lim = int(60 * 1000) # set 10 sec timeout
+        params.out_dly = 5 * 1000 # start printing to terminal status after 5 secs
         
-        rv = get_lp_params.obj = params
+        get_lp_params.obj = params
+
+        # make alternative params
+        params = glpk.glp_smcp()
+        glpk.glp_init_smcp(params)
+        params.meth = glpk.GLP_DUAL # use dual simplex... maybe works better?
+        params.msg_lev = glpk.GLP_MSG_ON
+
+        params.tm_lim = int(60 * 1000) # set 60 sec timeout
+        #params.out_dly = 1 * 1000 # start printing to terminal status after 1 secs
+        
+        get_lp_params.alt_obj = params
+        
+    if alternate_lp_params:
+        rv = get_lp_params.alt_obj
     else:
         rv = get_lp_params.obj
 
@@ -615,7 +629,7 @@ class LpInstance(Freezable):
             assert basis_type == 'cpx'
             glpk.glp_cpx_basis(self.lp)
 
-    def minimize(self, direction_vec, fail_on_unsat=True):
+    def minimize(self, direction_vec, fail_on_unsat=True, alternate_lp_params=False):
         '''minimize the lp, returning a list of assigments to each of the variables
 
         if direction_vec is not None, this will first assign the optimization direction
@@ -636,7 +650,8 @@ class LpInstance(Freezable):
 
         #self.reset_basis(basis_type='std') # TODO: REMOVE
 
-        simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
+        #alternative_lp_params = True
+        simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=alternate_lp_params))
 
         # there was a bug in glp where optimizing first time said optimal but
         # obj value was zero and if oyu ran it again it got a better answer (DUALP)
@@ -650,21 +665,27 @@ class LpInstance(Freezable):
         #Timers.toc('process_simplex_result')
 
         if rv is None and fail_on_unsat:
-            print("Note: minimize failed with fail_on_unsat was true, resetting and retrying...")
+            print("Note: minimize failed with fail_on_unsat was true, reinitializing and retrying...")
 
             self.reset_basis()
+            rv = self.minimize(direction_vec, fail_on_unsat=False, alternate_lp_params=True)
 
-            # sometimes setting the optimization direction makes the problem unsat...
-            result_nodir = self.minimize(None, fail_on_unsat=False)
-            rv = self.minimize(direction_vec, fail_on_unsat=False)
-
-            # lp became infeasible when I picked an optimization direction
             if rv is None:
-                if result_nodir is not None:
-                    print("Using result from no-direction optimization") 
-                    rv = result_nodir
-                else:
-                    print("No-dir result was none")
+                print("still unsat, trying no-dir optimization")
+                self.reset_basis()
+
+                result_nodir = self.minimize(None, fail_on_unsat=False)
+                rv = self.minimize(direction_vec, fail_on_unsat=False)
+
+                # lp became infeasible when I picked an optimization direction
+                if rv is None:
+                    if result_nodir is not None:
+                        print("Using result from no-direction optimization") 
+                        rv = result_nodir
+                    else:
+                        print("No-dir result was none")
+            else:
+                print("using result after reset and alterative lp params")
 
             #LpInstance.print_verbose("Note: LP was infeasible, but then feasible after resetting statuses")
 

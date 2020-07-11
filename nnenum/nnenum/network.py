@@ -111,7 +111,7 @@ class NeuralNetwork(Freezable):
         state = input_vec.copy() # test with float32 dtype?
         
         if state.shape != self.get_input_shape():
-            nn_unflatten(state, self.get_input_shape())
+            state = nn_unflatten(state, self.get_input_shape())
 
         for layer in self.layers:
             if save_branching and isinstance(layer, ReluLayer) or isinstance(layer, PoolingLayer):
@@ -120,8 +120,10 @@ class NeuralNetwork(Freezable):
             else:
                 if save_branching:
                     branch_list.append([])
-                    
+
+                assert state.shape == layer.get_input_shape()
                 state = layer.execute(state)
+                assert state.shape == layer.get_output_shape()
 
         assert state.shape == self.get_output_shape()
 
