@@ -6,6 +6,9 @@ import sys
 import time
 from pathlib import Path
 
+import onnx
+import onnxruntime as ort
+
 import numpy as np
 
 from nnenum.onnx_network import load_onnx_network
@@ -13,7 +16,7 @@ from nnenum.specification import Specification, DisjunctiveSpec
 from nnenum.lp_star_state import LpStarState
 from nnenum.enumerate import enumerate_network
 from nnenum.settings import Settings
-from nnenum.network import nn_flatten
+from nnenum.network import nn_flatten, nn_unflatten
 
 def load_unscaled_images(filename, specific_image=None, epsilon=0.0):
     '''read images from csv file
@@ -101,6 +104,7 @@ def make_init(nn, image_filename, epsilon, specific_image=None):
         
         output = nn.execute(image)
         flat_output = nn_flatten(output)
+
         num_outputs = flat_output.shape[0]
         label = np.argmax(flat_output)
 
@@ -166,14 +170,12 @@ def main():
     print(f"Using a timeout of {round(timeout_mins * 60, 1)} seconds")
 
     onnx_filename = f'data/{onnx_filename}'
-
     benchmark_name = f"eth_{netname}"
 
     filename = f'results/summary_{benchmark_name}.dat'
 
     Settings.TIMEOUT = 60 * timeout_mins
     Settings.COMPRESS_INIT_BOX = False
-    
     Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
     
     Settings.OVERAPPROX_MIN_GEN_LIMIT = np.inf
@@ -194,8 +196,8 @@ def main():
 
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
-    Settings.ADVERSARIAL_FROM_ABSTRACT_VIO = True
-    Settings.ADVERSARIAL_INIT_NEW_THREAD = False
+    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = True
+    Settings.ADVERSARIAL_INIT_PARALLEL = False
 
     #if epsilon == 0.05:
         # speed up splitting near root
@@ -208,11 +210,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    print("todo: check the counterexample found from image 0 on original network")
-
-    # "image 2 doesn't respect the timeout........"
-
-    specific_image = 2
+    specific_image = None
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")
@@ -228,7 +226,8 @@ def main():
         start = time.perf_counter()
 
         for image_id, image_data, classification, init_state, spec in tup_list:
-            print(f"\n========\nChecking robustness of image {image_id} for output class {classification}, with ep={epsilon}")
+            print(f"\n========\nChecking robustness of image {image_id} for " + \
+                  f"output class {classification}, with ep={epsilon}")
 
             # probably don't want to do this with globals
             Settings.ADVERSARIAL_ORIG_IMAGE = image_data

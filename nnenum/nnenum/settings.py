@@ -1,16 +1,18 @@
 '''
 Computation Settings. Change settings by assigning directly to the class attributes.
 
-For example:
-Settings.TIMEOUT = 10
+For example, to run single-threaded:
+Settings.NUM_PROCESSES = 1
 '''
 
 import os
 
+import numpy as np
+
 from nnenum.util import FreezableMeta
 
 class Settings(metaclass=FreezableMeta):
-    '''enumeration settings. Access these using, for example, Settings.TIMEOUT
+    '''enumeration settings. Access these using, for example, Settings.NUM_PROCESSES
 
     These get initialized by the metaclass to the values in the reset() class method.
     '''
@@ -24,7 +26,7 @@ class Settings(metaclass=FreezableMeta):
 
         # settings / optimizations
         cls.NUM_PROCESSES = len(os.sched_getaffinity(0)) # use multiple cores
-        cls.TIMEOUT = None # verification timeout, in seconds (None = no timeout)
+        cls.TIMEOUT = np.inf # verification timeout, in seconds (np.inf = no timeout)
 
         cls.SINGLE_SET = False # only do single-set overapproximation (no splitting)
 
@@ -69,7 +71,7 @@ class Settings(metaclass=FreezableMeta):
         cls.OVERAPPROX_CONTRACT_ZONO_LP = True # contract LP during overapproximation steps?
         cls.OVERAPPROX_GEN_LIMIT_MULTIPLIER = 1.5 # don't try approx star if multizono.gens > THIS * last_safe_gens
         cls.OVERAPPROX_MIN_GEN_LIMIT = 50 # minimum generators to use as cap
-        cls.OVERAPPROX_LP_TIMEOUT = 1.0 # timeout for LP part of overapproximation
+        cls.OVERAPPROX_LP_TIMEOUT = 1.0 # timeout for LP part of overapproximation, use np.inf for unbounded
         cls.OVERAPPROX_BOTH_BOUNDS = False # should overapprox star method compute both bounds or just reject branches?
 
         cls.SAVE_BRANCH_TUPLES_FILENAME = None
@@ -112,11 +114,12 @@ class Settings(metaclass=FreezableMeta):
         cls.ADVERSARIAL_QUICK_NUM_ATTEMPTS = 10 # how many attempts
         cls.ADVERSARIAL_IN_WORKERS = True # do lots of attempted adversarial generation until more work is produced
         cls.ADVERSARIAL_WORKERS_MAX_ITER = 100 # how many attempts workers should make
-        cls.ADVERSARIAL_FROM_ABSTRACT_VIO = False # try adversarial examples from abstract violations
+        cls.ADVERSARIAL_TEST_ABSTRACT_VIO = True # try executing abstract violations
+        cls.ADVERSARIAL_SEED_ABSTRACT_VIO = False # try adversarial examples seeded from abstract violations
 
 
         cls.ADVERSARIAL_ONNX_PATH = None # path to .onnx file with corresponidng .onnx.pb file
         cls.ADVERSARIAL_EPSILON = None
         cls.ADVERSARIAL_ORIG_IMAGE = None
         cls.ADVERSARIAL_ORIG_LABEL = None
-        cls.ADVERSARIAL_INIT_NEW_THREAD = True # use a new thread to generate initial adversarial example
+        cls.ADVERSARIAL_INIT_PARALLEL = True # run init adversarial generation in parallel to quick safety checking 

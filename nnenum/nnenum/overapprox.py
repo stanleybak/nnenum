@@ -12,20 +12,40 @@ from nnenum.prefilter import update_bounds_lp, sort_splits
 from nnenum.specification import DisjunctiveSpec
 from nnenum.network import ReluLayer, FullyConnectedLayer, nn_flatten, nn_unflatten
 
-def try_quick_overapprox(ss, network, spec):
+def try_quick_overapprox(ss, network, spec, start_time):
     'try a quick overapproximation, return True if safe'
 
     Timers.tic('try_quick_overapprox')
     
     overapprox_types = Settings.QUICK_OVERAPPROX_TYPES
 
-    prerelu_sims = make_prerelu_sims(ss, network)
+    def check_cancel_func():
+        'worker cancel func. can raise OverapproxCanceledException'
 
-    rr = do_overapprox_rounds(ss, network, spec, prerelu_sims, overapprox_types=overapprox_types)
+        diff = time.perf_counter() - start_time
+
+        if diff > Settings.TIMEOUT:
+            raise OverapproxCanceledException('timeout exceeded')
+    
+    try:
+        check_cancel_func()
+        
+        prerelu_sims = make_prerelu_sims(ss, network)
+
+        check_cancel_func()
+        
+        rr = do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=check_cancel_func,
+                              overapprox_types=overapprox_types)
+
+        rv = rr.is_safe, rr.concrete_io_tuple
+    except OverapproxCanceledException:
+        if Settings.PRINT_OUTPUT:
+            print("Overapprox canceled (timeout)")
+        rv = False, None
 
     Timers.toc('try_quick_overapprox')
 
-    return rr.is_safe
+    return rv
 
 def make_prerelu_sims(ss, network):
     '''compute the prerelu simulation values at each remaining layer
@@ -75,7 +95,6 @@ def check_round(ss, sets, spec_arg, check_cancel_func=None):
     This returns is_safe?, violation_stars, violation_indices
     '''
 
-    # todo: evaluate if trying to generate concrete counterexamples here is worth it
     Timers.tic('overapprox_check_round')
 
     if check_cancel_func is None:
@@ -159,6 +178,39 @@ class RoundsResult:
             rv = max(rv, max(gen_list))
 
         return rv
+
+def test_abstract_violation(dims, vstars, vindices, network, spec):
+    'test concrete executions for specification violations'
+    
+    concrete_io_tuple = None
+
+    Timers.tic('try_abstract_violation')
+
+    for vstar, vindex in zip(vstars, vindices):
+        if isinstance(spec, DisjunctiveSpec):
+            row = spec.spec_list[vindex].mat[0, :]
+        else:
+            row = spec.mat[0, :]
+
+        cinput, coutput = vstar.minimize_vec(row, return_io=True)
+
+        vio_label = np.argmax(coutput)
+
+        trimmed_inputs = cinput[:dims]
+        shaped_input = nn_unflatten(trimmed_inputs, network.get_input_shape())
+
+        exec_output = network.execute(shaped_input)
+        flat_output = np.ravel(exec_output)
+
+        if np.argmax(flat_output) == vio_label:
+            if Settings.PRINT_OUTPUT:
+                print("Found unsafe from concrete execution of abstract counterexample")
+
+            concrete_io_tuple = (trimmed_inputs, flat_output)
+
+    Timers.toc('try_abstract_violation')
+
+    return concrete_io_tuple
         
 def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None, gen_limit=np.inf,
                          overapprox_types=None, try_seeded_adversarial=None):
@@ -225,42 +277,15 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
         if rv.is_safe:
             break
 
-        if vstars and try_seeded_adversarial is not None and Settings.ADVERSARIAL_ONNX_PATH and \
-                      Settings.ADVERSARIAL_FROM_ABSTRACT_VIO:
-            Timers.tic('try_violation_adversarial')
-            dims = len(np.ravel(Settings.ADVERSARIAL_ORIG_IMAGE))
-
-            for vstar, vindex in zip(vstars, vindices):
-                if isinstance(spec, DisjunctiveSpec):
-                    row = spec.spec_list[vindex].mat[0, :]
-                else:
-                    row = spec.mat[0, :]
-
-                cinput, coutput = vstar.minimize_vec(row, return_io=True)
-
-                assert np.argmax(coutput) != Settings.ADVERSARIAL_ORIG_LABEL
-
-                trimmed_inputs = cinput[:dims]
-                shaped_input = nn_unflatten(trimmed_inputs, Settings.ADVERSARIAL_ORIG_IMAGE.shape)
-                    
-                exec_output = network.execute(shaped_input)
-                flat_output = np.ravel(exec_output)
+        if vstars and (Settings.ADVERSARIAL_TEST_ABSTRACT_VIO or Settings.ADVERSARIAL_SEED_ABSTRACT_VIO):
+            dims = ss.star.lpi.get_num_cols()
                 
-                if np.argmax(flat_output) != Settings.ADVERSARIAL_ORIG_LABEL:
-                    if Settings.PRINT_OUTPUT:
-                        print("Found unsafe from concrete execution of abstract counterexample")
-                        
-                    rv.concrete_io_tuple = trimmed_inputs, flat_output
-                else:
-                    rv.concrete_io_tuple = try_seeded_adversarial(shaped_input)
+            if Settings.ADVERSARIAL_TEST_ABSTRACT_VIO:
+                rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
 
-                    if rv.concrete_io_tuple and Settings.PRINT_OUTPUT:
-                        print("Found unsafe from adversarial search near abstract counterexample")
-
-                if rv.concrete_io_tuple is not None:
-                    break
-
-            Timers.toc('try_violation_adversarial')
+            if rv.concrete_io_tuple is None and Settings.ADVERSARIAL_SEED_ABSTRACT_VIO \
+                                            and Settings.ADVERSARIAL_ONNX_PATH and try_seeded_adversarial:
+                rv.concrete_io_tuple = try_seeded_adversarial(dims, vstars, vindices, spec)
 
         if vstars and Settings.CONTRACT_OVERAPPROX_VIOLATION:
             ss.contract_from_violation(vstars)
@@ -345,6 +370,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
             
             for s in sets:
                 s.transform_linear(layer)
+                check_cancel_func()
 
             Timers.toc('transform_linear')
 

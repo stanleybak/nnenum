@@ -19,7 +19,7 @@ from nnenum.lp_star_state import LpStarState
 from nnenum.util import Freezable, FakeQueue, to_time_str, check_openblas_threads
 from nnenum.settings import Settings
 from nnenum.result import Result
-from nnenum.network import NeuralNetwork
+from nnenum.network import NeuralNetwork, nn_flatten
 from nnenum.worker import Worker
 from nnenum.overapprox import try_quick_overapprox
 from nnenum.onnx_network import reinit_onnx_sessions
@@ -82,6 +82,9 @@ def enumerate_network(init, network, spec=None):
     the output is an instance of Result
     '''
 
+    assert Settings.TIMEOUT is not None, "use Settings.TIMEOUT = np.inf for no timeout"
+    assert Settings.OVERAPPROX_LP_TIMEOUT is not None, "use Settings.OVERAPPROX_LP_TIMEOUT = np.inf for no timeout"
+
     if Settings.CHECK_SINGLE_THREAD_BLAS:
         check_openblas_threads()
 
@@ -107,22 +110,31 @@ def enumerate_network(init, network, spec=None):
     p = None
 
     if Settings.ADVERSARIAL_ONNX_PATH is not None and Settings.ADVERSARIAL_TRY_QUICK:
-        if not Settings.ADVERSARIAL_INIT_NEW_THREAD:
-            concrete_io_tuple = gen_adv_single_threaded(network)
-        else:
-            q = multiprocessing.Queue()
-            p = multiprocessing.Process(target=gen_adv, args=(q, network))
-            p.start()
-            # we'll process the result later
+        q = multiprocessing.Queue()
+        remaining_secs = Settings.TIMEOUT # close enough since this is the first thing we do
+        p = multiprocessing.Process(target=gen_adv, args=(q, network, remaining_secs))
+        p.start()
+            
+        if not Settings.ADVERSARIAL_INIT_PARALLEL:
+            Timers.tic('try_quick_adversarial')
+            # wait for result rather than testing safety in parallel
+            concrete_io_tuple = q.get()
+            p.join()
+            p.terminate()
+            p = None
+            q = None
+            Timers.toc('try_quick_adversarial')
 
-    if concrete_io_tuple is None:
+    init_ss = None
+    
+    if concrete_io_tuple is None and remaining_secs > 0:
         init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
 
         proven_safe = False
         try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
 
         if init_ss is not None and try_quick and spec is not None:
-            proven_safe = try_quick_overapprox(init_ss, network, spec)
+            proven_safe, concrete_io_tuple = try_quick_overapprox(init_ss, network, spec, start)
 
     if concrete_io_tuple is not None:
         # non-parallel adversarial example was generated
@@ -131,30 +143,22 @@ def enumerate_network(init, network, spec=None):
 
         rv.cinput = concrete_io_tuple[0]
         rv.coutput = concrete_io_tuple[1]
-    elif init_ss is None:
+    elif init_ss is None or time.perf_counter() - start > Settings.TIMEOUT:
         rv = Result(network, quick=True)
         rv.result_str = 'timeout'
-
-        if p is not None and q is not None:
-            q.cancel_join_thread()
-            p.terminate()
     elif proven_safe:
         rv = Result(network, quick=True)
         rv.result_str = 'safe'
-
-        if p is not None and q is not None:
-            q.cancel_join_thread()
-            p.terminate()
     else:
         concrete_io_tuple = None
         
         if p is not None and q is not None:
-            Timers.tic('get_quick_adv result')
             concrete_io_tuple = q.get()
             p.join()
-            Timers.toc('get_quick_adv result')
             p.terminate()
             q.cancel_join_thread()
+            p = None
+            q = None
 
         if concrete_io_tuple is not None:
             if Settings.PRINT_OUTPUT:
@@ -204,6 +208,10 @@ def enumerate_network(init, network, spec=None):
             rv = shared.result
             rv.total_secs = time.perf_counter() - start
             process_result(shared)
+
+    if p is not None and q is not None:
+        q.cancel_join_thread()
+        p.terminate()
 
     if rv.total_secs is None:
         rv.total_secs = time.perf_counter() - start
@@ -500,13 +508,13 @@ def worker_func(worker_index, shared):
     if worker_index == 1 and Settings.ADVERSARIAL_IN_WORKERS and Settings.ADVERSARIAL_ONNX_PATH:
         # while worker 0 does overapproximation, worker 1
         priv.agen, aimage = try_quick_adversarial(1)
-        
+            
         for i in range(Settings.ADVERSARIAL_WORKERS_MAX_ITER):
             if aimage is not None:
                 if Settings.PRINT_OUTPUT:
                     print(f"mixed_adversarial worker {worker_index} found unsafe image after on iteration {i}")
 
-                flat_image = np.ravel(aimage)
+                flat_image = nn_flatten(aimage)
 
                 output = w.shared.network.execute(flat_image)
                 flat_output = np.ravel(output)
@@ -649,24 +657,24 @@ def worker_func(worker_index, shared):
 
         Timers.toc(timer_name)
 
-def gen_adv(q, network):
+def gen_adv(q, network, remaining_secs):
     '''try a quick adversarial
 
     puts concrete_io_tuple or None into the queue
     '''
 
-    concrete_io_tuple = gen_adv_single_threaded(network)
+    concrete_io_tuple = gen_adv_single_threaded(network, remaining_secs)
 
     q.put(concrete_io_tuple)
     q.close()
 
-def gen_adv_single_threaded(network):
+def gen_adv_single_threaded(network, remaining_secs):
     'gen adversarial without multiprocessing interface'
 
     concrete_io_tuple = None
         
     start = time.perf_counter()
-    _, aimage = try_quick_adversarial(Settings.ADVERSARIAL_QUICK_NUM_ATTEMPTS)
+    _, aimage = try_quick_adversarial(Settings.ADVERSARIAL_QUICK_NUM_ATTEMPTS, remaining_secs)
     gen_time = time.perf_counter() - start
 
     if aimage is not None:
@@ -690,6 +698,6 @@ def gen_adv_single_threaded(network):
             print(f"counterexample was confirmed: {confirmed}. Gen: {gen_ms}, Exec: {exec_ms}")
 
         if confirmed:
-            concrete_io_tuple = (np.ravel(aimage), flat_output)
+            concrete_io_tuple = (nn_flatten(aimage), flat_output)
 
     return concrete_io_tuple

@@ -291,11 +291,13 @@ class SingleEpsilonRPGD(
             a, binary_search, epsilon, stepsize, iterations, random_start, return_early
         )
 
-def try_quick_adversarial(num_attempts):
+def try_quick_adversarial(num_attempts, remaining_secs=None):
     '''try a quick adversarial example using Settings
 
     returns AgenState instance, aimage (may be None)
     '''
+
+    start = time.perf_counter()
 
     onnx_path = Settings.ADVERSARIAL_ONNX_PATH
     ep = Settings.ADVERSARIAL_EPSILON
@@ -306,6 +308,13 @@ def try_quick_adversarial(num_attempts):
     a = None
 
     for i in range(num_attempts):
+
+        if remaining_secs is not None:
+            diff = time.perf_counter() - start
+            
+            if diff > remaining_secs:
+                break # timeout!
+        
         a = agen.try_single()
 
         if a is not None:

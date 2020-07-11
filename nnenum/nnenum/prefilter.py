@@ -114,7 +114,7 @@ class OutputBounds(Freezable):
         if use_lp and self.prefilter.simulation is not None:
             # trim further using LP
 
-            if start_time is not None and Settings.TIMEOUT is not None:
+            if start_time is not None and Settings.TIMEOUT != np.inf:
                 def check_cancel_func():
                     'raise exception if we should cancel'
 

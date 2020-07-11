@@ -16,6 +16,7 @@ from nnenum.overapprox import do_overapprox_rounds, make_prerelu_sims, Overappro
 from nnenum.settings import Settings
 from nnenum.util import Freezable, to_time_str
 from nnenum.network import nn_unflatten, nn_flatten
+from nnenum.specification import DisjunctiveSpec
 
 from nnenum.prefilter import LpCanceledException
 from nnenum.agen import AgenState
@@ -33,9 +34,7 @@ class Worker(Freezable):
     def has_timeout(self):
         'was a timeout reached?'
 
-        t = Settings.TIMEOUT
-
-        return t is not None and time.perf_counter() - self.priv.start_time > t
+        return time.perf_counter() - self.priv.start_time > Settings.TIMEOUT
         
     def main_loop(self):
         'main worker loop'
@@ -115,54 +114,73 @@ class Worker(Freezable):
         if self.priv.branch_tuples_list is not None:
             self.priv.branch_tuples_list.append(f'{self.priv.ss.branch_str()} ({label})')
 
-    def try_seeded_adversarial(self, seed_image):
+    def try_seeded_adversarial(self, dims, vstars, vindices, spec):
         '''
-        generate adversarial image from seed
+        generate adversarial image from abstract counterexample seeds
 
         returns concrete_io_tuple or none
         '''
 
-        concrete_io_tuple = None
+        Timers.tic('try_seeded_adversarial')
 
-        onnx_path = Settings.ADVERSARIAL_ONNX_PATH
-        assert onnx_path is not None
+        assert dims == Settings.ADVERSARIAL_ORIG_IMAGE.size
 
-        if self.priv.agen is None:
-            # initialize
-            ep = Settings.ADVERSARIAL_EPSILON
-            im = Settings.ADVERSARIAL_ORIG_IMAGE
-            l = Settings.ADVERSARIAL_ORIG_LABEL
+        for vstar, vindex in zip(vstars, vindices):
+            if isinstance(spec, DisjunctiveSpec):
+                row = spec.spec_list[vindex].mat[0, :]
+            else:
+                row = spec.mat[0, :]
 
-            Timers.tic("AgenState init")
-            self.priv.agen = AgenState(onnx_path, im, l, ep)
-            Timers.toc("AgenState init")
+            cinput, coutput = vstar.minimize_vec(row, return_io=True)
 
-        #print(f"trying seeded in worker {self.priv.worker_index}")
-        a = self.priv.agen.try_seeded(seed_image)
+            assert np.argmax(coutput) != Settings.ADVERSARIAL_ORIG_LABEL
 
-        if a is not None:
-            aimage, ep = a
+            seed_image = cinput[:dims]
 
-            if Settings.PRINT_OUTPUT:
-                print(f"try_seeded_adversarial found violation image with ep={ep}")
-        else:
-            aimage = None
+            concrete_io_tuple = None
 
-        if aimage is not None:
-            flat_image = np.ravel(aimage)
-            
-            output = self.shared.network.execute(flat_image)
-            flat_output = np.ravel(output)
+            onnx_path = Settings.ADVERSARIAL_ONNX_PATH
+            assert onnx_path is not None
 
-            olabel = np.argmax(output)
-            confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
+            if self.priv.agen is None:
+                # initialize
+                ep = Settings.ADVERSARIAL_EPSILON
+                im = Settings.ADVERSARIAL_ORIG_IMAGE
+                l = Settings.ADVERSARIAL_ORIG_LABEL
 
-            if Settings.PRINT_OUTPUT:
-                print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
-                print(f"counterexample was confirmed: {confirmed}")
+                Timers.tic("AgenState init")
+                self.priv.agen = AgenState(onnx_path, im, l, ep)
+                Timers.toc("AgenState init")
 
-            if confirmed:
-                concrete_io_tuple = (flat_image, flat_output)
+            #print(f"trying seeded in worker {self.priv.worker_index}")
+            a = self.priv.agen.try_seeded(seed_image)
+
+            if a is not None:
+                aimage, ep = a
+
+                if Settings.PRINT_OUTPUT:
+                    print(f"try_seeded_adversarial found violation image with ep={ep}")
+            else:
+                aimage = None
+
+            if aimage is not None:
+                flat_image = nn_flatten(aimage)
+
+                output = self.shared.network.execute(flat_image)
+                flat_output = np.ravel(output)
+
+                olabel = np.argmax(output)
+                confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
+
+                if Settings.PRINT_OUTPUT:
+                    print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
+                    print(f"counterexample was confirmed: {confirmed}")
+
+                if confirmed:
+                    concrete_io_tuple = (flat_image, flat_output)
+                    break
+
+        Timers.toc('try_seeded_adversarial')
 
         return concrete_io_tuple
 
@@ -208,14 +226,11 @@ class Worker(Freezable):
 
                 now = time.perf_counter()
 
-                if Settings.TIMEOUT is not None and now - self.priv.start_time > Settings.TIMEOUT:
-                    raise OverapproxCanceledException('Settings.TIMEOUT exceeded')
-                    
-                to = Settings.OVERAPPROX_LP_TIMEOUT
-                diff = now - start
+                if now - self.priv.start_time > Settings.TIMEOUT:
+                    raise OverapproxCanceledException('timeout exceeded')
 
-                if to is not None and diff > to:
-                    raise OverapproxCanceledException(f'timeout ({diff} > {to})')
+                if now - start > Settings.OVERAPPROX_LP_TIMEOUT:
+                    raise OverapproxCanceledException('lp timeout exceeded')
 
             timer_name = 'do_overapprox_rounds'
             Timers.tic(timer_name)
@@ -489,17 +504,16 @@ class Worker(Freezable):
     def print_progress(self):
         'periodically print progress (worker 0 only)'
 
-        if self.priv.worker_index == 0 and (Settings.PRINT_INTERVAL > 0 or Settings.TIMEOUT is not None):
+        if self.priv.worker_index == 0:
             now = time.perf_counter()
 
             if self.priv.last_print_time is None:
                 self.priv.last_print_time = now - Settings.PRINT_INTERVAL - 1 # force a print at start
 
-            if Settings.TIMEOUT is not None:
-                cur_time = now - self.priv.start_time
+            cur_time = now - self.priv.start_time
 
-                if cur_time >= Settings.TIMEOUT:
-                    self.timeout()
+            if cur_time >= Settings.TIMEOUT:
+                self.timeout()
 
             if Settings.PRINT_OUTPUT and Settings.PRINT_PROGRESS and \
                now - self.priv.last_print_time > Settings.PRINT_INTERVAL:
