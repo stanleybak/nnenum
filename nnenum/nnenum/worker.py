@@ -135,7 +135,7 @@ class Worker(Freezable):
 
             assert np.argmax(coutput) != Settings.ADVERSARIAL_ORIG_LABEL
 
-            seed_image = cinput[:dims]
+            seed_image = nn_unflatten(cinput[:dims], Settings.ADVERSARIAL_ORIG_IMAGE.shape)
 
             concrete_io_tuple = None
 
