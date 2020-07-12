@@ -108,21 +108,15 @@ def enumerate_network(init, network, spec=None):
     concrete_io_tuple = None
     q = None
     p = None
+    found_adv = None
 
     if Settings.ADVERSARIAL_ONNX_PATH is not None and Settings.ADVERSARIAL_TRY_QUICK:
         q = multiprocessing.Queue()
-        p = multiprocessing.Process(target=gen_adv, args=(q, network, Settings.TIMEOUT))
+        found_adv = multiprocessing.Value('i', 0)
+        
+        p = multiprocessing.Process(target=gen_adv, args=(q, found_adv, network, Settings.TIMEOUT))
         p.start()
-            
-        if not Settings.ADVERSARIAL_INIT_PARALLEL:
-            Timers.tic('try_quick_adversarial')
-            # wait for result rather than testing safety in parallel
-            concrete_io_tuple = q.get()
-            p.join()
-            p.terminate()
-            p = None
-            q = None
-            Timers.toc('try_quick_adversarial')
+        # don't wait for result... run safety check in parallel
 
     init_ss = None
     
@@ -133,7 +127,7 @@ def enumerate_network(init, network, spec=None):
         try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
 
         if init_ss is not None and try_quick and spec is not None:
-            proven_safe, concrete_io_tuple = try_quick_overapprox(init_ss, network, spec, start)
+            proven_safe, concrete_io_tuple = try_quick_overapprox(init_ss, network, spec, start, found_adv)
 
     if concrete_io_tuple is not None:
         # non-parallel adversarial example was generated
@@ -657,13 +651,18 @@ def worker_func(worker_index, shared):
 
         Timers.toc(timer_name)
 
-def gen_adv(q, network, remaining_secs):
+def gen_adv(q, found_adv, network, remaining_secs):
     '''try a quick adversarial
 
     puts concrete_io_tuple or None into the queue
+
+    when it's found, the multiprocessing.value (found_adv) is set to 1
     '''
 
     concrete_io_tuple = gen_adv_single_threaded(network, remaining_secs)
+
+    if concrete_io_tuple is not None:
+        found_adv.value = 1
 
     q.put(concrete_io_tuple)
     q.close()

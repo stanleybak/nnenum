@@ -15,34 +15,36 @@ from termcolor import colored
 import swiglpk as glpk
 from nnenum.util import Freezable
 from nnenum.timerutil import Timers
+from nnenum.settings import Settings
 
 def get_lp_params(alternate_lp_params=False):
     'get the lp params object'
 
     if not hasattr(get_lp_params, 'obj'):
         # turn off printing at a lower-level
-        #glpk.glp_term_out(glpk.GLP_OFF)
+        glpk.glp_term_out(glpk.GLP_OFF)
 
         params = glpk.glp_smcp()
         glpk.glp_init_smcp(params)
 
+        #params.msg_lev = glpk.GLP_MSG_ERR
         params.msg_lev = glpk.GLP_MSG_ERR
 
-        params.tm_lim = int(60 * 1000) # set 10 sec timeout
-        params.out_dly = 5 * 1000 # start printing to terminal status after 5 secs
+        params.tm_lim = int(Settings.LP_PRIMARY_SETTINGS_TIMEOUT * 1000)
+        params.out_dly = 2 * 1000 # start printing to terminal delay
         
         get_lp_params.obj = params
 
         # make alternative params
-        params = glpk.glp_smcp()
-        glpk.glp_init_smcp(params)
-        params.meth = glpk.GLP_DUAL # use dual simplex... maybe works better?
-        params.msg_lev = glpk.GLP_MSG_ON
+        params2 = glpk.glp_smcp()
+        glpk.glp_init_smcp(params2)
+        params2.meth = glpk.GLP_DUAL # use dual simplex... maybe works better?
+        params2.msg_lev = glpk.GLP_MSG_ON
 
-        params.tm_lim = int(60 * 1000) # set 60 sec timeout
-        #params.out_dly = 1 * 1000 # start printing to terminal status after 1 secs
+        params2.tm_lim = int(60 * 1000) # set 60 sec timeout
+        params2.out_dly = 5 * 1000 # start printing to terminal status after 1 secs
         
-        get_lp_params.alt_obj = params
+        get_lp_params.alt_obj = params2
         
     if alternate_lp_params:
         rv = get_lp_params.alt_obj
@@ -661,7 +663,12 @@ class LpInstance(Freezable):
 
         # process simplex result
         #Timers.tic('process_simplex_result')
-        rv = self._process_simplex_result(simplex_res)
+
+        if fail_on_unsat and simplex_res == glpk.GLP_ETMLIM: # timeout
+            print("GLPK timed out with primary settings, trying secondary settings")
+            rv = None
+        else:
+            rv = self._process_simplex_result(simplex_res)
         #Timers.toc('process_simplex_result')
 
         if rv is None and fail_on_unsat:

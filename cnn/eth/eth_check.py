@@ -1,5 +1,5 @@
 '''
-pat vnn benchmark 2020
+eth vnn benchmark 2020
 '''
 
 import sys
@@ -197,7 +197,6 @@ def main():
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
     Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = False # true
-    Settings.ADVERSARIAL_INIT_PARALLEL = True
 
     #if epsilon == 0.05:
         # speed up splitting near root
@@ -210,7 +209,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = None #38
+    specific_image = 44 #38
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")

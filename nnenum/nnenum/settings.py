@@ -97,6 +97,8 @@ class Settings(metaclass=FreezableMeta):
 
         cls.SHUFFLE_TIME = None # shuffle star sets after some time (improves unsafe specs)
 
+        cls.LP_PRIMARY_SETTINGS_TIMEOUT = 2 # second to use primary lp params before switching to backup
+
         ####
         cls.NUM_LP_PROCESSES = 1 # if > 1, then force multiprocessing during lp step
         cls.PARALLEL_ROOT_LP = True # near the root of the search, use parallel lp, override NUM_LP_PROCESES if true
@@ -122,4 +124,3 @@ class Settings(metaclass=FreezableMeta):
         cls.ADVERSARIAL_EPSILON = None
         cls.ADVERSARIAL_ORIG_IMAGE = None
         cls.ADVERSARIAL_ORIG_LABEL = None
-        cls.ADVERSARIAL_INIT_PARALLEL = True # run init adversarial generation in parallel to quick safety checking 

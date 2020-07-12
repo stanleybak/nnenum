@@ -12,7 +12,7 @@ from nnenum.prefilter import update_bounds_lp, sort_splits
 from nnenum.specification import DisjunctiveSpec
 from nnenum.network import ReluLayer, FullyConnectedLayer, nn_flatten, nn_unflatten
 
-def try_quick_overapprox(ss, network, spec, start_time):
+def try_quick_overapprox(ss, network, spec, start_time, found_adv):
     'try a quick overapproximation, return True if safe'
 
     Timers.tic('try_quick_overapprox')
@@ -26,7 +26,10 @@ def try_quick_overapprox(ss, network, spec, start_time):
 
         if diff > Settings.TIMEOUT:
             raise OverapproxCanceledException('timeout exceeded')
-    
+
+        if found_adv is not None and found_adv.value != 0:
+            raise OverapproxCanceledException('found_adv was set')
+        
     try:
         check_cancel_func()
         
@@ -38,9 +41,9 @@ def try_quick_overapprox(ss, network, spec, start_time):
                               overapprox_types=overapprox_types)
 
         rv = rr.is_safe, rr.concrete_io_tuple
-    except OverapproxCanceledException:
+    except OverapproxCanceledException as e:
         if Settings.PRINT_OUTPUT:
-            print("Overapprox canceled (timeout)")
+            print(f"Overapprox canceled ({e})")
         rv = False, None
 
     Timers.toc('try_quick_overapprox')
