@@ -664,8 +664,8 @@ class LpInstance(Freezable):
         # process simplex result
         #Timers.tic('process_simplex_result')
 
-        if fail_on_unsat and simplex_res == glpk.GLP_ETMLIM: # timeout
-            print("GLPK timed out with primary settings, trying secondary settings")
+        if fail_on_unsat and simplex_res in [glpk.GLP_ETMLIM, glpk.GLP_EFAIL]: # timeout
+            print("GLPK timed out / failed with primary settings, trying secondary settings")
             rv = None
         else:
             rv = self._process_simplex_result(simplex_res)
