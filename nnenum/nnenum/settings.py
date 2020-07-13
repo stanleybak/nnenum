@@ -97,7 +97,7 @@ class Settings(metaclass=FreezableMeta):
 
         cls.SHUFFLE_TIME = None # shuffle star sets after some time (improves unsafe specs)
 
-        cls.LP_PRIMARY_SETTINGS_TIMEOUT = 2 # second to use primary lp params before switching to backup
+        cls.LP_PRIMARY_SETTINGS_TIMEOUT = 3 # second to use primary lp params before switching to backup
 
         ####
         cls.NUM_LP_PROCESSES = 1 # if > 1, then force multiprocessing during lp step

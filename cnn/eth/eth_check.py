@@ -209,7 +209,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = 44 #38
+    specific_image = None#44 #38
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")
