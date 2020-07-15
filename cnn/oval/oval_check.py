@@ -161,7 +161,7 @@ def main():
 
     assert netname in ['base', 'deep', 'wide'], f"unknown netname: {netname}"
     
-    onnx_filename = f'data/cifar_{netname}_kw_noscale.onnx'
+    onnx_filename = f'data/cifar_{netname}_kw.onnx'
     image_filename = f'data/{netname}_data.pkl'
 
     normalize = 'noscale' not in onnx_filename
@@ -212,8 +212,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    Settings.LP_PRIMARY_SETTINGS_TIMEOUT = 30
-    specific_image = 0 #None #38
+    specific_image = 78 #None #38
 
     tup_list = make_init(nn, image_filename, specific_image=specific_image, normalize=normalize)
     print(f"made {len(tup_list)} init states")

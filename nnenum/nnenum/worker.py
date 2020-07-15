@@ -83,7 +83,9 @@ class Worker(Freezable):
                     self.priv.ss = self.priv.work_list.pop()
                     
                 else: # pop from global (shared)
-                    self.priv.ss = self.shared.get_global_queue(timeout=0.01)
+
+                    if self.priv.worker_index == 0 or self.shared.finished_initial_overapprox.value:
+                        self.priv.ss = self.shared.get_global_queue(timeout=0.01)
 
                     if self.priv.ss is not None:
                         
