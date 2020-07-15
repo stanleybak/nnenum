@@ -217,7 +217,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = 39
+    specific_image = None
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")
@@ -241,11 +241,11 @@ def main():
             Settings.ADVERSARIAL_ORIG_LABEL = classification
 
             if primal_glpk:
-                print("Trying with primal glpk first")
+                print("Trying with primal glpk")
                 Settings.GLPK_FIRST_PRIMAL = True
                 Settings.GLPK_RESET_BEFORE_MINIMIZE = False
             else:
-                print("Trying with dual glpk first")
+                print("Trying with dual glpk")
                 Settings.GLPK_FIRST_PRIMAL = False
                 Settings.GLPK_RESET_BEFORE_MINIMIZE = True
 

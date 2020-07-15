@@ -184,6 +184,10 @@ def main():
     Settings.TIMING_STATS = True
     Settings.PRINT_OUTPUT = True
 
+    # using dual glpk here given glpk errors (ill-conditioned bm, fail with primary settings)
+    # no resets is faster than with resets
+    Settings.ADVERSARIAL_TEST_ABSTRACT_VIO = False
+
     #Settings.NUM_PROCESSES = 1
 
     # disable quick adversarial on bigger networks
@@ -207,8 +211,9 @@ def main():
 
     #if epsilon == 0.05:
         # speed up splitting near root
-    #    Settings.OVERAPPROX_TYPES_NEAR_ROOT = [['zono.area'],
-    #                                       ['zono.area', 'zono.ybloat', 'zono.interval', 'star.quick']]
+    print("using quick overapprox near root")
+    Settings.OVERAPPROX_TYPES_NEAR_ROOT = [['zono.area']]
+                                           #['zono.area', 'zono.ybloat', 'zono.interval', 'star.quick']]
 
     results = {}
     safe_count = 0
@@ -216,7 +221,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = 78 #None #38
+    specific_image = None #None #38
 
     tup_list = make_init(nn, image_filename, specific_image=specific_image, normalize=normalize)
     print(f"made {len(tup_list)} init states")
