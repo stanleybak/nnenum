@@ -683,7 +683,7 @@ class LpInstance(Freezable):
 
             self.reset_basis()
             start = time.perf_counter()
-            simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=True))
+            simplex_res = glpk.glp_simplex(self.lp, params)
 
             diff = time.perf_counter() - start
             print(f"simplex_res with reset + longer timeout was {simplex_res}, time: {round(diff, 3)} sec")
@@ -693,7 +693,7 @@ class LpInstance(Freezable):
             simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=True))
 
             diff = time.perf_counter() - start
-            print(f"simplex_res after reset was {simplex_res}, time: {round(diff, 3)} sec")
+            print(f"simplex_res after reset + alt params was {simplex_res}, time: {round(diff, 3)} sec")
             
         rv = self._process_simplex_result(simplex_res)
 
