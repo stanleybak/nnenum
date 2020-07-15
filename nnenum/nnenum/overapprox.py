@@ -216,11 +216,19 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
         rows.append(sum_row)
         
         for row in rows:
+                        print(f"in try_Abstract_violation, row={row}")
+            start = time.time()
+            cinput, coutput = vstar.minimize_vec(None, return_io=True)
+            diff = time.time() - start
+            print(f" minimize_vec - None time: {diff}")
+            print(f".coutput is {coutput}")
+            
             start = time.time()
             cinput, coutput = vstar.minimize_vec(row, return_io=True)
             diff = time.time() - start
 
-            print(f"in try_Abstract_violation, minimize_vec time: {diff}")
+            print(f" minimize_vec - row time: {diff}")
+            print(f".coutput is {coutput}")
             
             abstract_ios.append((cinput, coutput))
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
@@ -229,8 +237,6 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
             trimmed_input = cinput[:dims]
             exec_output = network.execute(trimmed_input)
             flat_output = np.ravel(exec_output)
-
-            print(f".violation star coutput is {coutput}")
 
             if cur_spec.is_violation(flat_output):
                 if Settings.PRINT_OUTPUT:
@@ -302,7 +308,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
 
             raise OverapproxCanceledException(f"{e}; {rv}, {msg}")
 
-        #print(f".done with round {types} {round_num}/{len(overapprox_types)} in {round(diff * 1000, 1)} ms")
 
         gens = [s.get_num_gens() for s in sets]
         rv.round_generators.append(gens)
@@ -310,9 +315,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
 
         start = time.perf_counter()
         rv.is_safe, vstars, vindices = check_round(ss, sets, spec, check_cancel_func)
-
-        #check_diff = time.perf_counter() - start
-        #print(f"safe after round: {rv.is_safe}, runtime: {diff * 1000} ms, check: {check_diff * 1000} ms")
 
         if rv.is_safe:
             break
@@ -333,10 +335,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
 
         if first_round:
             first_round = False
-
-    #print("done with overapprox rounds")
-
-    #raise RuntimeError(".debug exit")
         
     return rv
 
