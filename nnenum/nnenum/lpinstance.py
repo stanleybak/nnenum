@@ -650,13 +650,12 @@ class LpInstance(Freezable):
         simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
 
         if simplex_res != 0: # solver failure (possibly timeout)
-            if Settings.PRINT_OUTPUT:
-                r = self.get_num_rows()
-                c = self.get_num_cols()
-            
-                diff = time.perf_counter() - start
-                print(f"GLPK timed out / failed ({simplex_res}) after {round(diff, 3)} sec with primary " + \
-                      f"settings with {r} rows and {c} cols")
+            r = self.get_num_rows()
+            c = self.get_num_cols()
+
+            diff = time.perf_counter() - start
+            print(f"GLPK timed out / failed ({simplex_res}) after {round(diff, 3)} sec with primary " + \
+                  f"settings with {r} rows and {c} cols")
 
             if Settings.PRINT_OUTPUT:
                 print("Trying alternate GLPK settings")
@@ -664,7 +663,10 @@ class LpInstance(Freezable):
             # retry with alternate params
             params = get_lp_params(alternate_lp_params=True)
             self.reset_basis()
+            start = time.perf_counter()
             simplex_res = glpk.glp_simplex(self.lp, params)
+            diff = time.perf_counter() - start
+            print("result with reset & alternate settings ({simplex_res}) {round(diff, 3)} sec")
             
         rv = self._process_simplex_result(simplex_res)
 
