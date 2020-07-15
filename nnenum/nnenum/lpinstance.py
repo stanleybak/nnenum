@@ -39,7 +39,7 @@ def get_lp_params(alternate_lp_params=False):
         # make alternative params
         params2 = glpk.glp_smcp()
         glpk.glp_init_smcp(params2)
-        params2.meth = glpk.GLP_DUAL # use dual simplex... maybe works better?
+        params2.meth = glpk.GLP_DUALP # use dual simplex... maybe works better?
         params2.msg_lev = glpk.GLP_MSG_ON
 
         params2.tm_lim = int(60 * 1000) # set 60 sec timeout

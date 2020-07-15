@@ -282,7 +282,7 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
         start = time.perf_counter()
 
         if not ss.branch_tuples and Settings.PRINT_OUTPUT:
-            print(f"Overapprox Round {round_num+1}/{len(overapprox_types)} has {len(sets)} sets")
+            print(f"Overapprox Round {round_num+1}/{len(overapprox_types)} has {len(sets)} set(s)")
 
         try:
             run_overapprox_round(network, ss, sets, prerelu_sims, check_cancel_func)
