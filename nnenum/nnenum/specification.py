@@ -208,26 +208,6 @@ class Specification(Freezable):
         Timers.tic('get_violation_star')
         rv = None
 
-        print("------- in get_violation_star -------")
-
-        #start = time.perf_counter()
-        #coutput = lp_star.minimize_vec(self.mat[0])
-        #diff = time.perf_counter() - start
-        #print(f"time to minimize in original lpi: {round(diff, 3)} sec")
-
-        #lp_star.lpi.reset_basis()
-        #start = time.perf_counter()
-        #coutput = lp_star.minimize_vec(self.mat[0])
-        #diff = time.perf_counter() - start
-        #print(f"time to minimize in original lpi after reset: {round(diff, 3)} sec")
-
-        #init_bias = np.dot(self.mat, lp_star.bias)
-
-        #if np.dot(coutput, self.mat[0]) < self.rhs[0] - init_bias[0]:
-        #    print("was violation")
-        #else:
-        #    print("was NOT violation")
-
         # constructing a new star and do exact check
         copy = lp_star.copy()
 
@@ -246,29 +226,7 @@ class Specification(Freezable):
         for i, row in enumerate(init_spec):
             lpi.add_dense_row(row, self.rhs[i] - init_bias[i])
 
-        start = time.perf_counter()
         winput = lpi.minimize(None, fail_on_unsat=False)
-        diff = time.perf_counter() - start
-        print(f"original time to minimize copy: {round(diff, 3)} sec")
-
-        if True:
-            lpi.reset_basis()
-            start = time.perf_counter()
-            winput = lpi.minimize(None, fail_on_unsat=False)
-            diff = time.perf_counter() - start
-            print(f"time to minimize copy after 'std' basis: {round(diff, 3)} sec")
-
-            lpi.reset_basis('adv')
-            start = time.perf_counter()
-            winput = lpi.minimize(None, fail_on_unsat=False)
-            diff = time.perf_counter() - start
-            print(f"time to minimize copy after 'adv' basis: {round(diff, 3)} sec")
-
-            lpi.reset_basis('cpx')
-            start = time.perf_counter()
-            winput = lpi.minimize(None, fail_on_unsat=False)
-            diff = time.perf_counter() - start
-            print(f"time to minimize copy after 'cpx' basis: {round(diff, 3)} sec")
 
         if winput is None:
             # when we check all the specification directions at the same time, there is no violaton
@@ -280,8 +238,5 @@ class Specification(Freezable):
             #assert self.is_violation(woutput), f"witness output {woutput} was not a violation of {self}"
 
         Timers.toc('get_violation_star')
-
-        print(".spec debug exit")
-        exit(1)
 
         return rv if is_violation else None

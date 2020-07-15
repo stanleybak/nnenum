@@ -216,7 +216,12 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
         rows.append(sum_row)
         
         for row in rows:
+            start = time.time()
             cinput, coutput = vstar.minimize_vec(row, return_io=True)
+            diff = time.time() - start
+
+            print(f"in try_Abstract_violation, minimize_vec time: {diff}")
+            
             abstract_ios.append((cinput, coutput))
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
 
@@ -236,6 +241,9 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
 
         if concrete_io_tuple:
             break
+
+    print("debug exit")
+    exit(1)
 
     Timers.toc('try_abstract_violation')
 
