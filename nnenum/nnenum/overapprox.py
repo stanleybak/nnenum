@@ -373,7 +373,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
     
     for layer_index, layer in enumerate(remaining_layers):
         if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
-            print(f"Layer {layer_index}/{len(remaining_layers)}: {type(layer).__name__}")
+            print(f"Layer {layer_index + 1}/{len(remaining_layers)}: {type(layer).__name__}")
             
         check_cancel_func()
         

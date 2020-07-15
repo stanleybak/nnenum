@@ -185,7 +185,7 @@ def main():
     Settings.PRINT_OUTPUT = True
 
     # try this
-    Settings.LP_PRIMARY_SETTINGS_TIMEOUT = 4
+    Settings.LP_PRIMARY_SETTINGS_TIMEOUT = 3
 
     # contraction doesn't help in high dimensions
     Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
