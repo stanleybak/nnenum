@@ -82,6 +82,7 @@ class Settings(metaclass=FreezableMeta):
         cls.TRY_QUICK_OVERAPPROX = True
         cls.QUICK_OVERAPPROX_TYPES = [['zono.area'],
                                       ['zono.area', 'zono.ybloat', 'zono.interval']]
+        cls.PRINT_OVERAPPROX_OUTPUT = True # print progress on first overapprox
 
         # one_norm is especially good at finding counterexamples
         cls.SPLIT_ORDER = cls.SPLIT_ONE_NORM # rearrange splitting order within each layer

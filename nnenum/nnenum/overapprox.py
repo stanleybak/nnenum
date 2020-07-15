@@ -37,7 +37,7 @@ def try_quick_overapprox(ss, network, spec, start_time, found_adv):
 
         check_cancel_func()
 
-        if Settings.PRINT_OUTPUT:
+        if Settings.PRINT_OUTPUT and Settings.PRINT_OVERAPPROX_OUTPUT:
             print(f"Doing quick overapprox with {len(overapprox_types)} rounds...")
         
         rr = do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=check_cancel_func,
@@ -295,7 +295,7 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
 
         start = time.perf_counter()
 
-        if not ss.branch_tuples and Settings.PRINT_OUTPUT:
+        if not ss.branch_tuples and Settings.PRINT_OUTPUT and Settings.PRINT_OVERAPPROX_OUTPUT:
             print(f"Overapprox Round {round_num+1}/{len(overapprox_types)} has {len(sets)} set(s)")
 
         try:
@@ -379,7 +379,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
     for layer_index, layer in enumerate(remaining_layers):
         check_cancel_func()
 
-        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
+        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and Settings.PRINT_OVERAPPROX_OUTPUT:
             layer_start = time.perf_counter()
             print(f"Layer {layer_index + 1}/{len(remaining_layers)}: {type(layer).__name__}...", end='', flush=True)
         
@@ -389,7 +389,8 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
             layer_bounds = None
 
             for s in sets:
-                if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and layer_bounds is not None:
+                if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and layer_bounds is not None \
+                                             and Settings.PRINT_OVERAPPROX_OUTPUT:
                     if isinstance(s, StarOverapprox) and s.do_lp:
                         print(f"\nUsing LP to check {len(make_split_indices(layer_bounds))}/{len(layer_bounds)} " + \
                               "potential ReLU splits...", end='', flush=True)
@@ -418,7 +419,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
 
             Timers.toc('transform_linear')
 
-        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
+        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and Settings.PRINT_OVERAPPROX_OUTPUT:
             diff = time.perf_counter() - layer_start
             print(f" {round(diff, 3)} sec")
 

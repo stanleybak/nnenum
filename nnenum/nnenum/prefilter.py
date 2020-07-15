@@ -316,7 +316,7 @@ class Prefilter(Freezable):
             neg.domain_shrank(neg_star, start_time, depth)
 
             # tolerance for lp solver is about 1e-6
-            assert pos.simulation[1][i] >= -1e-6, f"pos sim for {i} was {pos.simulation[1][i]}"
+            assert pos.simulation[1][i] >= -1e-4, f"pos sim for {i} was {pos.simulation[1][i]}"
 
             # neg should exactly be equal to zero, since we assigned a_mat and bias to zero
             assert abs(neg.simulation[1][i]) <= Settings.SPLIT_TOLERANCE, f"neg sim for {i} was {neg.simulation[1][i]}"

@@ -5,6 +5,8 @@ Measurement script for ACAS Xu networks
 import os
 import sys
 import time
+from pathlib import Path
+
 from termcolor import cprint
 
 from nnenum.settings import Settings
@@ -16,11 +18,12 @@ def main():
     Settings.TIMING_STATS = False
     Settings.PARALLEL_ROOT_LP = False
     Settings.SPLIT_IF_IDLE = False
+    Settings.PRINT_OVERAPPROX_OUTPUT = False
 
-    full_filename = 'full_acasxu.dat'
-    hard_filename = 'hard_acasxu.dat'
-    accumulated_filename = 'accumulated_full_acasxu.dat'
-    hard_accumulated_filename = 'accumulated_hard_acasxu.dat'
+    full_filename = 'results/full_acasxu.dat'
+    hard_filename = 'results/hard_acasxu.dat'
+    accumulated_filename = 'results/accumulated_full_acasxu.dat'
+    hard_accumulated_filename = 'results/accumulated_hard_acasxu.dat'
 
     if len(sys.argv) > 1:
         Settings.TIMEOUT = 60 * float(sys.argv[1])
@@ -54,6 +57,8 @@ def main():
                    ["5", "1", "3"],
                    ["1", "9", "7"],
                    ["3", "3", "9"]]
+
+    Path("./results").mkdir(parents=True, exist_ok=True)
 
     with open(hard_filename, "w") as h:
         with open(full_filename, "w") as f:

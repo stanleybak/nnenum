@@ -5,6 +5,9 @@ functions related to loading onnx networks
 import time
 import numpy as np
 
+from scipy.sparse import csc_matrix, csr_matrix
+from scipy import sparse
+
 import onnx
 import onnxruntime as ort
 
@@ -116,8 +119,6 @@ class LinearOnnxSubnetworkLayer(Freezable):
 
         cols = []
 
-        start = time.perf_counter()
-
         for col in range(zono.mat_t.shape[1]):
             #print(f".transforming zono: {col} / {zono.mat_t.shape[1]})")
             vec = zono.mat_t[:, col]
@@ -135,56 +136,6 @@ class LinearOnnxSubnetworkLayer(Freezable):
         start_center = nn_unflatten(zono.center, self.input_shape)
         end_center = self.execute(start_center)
         zono.center = nn_flatten(end_center)
-
-        diff = time.perf_counter() - start
-        print(f"original transform zono time: {round(diff, 3)} sec")
-
-        # try transformation approach
-        start = time.perf_counter()
-        # compute linear transformation
-        basis_vec = np.ravel(np.zeros(self.get_input_shape(), dtype=dtype))
-
-        # matrix converts i-dim vectors to o-dim vectors
-        # (1xi) x (i x o) -> (1 x o)
-        
-        dims = basis_vec.size
-        rows = []
-        
-        for i in range(basis_vec.size):
-            if i > 0:
-                basis_vec[i-1] = 0.0
-                
-            basis_vec[i] = 1.0
-
-            res = self.execute(basis_vec)
-            res = res - self.zero_output
-            res = nn_flatten(res)
-
-            rows.append(res)
-
-        diff = time.perf_counter() - start
-        print(f"compute linear mat time: {round(diff, 3)} sec")
-
-        start = time.perf_counter()
-        big_mat = np.array(rows, dtype=dtype).transpose().copy()
-        diff = time.perf_counter() - start
-        print(f"make big_mat time: {round(diff, 3)} sec")
-
-        # big mat is (o x i)
-
-        # check result
-        # vec = zono.mat_t[:, col]
-        start = time.perf_counter()
-        res = np.dot(big_mat, zono_copy.mat_t)
-        diff = time.perf_counter() - start
-        print(f"dot time: {round(diff, 3)} sec")
-
-        assert all(zono.mat_t.shape == res.shape)
-        assert np.allclose(res, zono.mat_t)
-
-        print("debug exit")
-        exit(1)
-        
 
     def execute(self, state):
         '''execute on a concrete state

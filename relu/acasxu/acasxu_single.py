@@ -232,7 +232,8 @@ def main():
     # change default settings for improved speed with ACAS Xu
     Settings.SPLIT_IF_IDLE = False
     Settings.PARALLEL_ROOT_LP = False
-    
+    Settings.PRINT_OVERAPPROX_OUTPUT = False
+        
     if len(sys.argv) < 4:
         print("expected at least 3 args: net1 net2 spec_num <num_cores>")
         sys.exit(1)
@@ -258,7 +259,7 @@ def main():
 
     result_str, runtime = verify_acasxu((net1, net2), spec_str)
 
-    print(f"Result for {net1}-{net2} and spec {spec_str}: {result_str}. Total runtime: {round(runtime, 2)} sec)")
+    print(f"Result for {net1}-{net2} and spec {spec_str}: {result_str}. Total runtime: {round(runtime, 2)} sec")
 
 if __name__ == "__main__":
     main()

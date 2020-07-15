@@ -194,9 +194,12 @@ def main():
     Settings.CONTRACT_ZONOTOPE = False
     Settings.CONTRACT_ZONOTOPE_LP = False
 
+    print("WARNING: single process")
+    Settings.NUM_PROCESSES = 1
+
     print("warning: custom glpk settings!!!!!!!!!")
     Settings.GLPK_FIRST_PRIMAL = False
-    #Settings.GLPK_RESET_BEFORE_MINIMIZE = True
+    Settings.GLPK_RESET_BEFORE_MINIMIZE = True
 
     #nn = load_onnx_network(onnx_filename)
     print(f"loading onnx network from {onnx_filename}")
