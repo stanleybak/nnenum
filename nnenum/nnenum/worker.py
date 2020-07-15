@@ -144,10 +144,7 @@ class Worker(Freezable):
                 self.priv.agen = AgenState(onnx_path, im, l, ep)
                 Timers.toc("AgenState init")
 
-            print(f"trying seeded in worker {self.priv.worker_index}")
-            start = time.perf_counter()
             a = self.priv.agen.try_seeded(seed_image)
-            print(f"gen adv runtime: {time.perf_counter() - start}")
 
             if a is not None:
                 aimage, ep = a
@@ -175,9 +172,6 @@ class Worker(Freezable):
                     break
 
         Timers.toc('try_seeded_adversarial')
-
-        print(".worker debug exit")
-        exit(1)
 
         return concrete_io_tuple
 
