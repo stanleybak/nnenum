@@ -225,8 +225,10 @@ class Specification(Freezable):
 
         for i, row in enumerate(init_spec):
             lpi.add_dense_row(row, self.rhs[i] - init_bias[i])
-
+            
         winput = lpi.minimize(None, fail_on_unsat=False)
+
+        print(f"--- in get_violation_star... winput result {winput}")
 
         if winput is None:
             # when we check all the specification directions at the same time, there is no violaton
