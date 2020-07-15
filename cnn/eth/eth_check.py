@@ -135,10 +135,12 @@ def make_init(nn, image_filename, epsilon, specific_image=None):
                 init_box = np.array(init_box, dtype=np.float32)
                 init_state = LpStarState(init_box, spec)
 
+                image_index = image_id
+                
                 if specific_image is not None:
-                    image_id = specific_image
+                    image_index = specific_image
 
-                rv.append((image_id, image, label, init_state, spec, primal_glpk))
+                rv.append((image_index, image, label, init_state, spec, primal_glpk))
 
     return rv
 
