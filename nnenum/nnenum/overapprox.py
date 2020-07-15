@@ -216,42 +216,40 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
         rows.append(sum_row)
         
         for row in rows:
-            print(f"in try_Abstract_violation, row={row}")
-            start = time.perf_counter()
+            # this one is alsmost free since objective direction is None
             cinput, coutput = vstar.minimize_vec(None, return_io=True)
-            diff = time.perf_counter() - start
-            print(f" minimize_vec - None time: {diff}")
-            print(f".coutput is {coutput}")
-            print(f".objective val: {np.dot(row, coutput)}")
-            
-            start = time.perf_counter()
-            cinput, coutput = vstar.minimize_vec(row, return_io=True)
-            diff = time.perf_counter() - start
-
-            print(f" minimize_vec - row time: {diff}")
-            print(f".coutput is {coutput}")
-            print(f".objective val: {np.dot(row, coutput)}")
-            
-            abstract_ios.append((cinput, coutput))
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
 
-            # coutput (abstract violation) violates cur_spec... try concrete execution
             trimmed_input = cinput[:dims]
             exec_output = network.execute(trimmed_input)
             flat_output = np.ravel(exec_output)
 
             if cur_spec.is_violation(flat_output):
                 if Settings.PRINT_OUTPUT:
-                    print("Found unsafe from concrete execution of abstract counterexample")
+                    print("Found unsafe from first concrete execution of abstract counterexample")
 
                 concrete_io_tuple = (trimmed_input, flat_output)
                 break
 
-        if concrete_io_tuple:
-            break
+            # this one is worst violation, use row as objective function
+            cinput, coutput = vstar.minimize_vec(row, return_io=True)
+            assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
+            
+            abstract_ios.append((cinput, coutput))
 
-    print("debug exit")
-    exit(1)
+            trimmed_input = cinput[:dims]
+            exec_output = network.execute(trimmed_input)
+            flat_output = np.ravel(exec_output)
+
+            if cur_spec.is_violation(flat_output):
+                if Settings.PRINT_OUTPUT:
+                    print("Found unsafe from second concrete execution of abstract counterexample")
+
+                concrete_io_tuple = (trimmed_input, flat_output)
+                break
+
+        if concrete_io_tuple is not None:
+            break
 
     Timers.toc('try_abstract_violation')
 
@@ -326,7 +324,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
                 
             if Settings.ADVERSARIAL_TEST_ABSTRACT_VIO:
                 abstract_ios, rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
-                
 
             if rv.concrete_io_tuple is None and Settings.ADVERSARIAL_SEED_ABSTRACT_VIO \
                                             and Settings.ADVERSARIAL_ONNX_PATH and try_seeded_adversarial:
