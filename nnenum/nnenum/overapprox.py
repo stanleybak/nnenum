@@ -377,10 +377,11 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
     remaining_layers = network.layers[layer_num:]
     
     for layer_index, layer in enumerate(remaining_layers):
-        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
-            print(f"Layer {layer_index + 1}/{len(remaining_layers)}: {type(layer).__name__}")
-            
         check_cancel_func()
+
+        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
+            layer_start = time.perf_counter()
+            print(f"Layer {layer_index + 1}/{len(remaining_layers)}: {type(layer).__name__}...", end='', flush=True)
         
         if isinstance(layer, ReluLayer):
             sim = None if prerelu_sims is None else prerelu_sims[layer_num]
@@ -416,6 +417,10 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
                 check_cancel_func()
 
             Timers.toc('transform_linear')
+
+        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
+            diff = time.perf_counter() - layer_start
+            print(f" {round(diff, 3)} sec")
 
         layer_num += 1
 

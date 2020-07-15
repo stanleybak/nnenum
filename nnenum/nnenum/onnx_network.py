@@ -112,8 +112,6 @@ class LinearOnnxSubnetworkLayer(Freezable):
     def transform_zono(self, zono):
         'transform the zono'
 
-        start = time.perf_counter()
-
         cols = []
 
         for col in range(zono.mat_t.shape[1]):
@@ -133,8 +131,6 @@ class LinearOnnxSubnetworkLayer(Freezable):
         start_center = nn_unflatten(zono.center, self.input_shape)
         end_center = self.execute(start_center)
         zono.center = nn_flatten(end_center)
-
-        print(f"transform zono time: {round(time.perf_counter() - start, 3)}")
 
     def execute(self, state):
         '''execute on a concrete state

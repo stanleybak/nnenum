@@ -195,7 +195,7 @@ def main():
     Settings.CONTRACT_ZONOTOPE_LP = False
 
     print("warning: custom glpk settings!!!!!!!!!")
-    #Settings.GLPK_FIRST_PRIMAL = False
+    Settings.GLPK_FIRST_PRIMAL = False
     Settings.GLPK_RESET_BEFORE_MINIMIZE = True
 
     #nn = load_onnx_network(onnx_filename)
