@@ -181,10 +181,14 @@ def main():
     Settings.OVERAPPROX_MIN_GEN_LIMIT = np.inf
     Settings.SPLIT_IF_IDLE = False
     Settings.OVERAPPROX_LP_TIMEOUT = np.inf
-    Settings.TIMING_STATS = False
+    Settings.TIMING_STATS = True
     Settings.PRINT_OUTPUT = True
 
     #Settings.NUM_PROCESSES = 1
+
+    # disable quick adversarial on bigger networks
+    Settings.ADVERSARIAL_TRY_QUICK = False
+    Settings.TRY_QUICK_OVERAPPROX = False
 
     # contraction doesn't help in high dimensions
     Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
