@@ -662,7 +662,7 @@ class LpInstance(Freezable):
             start = time.perf_counter()
             simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
             diff = time.perf_counter() - start
-            print("result with reset  ({simplex_res}) {round(diff, 3)} sec")
+            print(f"result with reset  ({simplex_res}) {round(diff, 3)} sec")
 
             print("Retrying with reset + alternate GLPK settings")
                     
@@ -672,7 +672,7 @@ class LpInstance(Freezable):
             start = time.perf_counter()
             simplex_res = glpk.glp_simplex(self.lp, params)
             diff = time.perf_counter() - start
-            print("result with reset & alternate settings ({simplex_res}) {round(diff, 3)} sec")
+            print(f"result with reset & alternate settings ({simplex_res}) {round(diff, 3)} sec")
             
         rv = self._process_simplex_result(simplex_res)
 
