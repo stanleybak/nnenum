@@ -222,6 +222,7 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
             diff = time.perf_counter() - start
             print(f" minimize_vec - None time: {diff}")
             print(f".coutput is {coutput}")
+            print(f".objective val: {np.dot(row, coutput)}")
             
             start = time.perf_counter()
             cinput, coutput = vstar.minimize_vec(row, return_io=True)
@@ -229,6 +230,7 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
 
             print(f" minimize_vec - row time: {diff}")
             print(f".coutput is {coutput}")
+            print(f".objective val: {np.dot(row, coutput)}")
             
             abstract_ios.append((cinput, coutput))
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
