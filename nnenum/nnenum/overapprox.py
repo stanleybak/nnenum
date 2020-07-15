@@ -391,8 +391,8 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
             for s in sets:
                 if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and layer_bounds is not None:
                     if isinstance(s, StarOverapprox) and s.do_lp:
-                        print(f"Using LP to check {len(make_split_indices(layer_bounds))}/{len(layer_bounds)} " + \
-                              "potential ReLU splits")
+                        print(f"\nUsing LP to check {len(make_split_indices(layer_bounds))}/{len(layer_bounds)} " + \
+                              "potential ReLU splits...", end='', flush=True)
 
                 layer_bounds, split_indices = s.tighten_bounds(layer_bounds, split_indices, sim,
                                                                check_cancel_func, depth)

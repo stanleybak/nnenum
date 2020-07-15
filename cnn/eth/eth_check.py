@@ -196,7 +196,7 @@ def main():
 
     print("warning: custom glpk settings!!!!!!!!!")
     Settings.GLPK_FIRST_PRIMAL = False
-    Settings.GLPK_RESET_BEFORE_MINIMIZE = True
+    #Settings.GLPK_RESET_BEFORE_MINIMIZE = True
 
     #nn = load_onnx_network(onnx_filename)
     print(f"loading onnx network from {onnx_filename}")
