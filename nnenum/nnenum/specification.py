@@ -228,8 +228,6 @@ class Specification(Freezable):
             
         winput = lpi.minimize(None, fail_on_unsat=False)
 
-        print(f"--- in get_violation_star... winput result {winput}")
-
         if winput is None:
             # when we check all the specification directions at the same time, there is no violaton
             is_violation = False
