@@ -27,6 +27,7 @@ def get_lp_params(alternate_lp_params=False):
 
         #params.msg_lev = glpk.GLP_MSG_ERR
         params.msg_lev = glpk.GLP_MSG_ERR
+        params.meth = glpk.GLP_PRIMAL if Settings.GLPK_FIRST_PRIMAL else glpk.GLP_DUAL
 
         params.tm_lim = int(Settings.GLPK_TIMEOUT * 1000)
         params.out_dly = 2 * 1000 # start printing to terminal delay
@@ -36,7 +37,7 @@ def get_lp_params(alternate_lp_params=False):
         # make alternative params
         params2 = glpk.glp_smcp()
         glpk.glp_init_smcp(params2)
-        params2.meth = glpk.GLP_DUAL # use dual simplex... slower (10x sometimes) but can work when primal fails
+        params2.meth = glpk.GLP_DUAL if Settings.GLPK_FIRST_PRIMAL else glpk.GLP_PRIMAL
         params2.msg_lev = glpk.GLP_MSG_ON
 
         params2.tm_lim = int(Settings.GLPK_TIMEOUT * 1000)

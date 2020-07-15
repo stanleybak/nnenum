@@ -194,6 +194,9 @@ def main():
     Settings.CONTRACT_ZONOTOPE = False
     Settings.CONTRACT_ZONOTOPE_LP = False
 
+    print("warning: trying dual first!!!!!!!!!")
+    Settings.GLPK_FIRST_PRIMAL = False
+
     #nn = load_onnx_network(onnx_filename)
     print(f"loading onnx network from {onnx_filename}")
     nn = load_onnx_network(onnx_filename)
