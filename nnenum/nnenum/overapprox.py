@@ -216,16 +216,16 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
         rows.append(sum_row)
         
         for row in rows:
-                        print(f"in try_Abstract_violation, row={row}")
-            start = time.time()
+            print(f"in try_Abstract_violation, row={row}")
+            start = time.perf_counter()
             cinput, coutput = vstar.minimize_vec(None, return_io=True)
-            diff = time.time() - start
+            diff = time.perf_counter() - start
             print(f" minimize_vec - None time: {diff}")
             print(f".coutput is {coutput}")
             
-            start = time.time()
+            start = time.perf_counter()
             cinput, coutput = vstar.minimize_vec(row, return_io=True)
-            diff = time.time() - start
+            diff = time.perf_counter() - start
 
             print(f" minimize_vec - row time: {diff}")
             print(f".coutput is {coutput}")
