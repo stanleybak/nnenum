@@ -97,7 +97,7 @@ class Settings(metaclass=FreezableMeta):
 
         cls.SHUFFLE_TIME = None # shuffle star sets after some time (improves unsafe specs)
 
-        cls.LP_PRIMARY_SETTINGS_TIMEOUT = 3 # second to use primary lp params before switching to backup
+        cls.GLPK_TIMEOUT = 60 # maximum allowed seconds for each indivudal LP run
 
         cls.SKIP_COMPRESSED_CHECK = False # sanity check for compressed inputs when COMPRESS_INIT_BOX is False
 

@@ -22,16 +22,13 @@ def get_lp_params(alternate_lp_params=False):
     'get the lp params object'
 
     if not hasattr(get_lp_params, 'obj'):
-        # turn off printing at a lower-level
-        glpk.glp_term_out(glpk.GLP_OFF)
-
         params = glpk.glp_smcp()
         glpk.glp_init_smcp(params)
 
         #params.msg_lev = glpk.GLP_MSG_ERR
         params.msg_lev = glpk.GLP_MSG_ERR
 
-        params.tm_lim = int(Settings.LP_PRIMARY_SETTINGS_TIMEOUT * 1000)
+        params.tm_lim = int(Settings.GLPK_TIMEOUT * 1000)
         params.out_dly = 2 * 1000 # start printing to terminal delay
         
         get_lp_params.obj = params
@@ -42,14 +39,16 @@ def get_lp_params(alternate_lp_params=False):
         params2.meth = glpk.GLP_DUAL # use dual simplex... slower (10x sometimes) but can work when primal fails
         params2.msg_lev = glpk.GLP_MSG_ON
 
-        params2.tm_lim = int(60 * 1000) # set 60 sec timeout
-        params2.out_dly = 5 * 1000 # start printing to terminal status after 1 secs
+        params2.tm_lim = int(Settings.GLPK_TIMEOUT * 1000)
+        params2.out_dly = 1 * 1000 # start printing to terminal status after 1 secs
         
         get_lp_params.alt_obj = params2
         
     if alternate_lp_params:
+        #glpk.glp_term_out(glpk.GLP_ON)
         rv = get_lp_params.alt_obj
     else:
+        #glpk.glp_term_out(glpk.GLP_OFF)
         rv = get_lp_params.obj
 
     return rv
@@ -659,14 +658,13 @@ class LpInstance(Freezable):
                 print(f"GLPK timed out / failed ({simplex_res}) after {round(diff, 3)} sec with primary " + \
                       f"settings with {r} rows and {c} cols")
 
-            if simplex_res != glpk.GLP_ETMLIM:
-                if Settings.PRINT_OUTPUT:
-                    print("Trying alternate GLPK settings")
+            if Settings.PRINT_OUTPUT:
+                print("Trying alternate GLPK settings")
                     
-                # solver failed, retry with alternate params
-                params = get_lp_params(alternate_lp_params=True)
-                self.reset_basis()
-                simplex_res = glpk.glp_simplex(self.lp, params)
+            # retry with alternate params
+            params = get_lp_params(alternate_lp_params=True)
+            self.reset_basis()
+            simplex_res = glpk.glp_simplex(self.lp, params)
             
         rv = self._process_simplex_result(simplex_res)
 
