@@ -194,13 +194,6 @@ def main():
     Settings.CONTRACT_ZONOTOPE = False
     Settings.CONTRACT_ZONOTOPE_LP = False
 
-    print("WARNING: single process")
-    Settings.NUM_PROCESSES = 1
-
-    print("warning: custom glpk settings!!!!!!!!!")
-    Settings.GLPK_FIRST_PRIMAL = False
-    Settings.GLPK_RESET_BEFORE_MINIMIZE = True
-
     #nn = load_onnx_network(onnx_filename)
     print(f"loading onnx network from {onnx_filename}")
     nn = load_onnx_network(onnx_filename)
@@ -244,30 +237,41 @@ def main():
             Settings.ADVERSARIAL_ORIG_IMAGE = image_data
             Settings.ADVERSARIAL_ORIG_LABEL = classification
 
-            res = enumerate_network(init_state, nn, spec)
-            r = res.result_str
-            t = res.total_secs
+            for primal_glpk in [True, False]:
+                if primal_glpk:
+                    print("Trying with primal glpk first")
+                    Settings.GLPK_FIRST_PRIMAL = True
+                    Settings.GLPK_RESET_BEFORE_MINIMIZE = False
+                else:
+                    print("Trying with dual glpk first")
+                    Settings.GLPK_FIRST_PRIMAL = False
+                    Settings.GLPK_RESET_BEFORE_MINIMIZE = True
 
-            if r == 'safe':
-                safe_count += 1
-            elif r == 'unsafe':
-                unsafe_count += 1
-            else:
-                if r == 'error':
-                    error_count += 1
+                res = enumerate_network(init_state, nn, spec)
+                r = res.result_str
+                t = res.total_secs
 
-                unknown_count += 1
+                if r == 'safe':
+                    safe_count += 1
+                elif r == 'unsafe':
+                    unsafe_count += 1
+                else:
+                    if r == 'error':
+                        error_count += 1
 
-            if r != "timeout":
-                results[image_id] = [t, r, image_id]
+                    unknown_count += 1
 
-            print(f"result {image_id}: {r} in {round(t, 4)} sec")
+                if r != "timeout":
+                    results[image_id] = [t, r, image_id]
 
-            tup = res.progress_tuple
-            progress = f"{tup[0]}/{tup[0] + tup[1]} ({round(tup[2] * 100, 4)}%)"
-            print(f"progress: {progress}")
-            f.write(f"{benchmark_name}\t{image_id}\t{r}\t{t}\t{progress}\n")
-            f.flush()
+                print(f"result {image_id} (primal_glpk: {primal_glpk}): {r} in {round(t, 4)} sec")
+
+                tup = res.progress_tuple
+                progress = f"{tup[0]}/{tup[0] + tup[1]} ({round(tup[2] * 100, 4)}%)"
+                print(f"progress: {progress}")
+                primal_str = "primal" if primal_glpk else "dual"
+                f.write(f"{benchmark_name}\t{image_id}-{primal_str}\t{r}\t{t}\t{progress}\n")
+                f.flush()
 
         diff = time.perf_counter() - start
         f.write(f"\nSafe: {safe_count}, unsafe: {unsafe_count}, error: {error_count}, unknown: {unknown_count}, " + \
