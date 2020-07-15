@@ -230,7 +230,6 @@ class Specification(Freezable):
 
         # constructing a new star and do exact check
         copy = lp_star.copy()
-        copy.lpi.reset_basis()
 
         # add constraints on the outputs
 
