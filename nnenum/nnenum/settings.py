@@ -99,6 +99,7 @@ class Settings(metaclass=FreezableMeta):
 
         cls.GLPK_TIMEOUT = 60 # maximum allowed seconds for each indivudal LP run
         cls.GLPK_FIRST_PRIMAL = True # first try primal LP... if that fails do dual
+        cls.GLPK_RESET_BASIS_ON_NEW_CONSTRAINTS = False # reset the lp basis after adding new constraints
 
         cls.SKIP_COMPRESSED_CHECK = False # sanity check for compressed inputs when COMPRESS_INIT_BOX is False
 
