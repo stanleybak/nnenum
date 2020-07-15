@@ -275,10 +275,7 @@ class LpStar(Freezable):
 
         Timers.tic('star.minimize_vec')
 
-        if self.a_mat is not None:
-            dtype = self.a_mat.dtype
-        else:
-            dtype = float
+        dtype = float if self.a_mat is None else self.a_mat.dtype
 
         if self.a_mat.size == 0:
             rv = self.bias

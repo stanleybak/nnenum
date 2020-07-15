@@ -240,6 +240,11 @@ def process_result(shared):
     # save num stars to result
     shared.result.total_stars = shared.finished_stars.value
 
+    # save progress to result
+    shared.result.progress_tuple = (shared.finished_stars.value,
+                                    shared.unfinished_stars.value,
+                                    shared.finished_work_frac.value)
+
     if Settings.PRINT_OUTPUT:
         if shared.had_exception.value == 1:
             print("Exception occured during execution")
@@ -332,6 +337,8 @@ class SharedState(Freezable):
         self.num_lps_enum = multiprocessing.Value('i', 0)
         self.num_offloaded = multiprocessing.Value('i', 0)
         self.finished_stars = multiprocessing.Value('i', 0)
+        self.unfinished_stars = multiprocessing.Value('i', 0)
+        
         self.finished_approx_stars = multiprocessing.Value('i', 0)
         self.finished_work_frac = multiprocessing.Value('f', 0) 
         self.incorrect_overapprox_count = multiprocessing.Value('i', 0)

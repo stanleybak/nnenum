@@ -51,7 +51,9 @@ class LpStarState(Freezable):
             assert uncompressed_init_box.dtype in [np.float32, np.float64], \
                 f"init bounds dtype was not floating-point type: {uncompressed_init_box.dtype}"
 
+            Timers.tic('from_init_box')
             self.from_init_box(uncompressed_init_box)
+            Timers.toc('from_init_box')
 
         self.freeze_attrs()
 

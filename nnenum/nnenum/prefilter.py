@@ -191,12 +191,16 @@ class Prefilter(Freezable):
 
         dtype = type(uncompressed_init_box[0][0])
 
-        for i in uncompressed_init_box:
+        for row, i in enumerate(uncompressed_init_box):
             mid = (i[0] + i[1]) / 2.0
             sim_output.append(mid) # sim output is uncompressed
 
-            if abs(i[1] - i[0]) > tol: # sim input is compressed
-                sim_input.append(mid)
+            # make sure sim input is not compressed
+            if not Settings.SKIP_COMPRESSED_CHECK:
+                assert abs(i[1] - i[0]) > tol, f"init box looks compressed (row {row} is range {i}), " + \
+                    "use Settings.SKIP_COMPRESSED_CHECK to disable"
+                
+            sim_input.append(mid)
 
         sim_input = np.array(sim_input, dtype=dtype)
         sim_output = np.array(sim_output, dtype=dtype)

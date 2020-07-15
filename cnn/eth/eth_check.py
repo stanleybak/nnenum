@@ -184,6 +184,9 @@ def main():
     Settings.TIMING_STATS = False
     Settings.PRINT_OUTPUT = True
 
+    # try this
+    Settings.LP_PRIMARY_SETTINGS_TIMEOUT = 4
+
     # contraction doesn't help in high dimensions
     Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
     Settings.CONTRACT_ZONOTOPE = False
@@ -209,7 +212,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = None#44 #38
+    specific_image = 13
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")
@@ -251,7 +254,10 @@ def main():
 
             print(f"result {image_id}: {r} in {round(t, 4)} sec")
 
-            f.write(f"{benchmark_name}\t{image_id}\t{r}\t{t}\n")
+            tup = res.progress_tuple
+            progress = f"{tup[0]}/{tup[0] + tup[1]} ({round(tup[2] * 100, 4)}%)"
+            print(f"progress: {progress}")
+            f.write(f"{benchmark_name}\t{image_id}\t{r}\t{t}\t{progress}\n")
             f.flush()
 
         diff = time.perf_counter() - start

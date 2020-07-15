@@ -183,37 +183,60 @@ class RoundsResult:
         return rv
 
 def test_abstract_violation(dims, vstars, vindices, network, spec):
-    'test concrete executions for specification violations'
+    '''test concrete executions for specification violations
+
+    returns abstract_ios, (concrete_io_tuple or None)
+    '''
     
     concrete_io_tuple = None
+    abstract_ios = []
 
     Timers.tic('try_abstract_violation')
 
     for vstar, vindex in zip(vstars, vindices):
         if isinstance(spec, DisjunctiveSpec):
-            row = spec.spec_list[vindex].mat[0, :]
+            cur_spec = spec.spec_list[vindex]
         else:
-            row = spec.mat[0, :]
+            cur_spec = spec
 
-        cinput, coutput = vstar.minimize_vec(row, return_io=True)
+        # try all rows
+        # rows = cur_spec.mat
 
-        vio_label = np.argmax(coutput)
+        # try sum of all rows
+        rows = []
 
-        trimmed_inputs = cinput[:dims]
-        shaped_input = nn_unflatten(trimmed_inputs, network.get_input_shape())
+        sum_row = np.zeros(cur_spec.mat.shape[1])
 
-        exec_output = network.execute(shaped_input)
-        flat_output = np.ravel(exec_output)
+        for row in cur_spec.mat:
+            sum_row += row
 
-        if np.argmax(flat_output) == vio_label:
-            if Settings.PRINT_OUTPUT:
-                print("Found unsafe from concrete execution of abstract counterexample")
+        rows.append(sum_row)
+        
+        for row in rows:
+            cinput, coutput = vstar.minimize_vec(row, return_io=True)
+            abstract_ios.append((cinput, coutput))
+            assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
 
-            concrete_io_tuple = (trimmed_inputs, flat_output)
+            # coutput (abstract violation) violates cur_spec... try concrete execution
+            trimmed_input = cinput[:dims]
+            exec_output = network.execute(trimmed_input)
+            flat_output = np.ravel(exec_output)
+
+            print(f".violation star coutput is {coutput}")
+
+            if cur_spec.is_violation(flat_output):
+                if Settings.PRINT_OUTPUT:
+                    print("Found unsafe from concrete execution of abstract counterexample")
+
+                concrete_io_tuple = (trimmed_input, flat_output)
+                break
+
+        if concrete_io_tuple:
+            break
 
     Timers.toc('try_abstract_violation')
 
-    return concrete_io_tuple
+    return abstract_ios, concrete_io_tuple
         
 def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None, gen_limit=np.inf,
                          overapprox_types=None, try_seeded_adversarial=None):
@@ -284,11 +307,12 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
             dims = ss.star.lpi.get_num_cols()
                 
             if Settings.ADVERSARIAL_TEST_ABSTRACT_VIO:
-                rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
+                abstract_ios, rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
+                
 
             if rv.concrete_io_tuple is None and Settings.ADVERSARIAL_SEED_ABSTRACT_VIO \
                                             and Settings.ADVERSARIAL_ONNX_PATH and try_seeded_adversarial:
-                rv.concrete_io_tuple = try_seeded_adversarial(dims, vstars, vindices, spec)
+                rv.concrete_io_tuple = try_seeded_adversarial(dims, abstract_ios)
 
         if vstars and Settings.CONTRACT_OVERAPPROX_VIOLATION:
             ss.contract_from_violation(vstars)
@@ -340,10 +364,13 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
 
     # run remaining layers with newly-computed bounds
     remaining_layers = network.layers[layer_num:]
+
+    if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
+        print(f"Round has {len(sets)} sets")
     
     for layer_index, layer in enumerate(remaining_layers):
-        if Settings.NUM_PROCESSES == 1 and Settings.PRINT_OUTPUT:
-            print(f"Running Overapprox layer {layer_index} / {len(remaining_layers)}: {type(layer)}")
+        if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
+            print(f"Running Overapprox layer {layer_index} / {len(remaining_layers)}: {type(layer).__name__}")
             
         check_cancel_func()
         
@@ -352,7 +379,11 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
             split_indices = None
             layer_bounds = None
 
-            for s in sets:                    
+            for s in sets:
+                if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and layer_bounds is not None:
+                    if isinstance(s, StarOverapprox) and s.do_lp:
+                        print(f"current split_indices: {len(make_split_indices(layer_bounds))} / {len(layer_bounds)}")
+
                 layer_bounds, split_indices = s.tighten_bounds(layer_bounds, split_indices, sim,
                                                                check_cancel_func, depth)
 

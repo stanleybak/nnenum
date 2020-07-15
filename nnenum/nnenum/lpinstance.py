@@ -6,6 +6,7 @@ GLPK python interface using swiglpk
 
 import sys
 import math
+import time
 
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -653,6 +654,7 @@ class LpInstance(Freezable):
         #self.reset_basis(basis_type='std') # TODO: REMOVE
 
         #alternative_lp_params = True
+        start = time.perf_counter()
         simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=alternate_lp_params))
 
         # there was a bug in glp where optimizing first time said optimal but
@@ -664,25 +666,62 @@ class LpInstance(Freezable):
         # process simplex result
         #Timers.tic('process_simplex_result')
 
-        if fail_on_unsat and simplex_res in [glpk.GLP_ETMLIM, glpk.GLP_EFAIL]: # timeout
-            print("GLPK timed out / failed with primary settings, trying secondary settings")
-            rv = None
-        else:
-            rv = self._process_simplex_result(simplex_res)
-        #Timers.toc('process_simplex_result')
+        if simplex_res != 0: # error (or timeout)
+            if Settings.PRINT_OUTPUT:
+                r = self.get_num_rows()
+                c = self.get_num_cols()
+            
+                diff = time.perf_counter() - start
+                print(f"GLPK timed out / failed ({simplex_res}) after {round(diff, 3)} sec with primary " + \
+                      f"settings with {r} rows and {c} cols, trying secondary settings")
 
-        if rv is None and fail_on_unsat:
-            print("Note: minimize failed with fail_on_unsat was true, reinitializing and retrying...")
+                if simplex_res == glpk.GLP_ETMLIM:
+                    print("time out was exeeded")
+
+            params = get_lp_params(alternate_lp_params=False)
+            params.tm_lim = int(60 * 1000)
 
             self.reset_basis()
-            rv = self.minimize(direction_vec, fail_on_unsat=False, alternate_lp_params=True)
+            start = time.perf_counter()
+            simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=True))
+
+            diff = time.perf_counter() - start
+            print(f"simplex_res with reset + longer timeout was {simplex_res}, time: {round(diff, 3)} sec")
+            
+            self.reset_basis()
+            start = time.perf_counter()
+            simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=True))
+
+            diff = time.perf_counter() - start
+            print(f"simplex_res after reset was {simplex_res}, time: {round(diff, 3)} sec")
+            
+        rv = self._process_simplex_result(simplex_res)
+
+        if rv is None and fail_on_unsat:
+            print("Note: minimize failed with fail_on_unsat was true, retrying with alt settings...")
+
+            self.reset_basis()
+            start = time.perf_counter()
+            try:
+                rv = self.minimize(direction_vec, fail_on_unsat=False, alternate_lp_params=True)
+            except RuntimeError:
+                rv = None
+                
+            diff = time.perf_counter() - start
 
             if rv is None:
                 print("still unsat, trying no-dir optimization")
                 self.reset_basis()
-
-                result_nodir = self.minimize(None, fail_on_unsat=False)
-                rv = self.minimize(direction_vec, fail_on_unsat=False)
+            
+                try:
+                    result_nodir = self.minimize(None, fail_on_unsat=False)
+                except RuntimeError:
+                    result_nodir = None
+                
+                try:
+                    rv = self.minimize(direction_vec, fail_on_unsat=False)
+                except RuntimeError:
+                    rv = None
 
                 # lp became infeasible when I picked an optimization direction
                 if rv is None:
@@ -692,7 +731,8 @@ class LpInstance(Freezable):
                     else:
                         print("No-dir result was none")
             else:
-                print("using result after reset and alterative lp params")
+                if Settings.PRINT_OUTPUT:
+                    print(f"using result after reset and alterative lp params: {round(diff, 3)} sec")
 
             #LpInstance.print_verbose("Note: LP was infeasible, but then feasible after resetting statuses")
 

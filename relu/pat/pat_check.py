@@ -178,6 +178,9 @@ def main():
 
             print(f"result {image_id}: {r} in {round(t, 4)} sec")
 
+            tup = res.progress_tuple
+            progress = f"{tup[0]}/{tup[0] + tup[1]} ({round(tup[2] * 100, 4)}%)"
+            print(f"progress: {progress}")
             f.write(f"net{net} (e={epsilon})\t{image_id}\t{r}\t{t}\n")
             f.flush()
 

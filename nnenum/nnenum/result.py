@@ -34,6 +34,9 @@ class Result(Freezable):
         # total number of stars explored during path enumeration
         self.total_stars = 0
 
+        # data (3-tuple) about problem progress: (finished_stars, unfinished_stars, finished_work_frac)
+        self.progress_tuple = (0, 0, 0)
+
         ##### assigned if cls.RESULT_SAVE_TIMERS is nonempty. Map of timer_name -> total_seconds
         self.timers = {}
 

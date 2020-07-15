@@ -114,26 +114,18 @@ class Worker(Freezable):
         if self.priv.branch_tuples_list is not None:
             self.priv.branch_tuples_list.append(f'{self.priv.ss.branch_str()} ({label})')
 
-    def try_seeded_adversarial(self, dims, vstars, vindices, spec):
+    def try_seeded_adversarial(self, dims, abstract_ios):
         '''
         generate adversarial image from abstract counterexample seeds
 
-        returns concrete_io_tuple or none
+        returns concrete_io_tuple or None
         '''
 
         Timers.tic('try_seeded_adversarial')
 
         assert dims == Settings.ADVERSARIAL_ORIG_IMAGE.size
 
-        for vstar, vindex in zip(vstars, vindices):
-            if isinstance(spec, DisjunctiveSpec):
-                row = spec.spec_list[vindex].mat[0, :]
-            else:
-                row = spec.mat[0, :]
-
-            cinput, coutput = vstar.minimize_vec(row, return_io=True)
-
-            assert np.argmax(coutput) != Settings.ADVERSARIAL_ORIG_LABEL
+        for cinput, _ in abstract_ios:
 
             seed_image = nn_unflatten(cinput[:dims], Settings.ADVERSARIAL_ORIG_IMAGE.shape)
 
@@ -615,6 +607,7 @@ class Worker(Freezable):
 
             if self.priv.ss:
                 self.shared.stars_in_progress.value -= 1
+                self.shared.unfinished_stars.value += 1
                 self.priv.ss = None
 
             self.shared.stars_in_progress.value += self.priv.stars_in_progress
@@ -637,8 +630,10 @@ class Worker(Freezable):
                 else:
                     break
 
+            ########################################
             self.shared.mutex.acquire()
             self.shared.stars_in_progress.value -= count
+            self.shared.unfinished_stars.value += count
             count = 0
 
             if self.shared.stars_in_progress.value <= 0:
@@ -647,6 +642,7 @@ class Worker(Freezable):
                 should_exit = True
 
             self.shared.mutex.release()
+            ##########################################
 
             # don't busy wait
             if not should_exit:
