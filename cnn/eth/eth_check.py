@@ -184,6 +184,11 @@ def main():
     Settings.TIMING_STATS = False
     Settings.PRINT_OUTPUT = True
 
+    # disable quick overapprox / adversarial on bigger networks
+    if 'mnist_0.1' not in onnx_filename:
+        Settings.ADVERSARIAL_TRY_QUICK = False
+        Settings.TRY_QUICK_OVERAPPROX = False
+
     # contraction doesn't help in high dimensions
     Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
     Settings.CONTRACT_ZONOTOPE = False
@@ -209,7 +214,7 @@ def main():
     unknown_count = 0
     error_count = 0
 
-    specific_image = 93
+    specific_image = 6
     print("Loading images...")
     tup_list = make_init(nn, image_filename, epsilon, specific_image=specific_image)
     print(f"made {len(tup_list)} init states")
