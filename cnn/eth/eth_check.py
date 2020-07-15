@@ -201,7 +201,7 @@ def main():
 
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
-    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = False # true
+    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = True
 
     #if epsilon == 0.05:
         # speed up splitting near root
