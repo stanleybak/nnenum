@@ -484,9 +484,6 @@ class LpInstance(Freezable):
 
         glpk.glp_set_mat_row(self.lp, rows_before + 1, vec.size, indices_vec, data_vec)
 
-        if Settings.GLPK_RESET_BASIS_ON_NEW_CONSTRAINTS:
-            self.reset_basis()
-
         Timers.toc('add_dense_row')
 
     def set_constraints_csr(self, data, glpk_indices, indptr, shape):
@@ -650,6 +647,9 @@ class LpInstance(Freezable):
 
         self.set_minimize_direction(direction_vec)
 
+        if Settings.GLPK_RESET_BEFORE_MINIMIZE:
+            self.reset_basis()
+        
         start = time.perf_counter()
         simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
 
