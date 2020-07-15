@@ -247,11 +247,28 @@ class Specification(Freezable):
             lpi.add_dense_row(row, self.rhs[i] - init_bias[i])
 
         start = time.perf_counter()
-        Timers.tic('minimize')
         winput = lpi.minimize(None, fail_on_unsat=False)
-        Timers.toc('minimize')
         diff = time.perf_counter() - start
-        print(f"time to minimize copy: {round(diff, 3)} sec")
+        print(f"original time to minimize copy: {round(diff, 3)} sec")
+
+        if True:
+            lpi.reset_basis()
+            start = time.perf_counter()
+            winput = lpi.minimize(None, fail_on_unsat=False)
+            diff = time.perf_counter() - start
+            print(f"time to minimize copy after 'std' basis: {round(diff, 3)} sec")
+
+            lpi.reset_basis('adv')
+            start = time.perf_counter()
+            winput = lpi.minimize(None, fail_on_unsat=False)
+            diff = time.perf_counter() - start
+            print(f"time to minimize copy after 'adv' basis: {round(diff, 3)} sec")
+
+            lpi.reset_basis('cpx')
+            start = time.perf_counter()
+            winput = lpi.minimize(None, fail_on_unsat=False)
+            diff = time.perf_counter() - start
+            print(f"time to minimize copy after 'cpx' basis: {round(diff, 3)} sec")
 
         if winput is None:
             # when we check all the specification directions at the same time, there is no violaton

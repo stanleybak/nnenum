@@ -39,7 +39,7 @@ def get_lp_params(alternate_lp_params=False):
         # make alternative params
         params2 = glpk.glp_smcp()
         glpk.glp_init_smcp(params2)
-        params2.meth = glpk.GLP_DUALP # use dual simplex... maybe works better?
+        params2.meth = glpk.GLP_DUAL # use dual simplex... slower (10x sometimes) but can work when primal fails
         params2.msg_lev = glpk.GLP_MSG_ON
 
         params2.tm_lim = int(60 * 1000) # set 60 sec timeout
@@ -632,7 +632,7 @@ class LpInstance(Freezable):
             assert basis_type == 'cpx'
             glpk.glp_cpx_basis(self.lp)
 
-    def minimize(self, direction_vec, fail_on_unsat=True, alternate_lp_params=False):
+    def minimize(self, direction_vec, fail_on_unsat=True):
         '''minimize the lp, returning a list of assigments to each of the variables
 
         if direction_vec is not None, this will first assign the optimization direction
@@ -642,104 +642,60 @@ class LpInstance(Freezable):
 
         assert not isinstance(self.lp, tuple), "self.lp was tuple. Did you call lpi.deserialize()?"
 
-        #Timers.tic('lpi.minimize')
-
-        #Timers.tic('set_minimize_direction')
         if direction_vec is None:
             direction_vec = [0] * self.get_num_cols()
 
         self.set_minimize_direction(direction_vec)
-        #Timers.toc('set_minimize_direction')
 
-        #self.reset_basis(basis_type='std') # TODO: REMOVE
-
-        #alternative_lp_params = True
         start = time.perf_counter()
-        simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=alternate_lp_params))
+        simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
 
-        # there was a bug in glp where optimizing first time said optimal but
-        # obj value was zero and if oyu ran it again it got a better answer (DUALP)
-        #if glpk.glp_get_obj_val(self.lp) == 0:
-        #    print("obj was 0, resolving...")
-        #    simplex_res = glpk.glp_simplex(self.lp, params)
-
-        # process simplex result
-        #Timers.tic('process_simplex_result')
-
-        if simplex_res != 0: # error (or timeout)
+        if simplex_res != 0: # solver failure (possibly timeout)
             if Settings.PRINT_OUTPUT:
                 r = self.get_num_rows()
                 c = self.get_num_cols()
             
                 diff = time.perf_counter() - start
                 print(f"GLPK timed out / failed ({simplex_res}) after {round(diff, 3)} sec with primary " + \
-                      f"settings with {r} rows and {c} cols, trying secondary settings")
+                      f"settings with {r} rows and {c} cols")
 
-                if simplex_res == glpk.GLP_ETMLIM:
-                    print("time out was exeeded")
-
-            params = get_lp_params(alternate_lp_params=False)
-            params.tm_lim = int(60 * 1000)
-
-            self.reset_basis()
-            start = time.perf_counter()
-            simplex_res = glpk.glp_simplex(self.lp, params)
-
-            diff = time.perf_counter() - start
-            print(f"simplex_res with reset + longer timeout was {simplex_res}, time: {round(diff, 3)} sec")
-            
-            self.reset_basis()
-            start = time.perf_counter()
-            simplex_res = glpk.glp_simplex(self.lp, get_lp_params(alternate_lp_params=True))
-
-            diff = time.perf_counter() - start
-            print(f"simplex_res after reset + alt params was {simplex_res}, time: {round(diff, 3)} sec")
+            if simplex_res != glpk.GLP_ETMLIM:
+                if Settings.PRINT_OUTPUT:
+                    print("Trying alternate GLPK settings")
+                    
+                # solver failed, retry with alternate params
+                params = get_lp_params(alternate_lp_params=True)
+                self.reset_basis()
+                simplex_res = glpk.glp_simplex(self.lp, params)
             
         rv = self._process_simplex_result(simplex_res)
 
         if rv is None and fail_on_unsat:
-            print("Note: minimize failed with fail_on_unsat was true, retrying with alt settings...")
+            # extra logic to try harder if fail_on_unsafe is True
+            # glpk can sometimes be cajoled into providing a solution
+            
+            print("Note: minimize failed with fail_on_unsat was true, trying to reset basis...")
 
             self.reset_basis()
-            start = time.perf_counter()
-            try:
-                rv = self.minimize(direction_vec, fail_on_unsat=False, alternate_lp_params=True)
-            except RuntimeError:
-                rv = None
-                
-            diff = time.perf_counter() - start
+            rv = self.minimize(direction_vec, fail_on_unsat=False)
 
             if rv is None:
-                print("still unsat, trying no-dir optimization")
+                print("still unsat after reset basis, trying no-dir optimization")
                 self.reset_basis()
             
-                try:
-                    result_nodir = self.minimize(None, fail_on_unsat=False)
-                except RuntimeError:
-                    result_nodir = None
-                
-                try:
-                    rv = self.minimize(direction_vec, fail_on_unsat=False)
-                except RuntimeError:
-                    rv = None
+                result_nodir = self.minimize(None, fail_on_unsat=False)
 
                 # lp became infeasible when I picked an optimization direction
-                if rv is None:
-                    if result_nodir is not None:
-                        print("Using result from no-direction optimization") 
-                        rv = result_nodir
-                    else:
-                        print("No-dir result was none")
+                if result_nodir is not None:
+                    print("Using result from no-direction optimization") 
+                    rv = result_nodir
+                else:
+                    print("No-dir result was also infeasible")
             else:
-                if Settings.PRINT_OUTPUT:
-                    print(f"using result after reset and alterative lp params: {round(diff, 3)} sec")
-
-            #LpInstance.print_verbose("Note: LP was infeasible, but then feasible after resetting statuses")
+                print("Using result after reset basis (soltion was now feasible)")
 
         if rv is None and fail_on_unsat:
             raise UnsatError("minimize returned UNSAT and fail_on_unsat was True")
-
-        #Timers.toc('lpi.minimize')
 
         return rv
 
