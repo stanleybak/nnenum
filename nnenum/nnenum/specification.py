@@ -210,10 +210,16 @@ class Specification(Freezable):
 
         print("------- in get_violation_star -------")
 
-        #start = time.perf_counter()
-        #coutput = lp_star.minimize_vec(self.mat[0])
-        #diff = time.perf_counter() - start
-        #print(f"time to minimize in original lpi: {round(diff, 3)} sec")
+        start = time.perf_counter()
+        coutput = lp_star.minimize_vec(self.mat[0])
+        diff = time.perf_counter() - start
+        print(f"time to minimize in original lpi: {round(diff, 3)} sec")
+
+        lp_star.lpi.reset_basis()
+        start = time.perf_counter()
+        coutput = lp_star.minimize_vec(self.mat[0])
+        diff = time.perf_counter() - start
+        print(f"time to minimize in original lpi after reset: {round(diff, 3)} sec")
 
         #init_bias = np.dot(self.mat, lp_star.bias)
 
@@ -224,6 +230,7 @@ class Specification(Freezable):
 
         # constructing a new star and do exact check
         copy = lp_star.copy()
+        copy.lpi.reset_basis()
 
         # add constraints on the outputs
 

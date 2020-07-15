@@ -36,6 +36,9 @@ def try_quick_overapprox(ss, network, spec, start_time, found_adv):
         prerelu_sims = make_prerelu_sims(ss, network)
 
         check_cancel_func()
+
+        if Settings.PRINT_OUTPUT:
+            print(f"Doing quick overapprox with {len(overapprox_types)} rounds...")
         
         rr = do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=check_cancel_func,
                               overapprox_types=overapprox_types)
@@ -278,6 +281,9 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
 
         start = time.perf_counter()
 
+        if not ss.branch_tuples and Settings.PRINT_OUTPUT:
+            print(f"Overapprox Round {round_num+1}/{len(overapprox_types)} has {len(sets)} sets")
+
         try:
             run_overapprox_round(network, ss, sets, prerelu_sims, check_cancel_func)
             diff = time.perf_counter() - start if Settings.SAVE_BRANCH_TUPLES_TIMES else 0
@@ -364,13 +370,10 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
 
     # run remaining layers with newly-computed bounds
     remaining_layers = network.layers[layer_num:]
-
-    if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
-        print(f"Round has {len(sets)} sets")
     
     for layer_index, layer in enumerate(remaining_layers):
         if not ss_init.branch_tuples and Settings.PRINT_OUTPUT:
-            print(f"Running Overapprox layer {layer_index} / {len(remaining_layers)}: {type(layer).__name__}")
+            print(f"Layer {layer_index} / {len(remaining_layers)}: {type(layer).__name__}")
             
         check_cancel_func()
         
