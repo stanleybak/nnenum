@@ -80,6 +80,11 @@ def update_bounds_lp(layer_bounds, star, sim, split_indices, depth, check_cancel
             num_threads = 2**depth # estimate of number of threads
             n = p // num_threads
 
+    #print(f".lputil WARNING: checking feas with {star.lpi.get_num_rows()} rows and {star.lpi.get_num_cols()} cols")
+    #if not star.lpi.is_feasible():
+    #    print("infeasible")
+    #    print(star.lpi)
+
     if n <= 1:
         rv = update_bounds_lp_serial(layer_bounds, star, sim, split_indices, check_cancel_func, both_bounds)
     else:
@@ -112,6 +117,7 @@ def update_bounds_lp_parallel(layer_bounds, star, sim, split_indices, num_proces
         params.append(param)
 
     ####### start
+    
     star.lpi.serialize()
 
     init_arg = (worker_func, star)

@@ -700,7 +700,11 @@ class LpInstance(Freezable):
                     print("Using result from no-direction optimization") 
                     rv = result_nodir
                 else:
-                    print("No-dir result was also infeasible")
+                    f = 'error.cplex'                    
+                    print(f"No-dir result was also infeasible")
+
+                    print(self)
+
             else:
                 print("Using result after reset basis (soltion was now feasible)")
 
