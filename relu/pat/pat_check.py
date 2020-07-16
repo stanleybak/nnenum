@@ -102,7 +102,7 @@ def main():
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
 
-    Settings.ADVERSARIAL_FROM_ABSTRACT_VIO = True
+    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = True
 
     if epsilon == 0.05:
         # speed up splitting near root
@@ -119,7 +119,7 @@ def main():
 
     print("Loading images...")
 
-    for image_id in range(1, 26):
+    for image_id in [17]: #range(1, 26):
         image = load_image(image_id)
         out = nn.execute(image)
         classification = np.argmax(out)
