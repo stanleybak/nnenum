@@ -101,46 +101,44 @@ def make_init(nn, image_filename, epsilon, specific_image=None):
     print("making init states")
     
     for image_id, (image, classification) in enumerate(zip(images, labels)):
-        for primal_glpk in [True, False]:
+        output = nn.execute(image)
+        flat_output = nn_flatten(output)
 
-            output = nn.execute(image)
-            flat_output = nn_flatten(output)
+        num_outputs = flat_output.shape[0]
+        label = np.argmax(flat_output)
 
-            num_outputs = flat_output.shape[0]
-            label = np.argmax(flat_output)
+        if label == labels[image_id]:
+            # correctly classified
 
-            if label == labels[image_id]:
-                # correctly classified
+            # unsafe if classification is not maximal (anything else is > classfication)
+            spec_list = []
 
-                # unsafe if classification is not maximal (anything else is > classfication)
-                spec_list = []
+            for i in range(num_outputs):
+                if i == classification:
+                    continue
 
-                for i in range(num_outputs):
-                    if i == classification:
-                        continue
+                l = [0] * 10
 
-                    l = [0] * 10
+                l[classification] = 1
+                l[i] = -1
 
-                    l[classification] = 1
-                    l[i] = -1
+                spec_list.append(Specification([l], [0]))
 
-                    spec_list.append(Specification([l], [0]))
+            spec = DisjunctiveSpec(spec_list)
 
-                spec = DisjunctiveSpec(spec_list)
+            min_image = min_images[image_id]
+            max_image = max_images[image_id]
 
-                min_image = min_images[image_id]
-                max_image = max_images[image_id]
+            init_box = make_init_box(min_image, max_image)
+            init_box = np.array(init_box, dtype=np.float32)
+            init_state = LpStarState(init_box, spec)
 
-                init_box = make_init_box(min_image, max_image)
-                init_box = np.array(init_box, dtype=np.float32)
-                init_state = LpStarState(init_box, spec)
+            image_index = image_id
 
-                image_index = image_id
-                
-                if specific_image is not None:
-                    image_index = specific_image
+            if specific_image is not None:
+                image_index = specific_image
 
-                rv.append((image_index, image, label, init_state, spec, primal_glpk))
+            rv.append((image_index, image, label, init_state, spec))
 
     return rv
 
@@ -187,9 +185,10 @@ def main():
     Settings.TIMING_STATS = False
     Settings.PRINT_OUTPUT = True
 
+    Settings.ADVERSARIAL_TRY_QUICK = True
+
     # disable quick overapprox / adversarial on bigger networks
     if 'mnist_0.1' not in onnx_filename:
-        Settings.ADVERSARIAL_TRY_QUICK = False
         Settings.TRY_QUICK_OVERAPPROX = False
 
     # contraction doesn't help in high dimensions
@@ -204,7 +203,7 @@ def main():
 
     Settings.ADVERSARIAL_ONNX_PATH = onnx_filename # path to .onnx file with corresponidng .onnx.pb file
     Settings.ADVERSARIAL_EPSILON = epsilon
-    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = False
+    Settings.ADVERSARIAL_SEED_ABSTRACT_VIO = True
 
     #if epsilon == 0.05:
         # speed up splitting near root
@@ -232,22 +231,13 @@ def main():
 
         start = time.perf_counter()
 
-        for image_id, image_data, classification, init_state, spec, primal_glpk in tup_list:
+        for image_id, image_data, classification, init_state, spec in tup_list:
             print(f"\n========\nChecking robustness of image {image_id} for " + \
                   f"output class {classification}, with ep={epsilon}")
 
             # probably don't want to do this with globals
             Settings.ADVERSARIAL_ORIG_IMAGE = image_data
             Settings.ADVERSARIAL_ORIG_LABEL = classification
-
-            if primal_glpk:
-                print("Trying with primal glpk")
-                Settings.GLPK_FIRST_PRIMAL = True
-                Settings.GLPK_RESET_BEFORE_MINIMIZE = False
-            else:
-                print("Trying with dual glpk")
-                Settings.GLPK_FIRST_PRIMAL = False
-                Settings.GLPK_RESET_BEFORE_MINIMIZE = True
 
             res = enumerate_network(init_state, nn, spec)
             r = res.result_str
@@ -266,13 +256,12 @@ def main():
             if r != "timeout":
                 results[image_id] = [t, r, image_id]
 
-            print(f"result {image_id} (primal_glpk: {primal_glpk}): {r} in {round(t, 4)} sec")
+            print(f"result {image_id}: {r} in {round(t, 4)} sec")
 
             tup = res.progress_tuple
             progress = f"{tup[0]}/{tup[0] + tup[1]} ({round(tup[2] * 100, 4)}%)"
             print(f"progress: {progress}")
-            primal_str = "primal" if primal_glpk else "dual"
-            f.write(f"{benchmark_name}\t{image_id}-{primal_str}\t{r}\t{t}\t{progress}\n")
+            f.write(f"{benchmark_name}\t{image_id}\t{r}\t{t}\t{progress}\n")
             f.flush()
 
         diff = time.perf_counter() - start
