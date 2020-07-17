@@ -261,7 +261,7 @@ def main():
             tup = res.progress_tuple
             progress = f"{tup[0]}/{tup[0] + tup[1]} ({round(tup[2] * 100, 4)}%)"
             print(f"progress: {progress}")
-            f.write(f"{benchmark_name}\t{image_id}\t{r}\t{t}\t{progress}\n")
+            f.write(f"{benchmark_name}\t{image_id+1}\t{r}\t{t}\t{progress}\n")
             f.flush()
 
             tup_list[index] = None # clear memory from last star-state and computation
