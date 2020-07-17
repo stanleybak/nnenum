@@ -671,8 +671,12 @@ def gen_adv(q, found_adv, network, remaining_secs):
     if concrete_io_tuple is not None:
         found_adv.value = 1
 
-    q.put(concrete_io_tuple)
-    q.close()
+    try:
+        q.put(concrete_io_tuple)
+        q.close()
+    except Exception:
+        # queue may be closed from the other side if timed out... just ignore these cases
+        pass
 
 def gen_adv_single_threaded(network, remaining_secs):
     'gen adversarial without multiprocessing interface'
