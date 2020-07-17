@@ -148,8 +148,8 @@ def enumerate_network(init, network, spec=None):
         if p is not None and q is not None:
             concrete_io_tuple = q.get()
             p.join()
-            p.terminate()
-            q.cancel_join_thread()
+            #p.terminate()
+            #q.cancel_join_thread()
             p = None
             q = None
 
@@ -203,8 +203,10 @@ def enumerate_network(init, network, spec=None):
             process_result(shared)
 
     if p is not None and q is not None:
-        q.cancel_join_thread()
-        p.terminate()
+        #q.cancel_join_thread()
+        #p.terminate()
+        p = None
+        q = None
 
     if rv.total_secs is None:
         rv.total_secs = time.perf_counter() - start
@@ -671,12 +673,8 @@ def gen_adv(q, found_adv, network, remaining_secs):
     if concrete_io_tuple is not None:
         found_adv.value = 1
 
-    try:
-        q.put(concrete_io_tuple)
-        q.close()
-    except Exception:
-        # queue may be closed from the other side if timed out... just ignore these cases
-        pass
+    q.put(concrete_io_tuple)
+    q.close()
 
 def gen_adv_single_threaded(network, remaining_secs):
     'gen adversarial without multiprocessing interface'
