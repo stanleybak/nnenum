@@ -25,7 +25,7 @@ mkdir -p ./results
 pushd relu/acasxu
 python3 acasxu_all.py $TIMEOUT
 popd
-cp relu/acasxu/*.dat results
+cp relu/acasxu/results/*.dat results
 
 # pat networks
 pushd relu/pat
