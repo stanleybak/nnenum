@@ -1,0 +1,35 @@
+These are my notes for remote execution on the EC2 cloud using SSH. -Stan
+ 
+ 
+m4.10xlarge instance
+
+
+git clone https://github.com/stanleybak/nn-star.git
+export PYTHONPATH="/home/ubuntu/nn-star"
+export OPENBLAS_NUM_THREADS=1
+export OMP_NUM_THREADS=1
+cd nn-star
+git checkout ego
+cd examples/vnn_pat676
+
+sudo apt update
+sudo apt install python3-pip
+pip3 install numpy scipy matplotlib termcolor onnx onnxruntime threadpoolctl skl2onnx swiglpk
+
+
+echo "set -g history-limit 100000" > ~/.tmux.conf
+tmux new -s stanmeasure
+rm results/*; ./run_pat; echo "done all"; sleep 10; sudo shutdown now
+
+# then, if disconnected you can reconnect with:
+# tmux a -t stanmeasure
+
+
+# copy results:
+# scp -i "vnncomp.pem" ubuntu@ec2-54-244-101-111.us-west-2.compute.amazonaws.com:~/nn-star/examples/vnn_pat676/results/* /home/stan/Desktop/temp/res
+
+
+(tensorflow 2.2.0 requires pip3 install --upgrade pip)
+tensorflow mem error: TMPDIR=/home/ubunut/temp pip3 install --cache-dir=/home/ubuntu/temp --build /home/ubuntu/temp tensorflow==2.2.0
+to see disk usage of current directory: du -h (optional: pipe to grep "G\s")
+
