@@ -70,7 +70,7 @@ def do_pat():
 
                                 _net_eps, image, res, secs = line.split('\t')
 
-                                f_front.write(f"{net} {ep} {image}\n")
+                                f_front.write(f"MNIST{net} {ep} {image}\n")
 
                                 if res == 'safe':
                                     res = 'unsat'
