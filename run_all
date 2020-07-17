@@ -27,11 +27,17 @@ python3 acasxu_all.py $TIMEOUT
 popd
 cp relu/acasxu/*.dat results
 
-# pat676 networks
+# pat networks
 pushd relu/pat
-./run_pat
+./run_pat $TIMEOUT
 popd
 cp relu/pat/results/*.dat results
+
+# eth/ggn networks
+pushd cnn/eth
+./run_eth $TIMEOUT
+popd
+cp cnn/eth/results/*.dat results
 
 echo "All done. Result .dat files should be in the './results' folder"
 

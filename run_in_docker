@@ -1,5 +1,5 @@
 #!/bin/bash
-# meaure all script for nnenum 2020 vnn-comp relu
+# meaure all script for nnenum 2020 vnn-comp
 
 TIMEOUT=0.025 # default timeout: 1.5 secs
 
