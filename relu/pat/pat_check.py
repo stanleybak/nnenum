@@ -119,7 +119,7 @@ def main():
 
     print("Loading images...")
 
-    for image_id in [17]: #range(1, 26):
+    for image_id in range(1, 26):
         image = load_image(image_id)
         out = nn.execute(image)
         classification = np.argmax(out)
