@@ -221,14 +221,15 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
 
             trimmed_input = cinput[:dims]
-            exec_output = network.execute(trimmed_input)
+            full_input = vstar.to_full_input(trimmed_input)
+            exec_output = network.execute(full_input)
             flat_output = np.ravel(exec_output)
 
             if cur_spec.is_violation(flat_output):
                 if Settings.PRINT_OUTPUT:
                     print("Found unsafe from first concrete execution of abstract counterexample")
 
-                concrete_io_tuple = (trimmed_input, flat_output)
+                concrete_io_tuple = (full_input, flat_output)
                 break
 
             # this one is worst violation, use row as objective function
@@ -238,14 +239,15 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
             abstract_ios.append((cinput, coutput))
 
             trimmed_input = cinput[:dims]
-            exec_output = network.execute(trimmed_input)
+            full_input = vstar.to_full_input(trimmed_input)
+            exec_output = network.execute(full_input)
             flat_output = np.ravel(exec_output)
 
             if cur_spec.is_violation(flat_output):
                 if Settings.PRINT_OUTPUT:
                     print("Found unsafe from second concrete execution of abstract counterexample")
 
-                concrete_io_tuple = (trimmed_input, flat_output)
+                concrete_io_tuple = (full_input, flat_output)
                 break
 
         if concrete_io_tuple is not None:

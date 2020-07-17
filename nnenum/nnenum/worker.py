@@ -239,10 +239,10 @@ class Worker(Freezable):
                 if spec.is_violation(sim_out):
                     sim_in_flat = ss.prefilter.simulation[0]
                     sim_in = ss.star.to_full_input(sim_in_flat)
-                    sim_in = nn_unflatten(sim_in, network.get_input_shape())
+                    sim_in = sim_in.astype(ss.star.a_mat.dtype)
 
                     # run through complete network in to out before counting it
-                    sim_out = network.execute(sim_in.astype(ss.star.a_mat.dtype))
+                    sim_out = network.execute(sim_in)
                     sim_out = nn_flatten(sim_out)
 
                     if spec.is_violation(sim_out):
@@ -727,9 +727,9 @@ class Worker(Freezable):
             cinput, _ = res
 
             # try to confirm the counter-example
-            full_cinput_flat = star.to_full_input(cinput)
-            full_cinput = nn_unflatten(full_cinput_flat, self.shared.network.get_input_shape())
-            exec_output, exec_branch_list = self.shared.network.execute(full_cinput, save_branching=True)
+            full_cinput_flat = star.to_full_input(cinput).astype(star.a_mat.dtype)
+            
+            exec_output, exec_branch_list = self.shared.network.execute(full_cinput_flat, save_branching=True)
             exec_output = nn_flatten(exec_output)
 
             if branch_list_in_branch_tuples(exec_branch_list, branch_tuples):
