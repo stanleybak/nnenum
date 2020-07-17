@@ -85,7 +85,7 @@ class OutputBounds(Freezable):
         '''
         Initialize the output bounds.
         '''
-        
+
         self.prefilter = prefilter_parent
         
         self.layer_bounds = None # layer bounds for branching neurons
@@ -163,7 +163,6 @@ class Prefilter(Freezable):
     'main container for prefilter data and logic'
 
     def __init__(self):
-
         self.simulation = None # 2-list [input, output]        
         self.zono = None
 

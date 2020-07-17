@@ -123,6 +123,8 @@ def enumerate_network(init, network, spec=None):
     if concrete_io_tuple is None and time.perf_counter() - start < Settings.TIMEOUT:
         init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
 
+        print(f"make_init_ss returned None: {init_ss is None}")
+
         proven_safe = False
         try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
 
@@ -131,15 +133,24 @@ def enumerate_network(init, network, spec=None):
 
     if concrete_io_tuple is not None:
         # non-parallel adversarial example was generated
+        if Settings.PRINT_OUTPUT:
+            print("Proven unsafe before enumerate")
+                
         rv = Result(network, quick=True)
         rv.result_str = 'unsafe'
 
         rv.cinput = concrete_io_tuple[0]
         rv.coutput = concrete_io_tuple[1]
     elif init_ss is None or time.perf_counter() - start > Settings.TIMEOUT:
+        if Settings.PRINT_OUTPUT:
+            print(f"Timeout before enumerate, init_ss is None: {init_ss is None}")
+            
         rv = Result(network, quick=True)
         rv.result_str = 'timeout'
     elif proven_safe:
+        if Settings.PRINT_OUTPUT:
+            print("Proven safe before enumerate")
+            
         rv = Result(network, quick=True)
         rv.result_str = 'safe'
     else:
@@ -148,8 +159,8 @@ def enumerate_network(init, network, spec=None):
         if p is not None and q is not None:
             concrete_io_tuple = q.get()
             p.join()
-            #p.terminate()
-            #q.cancel_join_thread()
+            p.terminate()
+            q.cancel_join_thread()
             p = None
             q = None
 
@@ -203,8 +214,8 @@ def enumerate_network(init, network, spec=None):
             process_result(shared)
 
     if p is not None and q is not None:
-        #q.cancel_join_thread()
-        #p.terminate()
+        q.cancel_join_thread()
+        p.terminate()
         p = None
         q = None
 

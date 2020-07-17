@@ -231,7 +231,7 @@ def main():
 
         start = time.perf_counter()
 
-        for image_id, image_data, classification, init_state, spec in tup_list:
+        for index, (image_id, image_data, classification, init_state, spec) in enumerate(tup_list):
             print(f"\n========\nChecking robustness of image {image_id} for " + \
                   f"output class {classification}, with ep={epsilon}")
 
@@ -263,6 +263,8 @@ def main():
             print(f"progress: {progress}")
             f.write(f"{benchmark_name}\t{image_id}\t{r}\t{t}\t{progress}\n")
             f.flush()
+
+            tup_list[index] = None # clear memory from last star-state and computation
 
         diff = time.perf_counter() - start
         f.write(f"\nSafe: {safe_count}, unsafe: {unsafe_count}, error: {error_count}, unknown: {unknown_count}, " + \

@@ -23,8 +23,8 @@ class LpStarState(Freezable):
     #                '++++++-+++-++---+++----++-+++-++'
     #                '++++++-+++-++---+++----++-+++-++'
 
-
     def __init__(self, uncompressed_init_box=None, spec=None, safe_spec_list=None):
+        
         self.star = None
         self.prefilter = None
         
@@ -56,6 +56,11 @@ class LpStarState(Freezable):
             Timers.toc('from_init_box')
 
         self.freeze_attrs()
+
+    def __del__(self):
+        # delete the circular reference which would prevent the memory from being freed
+        if self.prefilter.output_bounds:
+            self.prefilter.output_bounds.prefilter = None
 
     def __str__(self):
         split_str = "no splits"
