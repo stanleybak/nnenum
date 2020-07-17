@@ -123,8 +123,6 @@ def enumerate_network(init, network, spec=None):
     if concrete_io_tuple is None and time.perf_counter() - start < Settings.TIMEOUT:
         init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
 
-        print(f"make_init_ss returned None: {init_ss is None}")
-
         proven_safe = False
         try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
 
