@@ -8,8 +8,7 @@
 
 FROM tensorflow/tensorflow:2.2.0
 
-# copy current directory to docker
-COPY . /work
+COPY ./requirements.txt /work/requirements.txt
 
 # set working directory
 WORKDIR /work
@@ -21,3 +20,6 @@ RUN pip3 install -r requirements.txt
 ENV PYTHONPATH=$PYTHONPATH:/work/nnenum
 ENV OPENBLAS_NUM_THREADS=1
 ENV OMP_NUM_THREADS=1
+
+# copy remaining files to docker
+COPY . /work
