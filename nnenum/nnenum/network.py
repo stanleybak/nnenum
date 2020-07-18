@@ -33,6 +33,33 @@ class NeuralNetwork(Freezable):
         return f'[NeuralNetwork with {len(self.layers)} layers with {self.layers[0].get_input_shape()} input and ' + \
           f'{self.get_output_shape()} output]'
 
+    def num_relu_layers(self):
+        'count the number of relu layers'
+
+        rv = 0
+
+        for l in self.layers:
+            if isinstance(l, ReluLayer):
+                rv += 1
+
+        return rv
+
+    def num_relu_neurons(self):
+        'count the number of relu neurons'
+
+        rv = 0
+
+        for l in self.layers:
+            if isinstance(l, ReluLayer):
+                count = 1
+
+                for dim in l.shape:
+                    count *= dim
+
+                rv += count
+
+        return rv
+
     def get_input_shape(self):
         'get the input shape to the first layer'
 
@@ -84,7 +111,7 @@ class NeuralNetwork(Freezable):
         state = input_vec.copy() # test with float32 dtype?
         
         if state.shape != self.get_input_shape():
-            nn_unflatten(state, self.get_input_shape())
+            state = nn_unflatten(state, self.get_input_shape())
 
         for layer in self.layers:
             if save_branching and isinstance(layer, ReluLayer) or isinstance(layer, PoolingLayer):
@@ -93,8 +120,10 @@ class NeuralNetwork(Freezable):
             else:
                 if save_branching:
                     branch_list.append([])
-                    
+
+                assert state.shape == layer.get_input_shape()
                 state = layer.execute(state)
+                assert state.shape == layer.get_output_shape()
 
         assert state.shape == self.get_output_shape()
 

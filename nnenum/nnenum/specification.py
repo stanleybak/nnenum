@@ -3,6 +3,8 @@ Stanley Bak
 Specification container object
 '''
 
+import time
+
 import numpy as np
 
 from nnenum.util import Freezable
@@ -37,6 +39,8 @@ class DisjunctiveSpec(Freezable):
                 s += " or "
 
             s += str(spec)
+
+        return s
 
     def get_num_expected_variables(self):
         'get the number of expected variables for this spec'
@@ -140,7 +144,7 @@ class Specification(Freezable):
 
         return self.mat.shape[1]
 
-    def is_violation(self, state):
+    def is_violation(self, state, tol_rhs=0.0):
         'does this concrete state violate the specification?'
 
         res = np.dot(self.mat, state)
@@ -148,7 +152,7 @@ class Specification(Freezable):
         rv = True
 
         for got, ub in zip(res, self.rhs):
-            if got > ub:
+            if got > ub + tol_rhs:
                 rv = False
                 break
 
@@ -221,10 +225,8 @@ class Specification(Freezable):
 
         for i, row in enumerate(init_spec):
             lpi.add_dense_row(row, self.rhs[i] - init_bias[i])
-
-        Timers.tic('minimize')
+            
         winput = lpi.minimize(None, fail_on_unsat=False)
-        Timers.toc('minimize')
 
         if winput is None:
             # when we check all the specification directions at the same time, there is no violaton

@@ -5,6 +5,9 @@ functions related to loading onnx networks
 import time
 import numpy as np
 
+from scipy.sparse import csc_matrix, csr_matrix
+from scipy import sparse
+
 import onnx
 import onnxruntime as ort
 
@@ -92,6 +95,7 @@ class LinearOnnxSubnetworkLayer(Freezable):
         cols = []
 
         for col in range(star.a_mat.shape[1]):
+            #print(f".transforming star: {col} / {star.a_mat.shape[1]})")
             vec = star.a_mat[:, col]
             vec = nn_unflatten(vec, self.input_shape)
             
@@ -111,9 +115,12 @@ class LinearOnnxSubnetworkLayer(Freezable):
     def transform_zono(self, zono):
         'transform the zono'
 
+        zono_copy = zono.deep_copy()
+
         cols = []
 
         for col in range(zono.mat_t.shape[1]):
+            #print(f".transforming zono: {col} / {zono.mat_t.shape[1]})")
             vec = zono.mat_t[:, col]
             vec = nn_unflatten(vec, self.input_shape)
             
@@ -214,7 +221,7 @@ def convert_model_type_unused(model, from_type=onnx.TensorProto.FLOAT, to_type=o
 
     return onnx_model
 
-def load_onnx_network_optimized(filename, check_model=True):
+def load_onnx_network_optimized(filename):
     '''load an onnx network from a filename and return the NeuralNetwork object
 
     this has optimized implementation for linear transformations, but it supports less
@@ -222,9 +229,7 @@ def load_onnx_network_optimized(filename, check_model=True):
     '''
 
     model = onnx.load(filename)
-
-    if check_model:
-        onnx.checker.check_model(model)
+    onnx.checker.check_model(model)
 
     graph = model.graph
 
@@ -628,9 +633,9 @@ def get_io_shapes(model):
 
     rv = {}
 
-    intermediate_outputs = enumerate_model_node_outputs(model)
+    intermediate_outputs = list(enumerate_model_node_outputs(model))
 
-    initializers =  [i.name for i in model.graph.initializer]
+    initializers = [i.name for i in model.graph.initializer]
     inputs = [i for i in model.graph.input if i.name not in initializers]
     assert len(inputs) == 1
 
@@ -638,25 +643,61 @@ def get_io_shapes(model):
     assert t == onnx.TensorProto.FLOAT
     dtype = np.float32
 
+    if dtype == np.float32:
+        elem_type = onnx.TensorProto.FLOAT
+    else:
+        assert dtype == np.float64
+        elem_type = onnx.TensorProto.DOUBLE
+
     # create inputs as zero tensors
     input_map = {}
 
     for inp in inputs:            
-        shape = shape = tuple(d.dim_value for d in inp.type.tensor_type.shape.dim)
+        shape = tuple(d.dim_value if d.dim_value != 0 else 1 for d in inp.type.tensor_type.shape.dim)
+        
         input_map[inp.name] = np.zeros(shape, dtype=dtype)
 
         # also save it's shape
         rv[inp.name] = shape
 
-    for out_name in intermediate_outputs:
-        temp_onnx = select_model_inputs_outputs(model, out_name)
+    new_out = []
 
-        sess = ort.InferenceSession(temp_onnx.SerializeToString())
-
-        output = sess.run(None, input_map)
+    # add all old outputs
+    for out in model.graph.output:
+        new_out.append(out)
         
-        rv[out_name] = output[0].shape
+    for out_name in intermediate_outputs:
+        if out_name in rv: # inputs were already added
+            continue
 
+        # create new output
+        #nt = onnx.TypeProto()
+        #nt.tensor_type.elem_type = elem_type
+
+        value_info = ValueInfoProto()
+        value_info.name = out_name
+        new_out.append(value_info)
+
+    # ok run once and get all outputs
+    graph = make_graph(model.graph.node, model.graph.name, model.graph.input,
+                       new_out, model.graph.initializer)
+
+    # this model is not a valud model since the outputs don't have shape type info...
+    # but it still will execute! skip the check_model step
+    new_onnx_model = make_model_with_graph(model, graph, check_model=False)
+    
+    sess = ort.InferenceSession(new_onnx_model.SerializeToString())
+
+    res = sess.run(None, input_map)
+    names = [o.name for o in sess.get_outputs()]
+    out_map = {name: output for name, output in zip(names, res)}
+
+    for out_name in intermediate_outputs:
+        if out_name in rv: # inputs were already added
+            continue
+
+        rv[out_name] = out_map[out_name].shape
+        
     return rv
 
 def remove_unused_initializers(model):
@@ -687,7 +728,7 @@ def remove_unused_initializers(model):
     return onnx_model
     
 
-def load_onnx_network(filename, check_model=True):
+def load_onnx_network(filename):
     '''load an onnx network from a filename and return the NeuralNetwork object
 
     This newer version will use the onnx runtime to execute all linear layers,
@@ -695,18 +736,12 @@ def load_onnx_network(filename, check_model=True):
     '''
 
     model = onnx.load(filename)
-
-    if check_model:
-        onnx.checker.check_model(model)
+    onnx.checker.check_model(model)
 
     passes = ["extract_constant_to_initializer", "eliminate_unused_initializer"]
     
     model = remove_unused_initializers(model)
-
-    if check_model:
-        onnx.checker.check_model(model)
-
-    #onnx.save_model(model, 'optimized.onnx')
+    onnx.checker.check_model(model)
 
     io_shapes = get_io_shapes(model)
 

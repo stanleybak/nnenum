@@ -85,7 +85,7 @@ class OutputBounds(Freezable):
         '''
         Initialize the output bounds.
         '''
-        
+
         self.prefilter = prefilter_parent
         
         self.layer_bounds = None # layer bounds for branching neurons
@@ -114,7 +114,7 @@ class OutputBounds(Freezable):
         if use_lp and self.prefilter.simulation is not None:
             # trim further using LP
 
-            if start_time is not None and Settings.TIMEOUT is not None:
+            if start_time is not None and Settings.TIMEOUT != np.inf:
                 def check_cancel_func():
                     'raise exception if we should cancel'
 
@@ -163,7 +163,6 @@ class Prefilter(Freezable):
     'main container for prefilter data and logic'
 
     def __init__(self):
-
         self.simulation = None # 2-list [input, output]        
         self.zono = None
 
@@ -191,11 +190,18 @@ class Prefilter(Freezable):
 
         dtype = type(uncompressed_init_box[0][0])
 
-        for i in uncompressed_init_box:
+        for row, i in enumerate(uncompressed_init_box):
             mid = (i[0] + i[1]) / 2.0
             sim_output.append(mid) # sim output is uncompressed
 
-            if abs(i[1] - i[0]) > tol: # sim input is compressed
+            if Settings.COMPRESS_INIT_BOX:
+                if abs(i[1] - i[0]) > tol:
+                    sim_input.append(mid)
+            else:   
+                if not Settings.SKIP_COMPRESSED_CHECK:
+                    assert abs(i[1] - i[0]) > tol, f"init box looks compressed (row {row} is range {i}), " + \
+                        "use Settings.SKIP_COMPRESSED_CHECK to disable"
+
                 sim_input.append(mid)
 
         sim_input = np.array(sim_input, dtype=dtype)
@@ -312,7 +318,7 @@ class Prefilter(Freezable):
             neg.domain_shrank(neg_star, start_time, depth)
 
             # tolerance for lp solver is about 1e-6
-            assert pos.simulation[1][i] >= -1e-6, f"pos sim for {i} was {pos.simulation[1][i]}"
+            assert pos.simulation[1][i] >= -1e-4, f"pos sim for {i} was {pos.simulation[1][i]}"
 
             # neg should exactly be equal to zero, since we assigned a_mat and bias to zero
             assert abs(neg.simulation[1][i]) <= Settings.SPLIT_TOLERANCE, f"neg sim for {i} was {neg.simulation[1][i]}"

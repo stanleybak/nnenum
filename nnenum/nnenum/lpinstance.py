@@ -6,6 +6,7 @@ GLPK python interface using swiglpk
 
 import sys
 import math
+import time
 
 import numpy as np
 from scipy.sparse import csr_matrix
@@ -15,24 +16,40 @@ from termcolor import colored
 import swiglpk as glpk
 from nnenum.util import Freezable
 from nnenum.timerutil import Timers
+from nnenum.settings import Settings
 
-def get_lp_params():
+def get_lp_params(alternate_lp_params=False):
     'get the lp params object'
 
     if not hasattr(get_lp_params, 'obj'):
-        # turn off printing at a lower-level
-        #glpk.glp_term_out(glpk.GLP_OFF)
-
         params = glpk.glp_smcp()
         glpk.glp_init_smcp(params)
 
+        #params.msg_lev = glpk.GLP_MSG_ERR
         params.msg_lev = glpk.GLP_MSG_ERR
+        params.meth = glpk.GLP_PRIMAL if Settings.GLPK_FIRST_PRIMAL else glpk.GLP_DUAL
 
-        params.tm_lim = int(60 * 1000) # set 60 sec timeout
-        params.out_dly = 10 * 1000 # star printing to terminal status after 10 secs
+        params.tm_lim = int(Settings.GLPK_TIMEOUT * 1000)
+        params.out_dly = 2 * 1000 # start printing to terminal delay
         
-        rv = get_lp_params.obj = params
+        get_lp_params.obj = params
+
+        # make alternative params
+        params2 = glpk.glp_smcp()
+        glpk.glp_init_smcp(params2)
+        params2.meth = glpk.GLP_DUAL if Settings.GLPK_FIRST_PRIMAL else glpk.GLP_PRIMAL
+        params2.msg_lev = glpk.GLP_MSG_ON
+
+        params2.tm_lim = int(Settings.GLPK_TIMEOUT * 1000)
+        params2.out_dly = 1 * 1000 # start printing to terminal status after 1 secs
+        
+        get_lp_params.alt_obj = params2
+        
+    if alternate_lp_params:
+        #glpk.glp_term_out(glpk.GLP_ON)
+        rv = get_lp_params.alt_obj
     else:
+        #glpk.glp_term_out(glpk.GLP_OFF)
         rv = get_lp_params.obj
 
     return rv
@@ -625,53 +642,70 @@ class LpInstance(Freezable):
 
         assert not isinstance(self.lp, tuple), "self.lp was tuple. Did you call lpi.deserialize()?"
 
-        #Timers.tic('lpi.minimize')
-
-        #Timers.tic('set_minimize_direction')
         if direction_vec is None:
             direction_vec = [0] * self.get_num_cols()
 
         self.set_minimize_direction(direction_vec)
-        #Timers.toc('set_minimize_direction')
 
-        #self.reset_basis(basis_type='std') # TODO: REMOVE
-
+        if Settings.GLPK_RESET_BEFORE_MINIMIZE:
+            self.reset_basis()
+        
+        start = time.perf_counter()
         simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
 
-        # there was a bug in glp where optimizing first time said optimal but
-        # obj value was zero and if oyu ran it again it got a better answer (DUALP)
-        #if glpk.glp_get_obj_val(self.lp) == 0:
-        #    print("obj was 0, resolving...")
-        #    simplex_res = glpk.glp_simplex(self.lp, params)
+        if simplex_res != 0: # solver failure (possibly timeout)
+            r = self.get_num_rows()
+            c = self.get_num_cols()
 
-        # process simplex result
-        #Timers.tic('process_simplex_result')
+            diff = time.perf_counter() - start
+            print(f"GLPK timed out / failed ({simplex_res}) after {round(diff, 3)} sec with primary " + \
+                  f"settings with {r} rows and {c} cols")
+
+            print("Retrying with reset")
+            self.reset_basis()
+            start = time.perf_counter()
+            simplex_res = glpk.glp_simplex(self.lp, get_lp_params())
+            diff = time.perf_counter() - start
+            print(f"result with reset  ({simplex_res}) {round(diff, 3)} sec")
+
+            print("Retrying with reset + alternate GLPK settings")
+                    
+            # retry with alternate params
+            params = get_lp_params(alternate_lp_params=True)
+            self.reset_basis()
+            start = time.perf_counter()
+            simplex_res = glpk.glp_simplex(self.lp, params)
+            diff = time.perf_counter() - start
+            print(f"result with reset & alternate settings ({simplex_res}) {round(diff, 3)} sec")
+            
         rv = self._process_simplex_result(simplex_res)
-        #Timers.toc('process_simplex_result')
 
         if rv is None and fail_on_unsat:
-            print("Note: minimize failed with fail_on_unsat was true, resetting and retrying...")
+            # extra logic to try harder if fail_on_unsafe is True
+            # glpk can sometimes be cajoled into providing a solution
+            
+            print("Note: minimize failed with fail_on_unsat was true, trying to reset basis...")
 
             self.reset_basis()
-
-            # sometimes setting the optimization direction makes the problem unsat...
-            result_nodir = self.minimize(None, fail_on_unsat=False)
             rv = self.minimize(direction_vec, fail_on_unsat=False)
 
-            # lp became infeasible when I picked an optimization direction
             if rv is None:
+                print("still unsat after reset basis, trying no-dir optimization")
+                self.reset_basis()
+            
+                result_nodir = self.minimize(None, fail_on_unsat=False)
+
+                # lp became infeasible when I picked an optimization direction
                 if result_nodir is not None:
                     print("Using result from no-direction optimization") 
                     rv = result_nodir
                 else:
-                    print("No-dir result was none")
-
-            #LpInstance.print_verbose("Note: LP was infeasible, but then feasible after resetting statuses")
+                    print("Error: No-dir result was also infeasible!")
+            else:
+                print("Using result after reset basis (soltion was now feasible)")
 
         if rv is None and fail_on_unsat:
             raise UnsatError("minimize returned UNSAT and fail_on_unsat was True")
-
-        #Timers.toc('lpi.minimize')
 
         return rv
 

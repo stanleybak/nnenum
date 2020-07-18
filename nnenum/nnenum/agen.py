@@ -88,10 +88,8 @@ class AgenState(Freezable):
         rv = None
 
         classes = [fb.attacks.FGSM, # 0.057 in 41ms
-         #fb.attacks.LinfinityBasicIterativeAttack, # 0.044 in 288 ms ## best
          fb.attacks.ContrastReductionAttack, # 0.05 in 64 ms
          fb.attacks.BlendedUniformNoiseAttack, # 0.09 in 93ms
-         fb.attacks.NewtonFoolAttack, # 0.11 in 93ms
          fb.attacks.DecoupledDirectionNormL2Attack, # 0.074 in 124ms
          fb.attacks.BIM, # 0.044 in 300 ms
          fb.attacks.PGD, # 0.05 in 1302 ms
@@ -107,17 +105,18 @@ class AgenState(Freezable):
         if not random_only and iteration < len(classes):
             attack_class = classes[iteration]
 
-        seed_image = None
+        t = Settings.ADVERSARIAL_TARGET
+        criterion = fb.criteria.Misclassification() if t is None else fb.criteria.TargetClass(t)
             
         with self.sess.as_default():
             if attack_class is None:
                 attack_class = SingleEpsilonRPGD
-                attack = SingleEpsilonRPGD(self.fmodel, distance=fb.distances.Linfinity)
+                attack = SingleEpsilonRPGD(self.fmodel, distance=fb.distances.Linfinity, criterion=criterion)
 
                 # subtract a small amount since attack was overshooting by numerical precision
                 SingleEpsilonRPGD.set_epsilon(self.epsilon - 1e-6)
             else:
-                attack = attack_class(self.fmodel, distance=fb.distances.Linfinity)
+                attack = attack_class(self.fmodel, distance=fb.distances.Linfinity, criterion=criterion)
 
             Timers.tic('attack')
             a = attack(self.orig_image, self.labels, unpack=False)[0]
@@ -147,8 +146,11 @@ class AgenState(Freezable):
 
         rv = None
 
+        t = Settings.ADVERSARIAL_TARGET
+        criterion = fb.criteria.Misclassification() if t is None else fb.criteria.TargetClass(t)
+
         with self.sess.as_default():
-            attack = SingleEpsilonRPGD(self.fmodel, distance=fb.distances.Linfinity)
+            attack = SingleEpsilonRPGD(self.fmodel, distance=fb.distances.Linfinity, criterion=criterion)
 
             # subtract a small amount since attack was overshooting by numerical precision
             SingleEpsilonRPGD.set_epsilon(self.epsilon - 1e-6)
@@ -196,6 +198,9 @@ class AgenState(Freezable):
          #fb.attacks.AdamRandomPGD, # 0.042 in 700ms
          #fb.attacks.RandomPGD # best
          ]
+
+        t = Settings.ADVERSARIAL_TARGET
+        criterion = fb.criteria.Misclassification() if t is None else fb.criteria.TargetClass(t)
         
         with self.sess.as_default():
             for attack_class in classes:
@@ -203,7 +208,7 @@ class AgenState(Freezable):
                 #if rv is not None:
                 #    break
                 
-                attack = attack_class(self.fmodel, distance=fb.distances.Linfinity)
+                attack = attack_class(self.fmodel, distance=fb.distances.Linfinity, criterion=criterion)
 
                 factor = 0.65 # sweet spot
 
@@ -291,11 +296,13 @@ class SingleEpsilonRPGD(
             a, binary_search, epsilon, stepsize, iterations, random_start, return_early
         )
 
-def try_quick_adversarial(num_attempts):
+def try_quick_adversarial(num_attempts, remaining_secs=None):
     '''try a quick adversarial example using Settings
 
     returns AgenState instance, aimage (may be None)
     '''
+
+    start = time.perf_counter()
 
     onnx_path = Settings.ADVERSARIAL_ONNX_PATH
     ep = Settings.ADVERSARIAL_EPSILON
@@ -306,6 +313,13 @@ def try_quick_adversarial(num_attempts):
     a = None
 
     for i in range(num_attempts):
+
+        if remaining_secs is not None:
+            diff = time.perf_counter() - start
+            
+            if diff > remaining_secs:
+                break # timeout!
+        
         a = agen.try_single()
 
         if a is not None:

@@ -16,6 +16,7 @@ from nnenum.overapprox import do_overapprox_rounds, make_prerelu_sims, Overappro
 from nnenum.settings import Settings
 from nnenum.util import Freezable, to_time_str
 from nnenum.network import nn_unflatten, nn_flatten
+from nnenum.specification import DisjunctiveSpec
 
 from nnenum.prefilter import LpCanceledException
 from nnenum.agen import AgenState
@@ -33,9 +34,7 @@ class Worker(Freezable):
     def has_timeout(self):
         'was a timeout reached?'
 
-        t = Settings.TIMEOUT
-
-        return t is not None and time.perf_counter() - self.priv.start_time > t
+        return time.perf_counter() - self.priv.start_time > Settings.TIMEOUT
         
     def main_loop(self):
         'main worker loop'
@@ -84,7 +83,9 @@ class Worker(Freezable):
                     self.priv.ss = self.priv.work_list.pop()
                     
                 else: # pop from global (shared)
-                    self.priv.ss = self.shared.get_global_queue(timeout=0.01)
+
+                    if self.priv.worker_index == 0 or self.shared.finished_initial_overapprox.value:
+                        self.priv.ss = self.shared.get_global_queue(timeout=0.01)
 
                     if self.priv.ss is not None:
                         
@@ -115,54 +116,64 @@ class Worker(Freezable):
         if self.priv.branch_tuples_list is not None:
             self.priv.branch_tuples_list.append(f'{self.priv.ss.branch_str()} ({label})')
 
-    def try_seeded_adversarial(self, seed_image):
+    def try_seeded_adversarial(self, dims, abstract_ios):
         '''
-        generate adversarial image from seed
+        generate adversarial image from abstract counterexample seeds
 
-        returns concrete_io_tuple or none
+        returns concrete_io_tuple or None
         '''
 
-        concrete_io_tuple = None
+        Timers.tic('try_seeded_adversarial')
 
-        onnx_path = Settings.ADVERSARIAL_ONNX_PATH
-        assert onnx_path is not None
+        assert dims == Settings.ADVERSARIAL_ORIG_IMAGE.size
 
-        if self.priv.agen is None:
-            # initialize
-            ep = Settings.ADVERSARIAL_EPSILON
-            im = Settings.ADVERSARIAL_ORIG_IMAGE
-            l = Settings.ADVERSARIAL_ORIG_LABEL
+        for cinput, _ in abstract_ios:
 
-            Timers.tic("AgenState init")
-            self.priv.agen = AgenState(onnx_path, im, l, ep)
-            Timers.toc("AgenState init")
+            seed_image = nn_unflatten(cinput[:dims], Settings.ADVERSARIAL_ORIG_IMAGE.shape)
 
-        #print(f"trying seeded in worker {self.priv.worker_index}")
-        a = self.priv.agen.try_seeded(seed_image)
+            concrete_io_tuple = None
 
-        if a is not None:
-            aimage, ep = a
+            onnx_path = Settings.ADVERSARIAL_ONNX_PATH
+            assert onnx_path is not None
 
-            if Settings.PRINT_OUTPUT:
-                print(f"try_seeded_adversarial found violation image with ep={ep}")
-        else:
-            aimage = None
+            if self.priv.agen is None:
+                # initialize
+                ep = Settings.ADVERSARIAL_EPSILON
+                im = Settings.ADVERSARIAL_ORIG_IMAGE
+                l = Settings.ADVERSARIAL_ORIG_LABEL
 
-        if aimage is not None:
-            flat_image = np.ravel(aimage)
-            
-            output = self.shared.network.execute(flat_image)
-            flat_output = np.ravel(output)
+                Timers.tic("AgenState init")
+                self.priv.agen = AgenState(onnx_path, im, l, ep)
+                Timers.toc("AgenState init")
 
-            olabel = np.argmax(output)
-            confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
+            a = self.priv.agen.try_seeded(seed_image)
 
-            if Settings.PRINT_OUTPUT:
-                print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
-                print(f"counterexample was confirmed: {confirmed}")
+            if a is not None:
+                aimage, ep = a
 
-            if confirmed:
-                concrete_io_tuple = (flat_image, flat_output)
+                if Settings.PRINT_OUTPUT:
+                    print(f"try_seeded_adversarial found violation image with ep={ep}")
+            else:
+                aimage = None
+
+            if aimage is not None:
+                flat_image = nn_flatten(aimage)
+
+                output = self.shared.network.execute(flat_image)
+                flat_output = np.ravel(output)
+
+                olabel = np.argmax(output)
+                confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
+
+                if Settings.PRINT_OUTPUT:
+                    print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
+                    print(f"counterexample was confirmed: {confirmed}")
+
+                if confirmed:
+                    concrete_io_tuple = (flat_image, flat_output)
+                    break
+
+        Timers.toc('try_seeded_adversarial')
 
         return concrete_io_tuple
 
@@ -208,14 +219,11 @@ class Worker(Freezable):
 
                 now = time.perf_counter()
 
-                if Settings.TIMEOUT is not None and now - self.priv.start_time > Settings.TIMEOUT:
-                    raise OverapproxCanceledException('Settings.TIMEOUT exceeded')
-                    
-                to = Settings.OVERAPPROX_LP_TIMEOUT
-                diff = now - start
+                if now - self.priv.start_time > Settings.TIMEOUT:
+                    raise OverapproxCanceledException('timeout exceeded')
 
-                if to is not None and diff > to:
-                    raise OverapproxCanceledException(f'timeout ({diff} > {to})')
+                if now - start > Settings.OVERAPPROX_LP_TIMEOUT:
+                    raise OverapproxCanceledException('lp timeout exceeded')
 
             timer_name = 'do_overapprox_rounds'
             Timers.tic(timer_name)
@@ -231,10 +239,10 @@ class Worker(Freezable):
                 if spec.is_violation(sim_out):
                     sim_in_flat = ss.prefilter.simulation[0]
                     sim_in = ss.star.to_full_input(sim_in_flat)
-                    sim_in = nn_unflatten(sim_in, network.get_input_shape())
+                    sim_in = sim_in.astype(ss.star.a_mat.dtype)
 
                     # run through complete network in to out before counting it
-                    sim_out = network.execute(sim_in.astype(ss.star.a_mat.dtype))
+                    sim_out = network.execute(sim_in)
                     sim_out = nn_flatten(sim_out)
 
                     if spec.is_violation(sim_out):
@@ -489,17 +497,16 @@ class Worker(Freezable):
     def print_progress(self):
         'periodically print progress (worker 0 only)'
 
-        if self.priv.worker_index == 0 and (Settings.PRINT_INTERVAL > 0 or Settings.TIMEOUT is not None):
+        if self.priv.worker_index == 0:
             now = time.perf_counter()
 
             if self.priv.last_print_time is None:
                 self.priv.last_print_time = now - Settings.PRINT_INTERVAL - 1 # force a print at start
 
-            if Settings.TIMEOUT is not None:
-                cur_time = now - self.priv.start_time
+            cur_time = now - self.priv.start_time
 
-                if cur_time >= Settings.TIMEOUT:
-                    self.timeout()
+            if cur_time >= Settings.TIMEOUT:
+                self.timeout()
 
             if Settings.PRINT_OUTPUT and Settings.PRINT_PROGRESS and \
                now - self.priv.last_print_time > Settings.PRINT_INTERVAL:
@@ -601,6 +608,7 @@ class Worker(Freezable):
 
             if self.priv.ss:
                 self.shared.stars_in_progress.value -= 1
+                self.shared.unfinished_stars.value += 1
                 self.priv.ss = None
 
             self.shared.stars_in_progress.value += self.priv.stars_in_progress
@@ -623,8 +631,10 @@ class Worker(Freezable):
                 else:
                     break
 
+            ########################################
             self.shared.mutex.acquire()
             self.shared.stars_in_progress.value -= count
+            self.shared.unfinished_stars.value += count
             count = 0
 
             if self.shared.stars_in_progress.value <= 0:
@@ -633,6 +643,7 @@ class Worker(Freezable):
                 should_exit = True
 
             self.shared.mutex.release()
+            ##########################################
 
             # don't busy wait
             if not should_exit:
@@ -716,9 +727,9 @@ class Worker(Freezable):
             cinput, _ = res
 
             # try to confirm the counter-example
-            full_cinput_flat = star.to_full_input(cinput)
-            full_cinput = nn_unflatten(full_cinput_flat, self.shared.network.get_input_shape())
-            exec_output, exec_branch_list = self.shared.network.execute(full_cinput, save_branching=True)
+            full_cinput_flat = star.to_full_input(cinput).astype(star.a_mat.dtype)
+            
+            exec_output, exec_branch_list = self.shared.network.execute(full_cinput_flat, save_branching=True)
             exec_output = nn_flatten(exec_output)
 
             if branch_list_in_branch_tuples(exec_branch_list, branch_tuples):
