@@ -15,6 +15,8 @@ def do_acasxu():
             f_results.write('blankheader3\n')
             
             with open('acasxu-all-nnenum.txt', 'w') as f_nnenum:
+                f_nnenum.write('nnenum_sec nnenum_result\n')
+                
                 with open('acasxu-all-empty.txt', 'w') as f_empty:
 
                     for line in lines:
@@ -33,12 +35,19 @@ def do_acasxu():
                             res = 'sat'
                         else:
                             res = 'unknown'
-                        
-                        f_results.write(f"{res.upper()}\n")
 
-                        secs_str = "{:#.2g}".format(float(secs))
+                        res = res.upper()
+                        f_results.write(f"{res}\n")
 
-                        f_nnenum.write(f"{secs_str}\n")
+                        secs_float = float(secs)
+
+                        if secs_float <= 0.01:
+                            secs_str = "0.01"
+                        else:
+                            secs_str = "{:.02f}".format(secs_float)
+
+                        #print(f".secs: {secs_str}")
+                        f_nnenum.write(f"{secs_str} {res}\n")
                         
                         f_empty.write("-\n")
 
@@ -54,6 +63,8 @@ def do_pat():
             f_results.write('blankheaderres\n')
             
             with open('pat-all-nnenum.txt', 'w') as f_nnenum:
+                f_nnenum.write('nnenum_sec nnenum_result\n')
+                
                 with open('pat-all-empty.txt', 'w') as f_empty:
 
                     for net in nets:
@@ -80,19 +91,20 @@ def do_pat():
                                     res = 'unknown'
                                     secs = None
 
-                                f_results.write(f"{res.upper()}\n")
+                                res = res.upper()
+                                f_results.write(f"{res}\n")
 
                                 if secs is None:
                                     secs_str = '-'
                                 else:
-                                    if 1.0 <= float(secs) < 10.0:
-                                        secs_str = f"{round(float(secs), 1)}"
-                                    elif float(secs) >= 10.0:
-                                        secs_str = f"{round(float(secs))}"
-                                    else:
-                                        secs_str = "{:#.2f}".format(float(secs))
+                                    secs_float = float(secs)
 
-                                f_nnenum.write(f"{secs_str}\n")
+                                    if secs_float <= 0.01:
+                                        secs_str = "0.01"
+                                    else:
+                                        secs_str = "{:.02f}".format(secs_float)
+
+                                f_nnenum.write(f"{secs_str} {res}\n")
 
                                 f_empty.write("-\n")
 
@@ -107,6 +119,8 @@ def do_eth():
             f_results.write('blankheaderres\n')
             
             with open('ggn-all-nnenum.txt', 'w') as f_nnenum:
+                f_nnenum.write('nnenum_sec nnenum_result\n')
+                
                 with open('ggn-all-empty.txt', 'w') as f_empty:
 
                     for type_str, ep_str in types:
@@ -134,19 +148,21 @@ def do_eth():
                                 res = 'unknown'
                                 secs = None
 
-                            f_results.write(f"{res.upper()}\n")
+                            res = res.upper()
+
+                            f_results.write(f"{res}\n")
 
                             if secs is None:
                                 secs_str = '-'
                             else:
-                                if 1.0 <= float(secs) < 10.0:
-                                    secs_str = f"{round(float(secs), 1)}"
-                                elif float(secs) >= 10.0:
-                                    secs_str = f"{round(float(secs))}"
-                                else:
-                                    secs_str = "{:#.2f}".format(float(secs))
+                                secs_float = float(secs)
 
-                            f_nnenum.write(f"{secs_str}\n")
+                                if secs_float <= 0.01:
+                                    secs_str = "0.01"
+                                else:
+                                    secs_str = "{:.02f}".format(secs_float)
+
+                            f_nnenum.write(f"{secs_str} {res}\n")
 
                             f_empty.write("-\n")
 
