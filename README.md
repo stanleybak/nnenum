@@ -10,7 +10,7 @@ The best way to get started is to look at some of the examples. For example, in 
 
 ```python3 acasxu_single.py 3 3 9```
 
-### VNN 2020 Neural Network Verification Competition Version
+### VNN 2020 Neural Network Verification Competition (VNN-COMP) Version
 The nnenum tool performed well in VNN-COMP 2020, being the only tool to verify all the ACAS-Xu benchmarks (each in under 10 seconds), as well as one of the best on the MNIST anf CIFAR-10 image perturbation benchmarks. The version used for the competition as well as model files and scripts to run the compeition benchmarks are in the `vnn2020` branch.
 
 ### CAV 2020 Paper Version
