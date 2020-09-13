@@ -152,6 +152,9 @@ class Timers():
 
             Timers.stack[-1].toc()
             Timers.stack.pop()
+        else:
+            assert not Timers.stack, "Timers.enabled was False but Timers.stack non-empty: " + \
+                                      f"{[t.name for t in Timers.stack]}"
 
     @staticmethod
     def print_stats(name=None, short=False):

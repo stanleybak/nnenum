@@ -69,13 +69,14 @@ def make_prerelu_sims(ss, network):
 
         state = ss.prefilter.simulation[1].copy()
         layer_num = ss.cur_layer
-        layer = network.layers[layer_num]
 
-        rv[layer_num] = state
+        if layer_num < len(network.layers):
+            layer = network.layers[layer_num]
+            rv[layer_num] = state
 
-        # current layer may be partially processed
-        if isinstance(layer, ReluLayer):
-            state = np.clip(state, 0, np.inf)
+            # current layer may be partially processed
+            if isinstance(layer, ReluLayer):
+                state = np.clip(state, 0, np.inf)
 
         while layer_num + 1 < len(network.layers):
             layer_num += 1
@@ -301,7 +302,9 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
             print(f"Overapprox Round {round_num+1}/{len(overapprox_types)} has {len(sets)} set(s)")
 
         try:
-            run_overapprox_round(network, ss, sets, prerelu_sims, check_cancel_func)
+            if ss.cur_layer < len(network.layers):
+                run_overapprox_round(network, ss, sets, prerelu_sims, check_cancel_func)
+            
             diff = time.perf_counter() - start if Settings.SAVE_BRANCH_TUPLES_TIMES else 0
         except OverapproxCanceledException as e:
             diff = time.perf_counter() - start if Settings.SAVE_BRANCH_TUPLES_TIMES else 0
@@ -309,7 +312,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
             msg = f"canceled after {round(diff * 1000, 1)} ms"
 
             raise OverapproxCanceledException(f"{e}; {rv}, {msg}")
-
 
         gens = [s.get_num_gens() for s in sets]
         rv.round_generators.append(gens)
@@ -408,7 +410,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
                 
             split_indices = sort_splits(layer_bounds, split_indices)
             zero_indices = np.nonzero(layer_bounds[:, 1] < -Settings.SPLIT_TOLERANCE)[0]
-            
+
             for s in sets:
                 s.execute_with_bounds(layer_num, layer_bounds, split_indices, zero_indices)
         else:
@@ -482,16 +484,11 @@ class StarOverapprox(Freezable):
         returns (layer_bounds, split_indices), split_indices can be None
         '''
 
-        #print(f". split_indices on call (star): {split_indices}")
-        #print(f". layer_bounds on call (star): {layer_bounds[:3]}")
-
         if layer_bounds is None:
             num_neurons = self.star.a_mat.shape[0]            
             layer_bounds = np.array([[-np.inf, np.inf] for _ in range(num_neurons)], dtype=float)
         elif split_indices is None:
             split_indices = make_split_indices(layer_bounds)
-
-        #print(f". split_indices (Before lp): {split_indices}")
 
         if self.do_lp:
             both_bounds = Settings.OVERAPPROX_BOTH_BOUNDS
@@ -553,7 +550,7 @@ class ZonoOverapprox(Freezable):
 
         if self.get_num_gens() + len(split_indices) > self.max_gens:
             raise OverapproxCanceledException(f'{self.type_string} gens exceeds limit (> {self.max_gens})')
-
+        
         update_zono(self.zono, self.relu_update_func, layer_bounds, split_indices, zero_indices)
 
     def transform_linear(self, layer):

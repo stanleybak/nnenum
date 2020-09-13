@@ -113,7 +113,7 @@ class LpStar(Freezable):
         return rv
 
     def input_box_bounds(self, cur_box, max_dim=np.inf, count_lps=True):
-        '''get input box bounds on this set, compared with the current bounds using lp
+        '''compute new input box bounds on this set, compared with the current bounds using lp
 
         returns a list of 3-tuples for each of the bounds that was adjusted:
         (dim, lb, ub)

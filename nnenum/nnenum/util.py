@@ -146,6 +146,7 @@ def compress_init_box(input_box, tol=1e-9):
     inputs = len(input_box)
 
     dtype = type(input_box[0][0])
+    assert dtype in [float, np.float64, np.float32], f"input_box dtype should be float32/64, got {dtype}"
     cur_bias = np.array([0] * inputs, dtype=dtype)
 
     cur_bm_transpose = []
@@ -153,7 +154,7 @@ def compress_init_box(input_box, tol=1e-9):
 
     for dim, (lb, ub) in enumerate(input_box):
         mid = (lb + ub) / 2.0
-            
+
         if abs(ub-lb) < tol:
             # equal, update cur_bias
             cur_bias[dim] = mid

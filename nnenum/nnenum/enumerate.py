@@ -89,6 +89,10 @@ def enumerate_network(init, network, spec=None):
         check_openblas_threads()
 
     Timers.reset()
+
+    if not Settings.TIMING_STATS:
+        Timers.disable()
+    
     Timers.tic('enumerate_network')
     start = time.perf_counter()
 
@@ -100,9 +104,6 @@ def enumerate_network(init, network, spec=None):
 
     assert not Settings.RESULT_SAVE_TIMERS or Settings.TIMING_STATS, \
         "RESULT_SAVE_TIMERS cannot be used if TIMING_STATS is False"
-
-    if not Settings.TIMING_STATS:
-        Timers.disable()
 
     # adversarial generation process and queue
     concrete_io_tuple = None
@@ -665,6 +666,8 @@ def worker_func(worker_index, shared):
 
         # fix timers
         while Timers.stack and Timers.stack[-1].name != timer_name:
+            print(f".enumerate popping timer {Timers.stack[-1].name}, stack len {len(Timers.stack)}")
+                        
             Timers.toc(Timers.stack[-1].name)
 
         Timers.toc(timer_name)
