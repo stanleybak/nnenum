@@ -4,11 +4,14 @@
 The tool is written by Stanley Bak ([homepage](http://stanleybak.com), [twitter](https://twitter.com/StanleyBak)).
 
 ### Getting Started
-The `Dockerfile` shows how to install all the dependencies (mostly python packages) and set up the environment. Although tool loads neural networks directly from ONNX files, the properties and initial sets and verification settings must be defined in python scripts.
+The `Dockerfile` shows how to install all the dependencies (mostly python packages) and set up the environment. Although the tool loads neural networks directly from ONNX files, the properties and initial sets and verification settings must be defined in python scripts.
 
 The best way to get started is to look at some of the examples. For example, in the `examples/acasxu` directory you can try to verify property 9 of network 3-3 of the [well-studied ACAS Xu neural network verification benchmarks](https://arxiv.org/abs/1702.01135) by running the command: 
 
 ```python3 acasxu_single.py 3 3 9```
+
+### VNN 2020 Neural Network Verification Competition (VNN-COMP) Version
+The nnenum tool performed well in VNN-COMP 2020, being the only tool to verify all the ACAS-Xu benchmarks (each in under 10 seconds), as well as one of the best on the MNIST and CIFAR-10 benchmarks. The version used for the competition as well as model files and scripts to run the compeition benchmarks are in the `vnn2020` branch.
 
 ### CAV 2020 Paper Version
 The CAV 2020 paper ["Improved Geometric Path Enumeration for Verifying ReLU Neural Networks"](http://stanleybak.com/papers/bak2020cav.pdf) by S. Bak, H.D Tran, K. Hobbs and T. T. Johnson corresponds to optimizations integrated into the exact analysis mode of nnenum, which also benefits overapproximative analysis. The paper version and repeatability evaluation package instructions are available [here](http://stanleybak.com/papers/bak2020cav_repeatability.zip).
