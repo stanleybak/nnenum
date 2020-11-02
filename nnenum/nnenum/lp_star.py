@@ -117,6 +117,8 @@ class LpStar(Freezable):
 
         returns a list of 3-tuples for each of the bounds that was adjusted:
         (dim, lb, ub)
+
+        note: lb may be -np.inf and ub may be np.inf
         '''
 
         Timers.tic("star.input_box_bounds")
@@ -132,6 +134,7 @@ class LpStar(Freezable):
 
             while True:
                 vec = np.array([1 if not should_skip[i, 0] else 0 for i in range(dims)], dtype=float)
+
                 Timers.tic('lpi.minimize pre')
                 res = self.lpi.minimize(vec)
                 Timers.toc('lpi.minimize pre')
@@ -179,36 +182,43 @@ class LpStar(Freezable):
             
             # adjust lb
             if not should_skip[dim, 0]:
+                # possible optimization: this may be solving an extra lp if the above loops only involved a single dim
+                
                 vec = np.array([1 if i == dim else 0 for i in range(dims)], dtype=float)
                 Timers.tic('lpi.minimize post')
-                res = self.lpi.minimize(vec)
+                min_val = self.lpi.minimize(vec)[dim]
                 Timers.toc('lpi.minimize post')
 
                 if count_lps:
                     self.num_lps += 1
 
+                max_val = cur_box[dim][1] if cur_box is not None else np.inf
+
                 if cur_box is None or abs(res[dim] - cur_box[dim][0]) >= tol:
                     assert not should_skip[dim, 0]
-                    rv.append([dim, res[dim], np.inf])
+                    rv.append([dim, min_val, max_val])
 
             # adjust ub
             if not should_skip[dim, 1]:
                 vec = np.array([-1 if i == dim else 0 for i in range(dims)], dtype=float)
 
                 Timers.tic('lpi.minimize post')
-                res = self.lpi.minimize(vec)
+                max_val = self.lpi.minimize(vec)[dim]
                 Timers.toc('lpi.minimize post')
 
                 if count_lps:
                     self.num_lps += 1
 
+                min_val = cur_box[dim][0] if cur_box is not None else -np.inf
+
                 if cur_box is None or abs(res[dim] - cur_box[dim][1]) >= tol:
                     assert not should_skip[dim, 1]
 
                     if not rv or rv[-1][0] != dim:
-                        rv.append([dim, -np.inf, res[dim]])
+                        rv.append([dim, min_val, max_val])
                     else:
-                        rv[-1][2] = res[dim]
+                        # both bounds changed, update previous val
+                        rv[-1][2] = max_val
 
         Timers.toc("star.input_box_bounds")
 

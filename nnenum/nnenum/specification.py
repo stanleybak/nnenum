@@ -83,7 +83,7 @@ class DisjunctiveSpec(Freezable):
 
         return rv
 
-    def get_violation_star(self, lp_star, safe_spec_list=None):
+    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False):
         '''does this lp_star violate the spec?
 
         if so, return a new, non-empty star object with the violation region
@@ -98,7 +98,7 @@ class DisjunctiveSpec(Freezable):
                 # skip parts of the disjunctive spec that are already safe
                 continue
             
-            res = spec.get_violation_star(lp_star)
+            res = spec.get_violation_star(lp_star, normalize=normalize)
 
             if res is not None:
                 break
@@ -197,7 +197,7 @@ class Specification(Freezable):
 
         return might_violate
 
-    def get_violation_star(self, lp_star, safe_spec_list=None):
+    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False):
         '''does this lp_star violate the spec?
 
         if so, return a new, non-empty star object with the violation region
@@ -210,7 +210,7 @@ class Specification(Freezable):
 
         # constructing a new star and do exact check
         copy = lp_star.copy()
-
+        
         # add constraints on the outputs
 
         # output = a_mat.tranpose * input_col
@@ -224,8 +224,8 @@ class Specification(Freezable):
         init_bias = np.dot(self.mat, copy.bias)
 
         for i, row in enumerate(init_spec):
-            lpi.add_dense_row(row, self.rhs[i] - init_bias[i])
-            
+            lpi.add_dense_row(row, self.rhs[i] - init_bias[i], normalize=normalize)
+
         winput = lpi.minimize(None, fail_on_unsat=False)
 
         if winput is None:

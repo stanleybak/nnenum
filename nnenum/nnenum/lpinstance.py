@@ -132,9 +132,11 @@ class LpInstance(Freezable):
         'set double-bounded column bounds'
 
         col_type = glpk.glp_get_col_type(self.lp, col + 1)
-        assert col_type == glpk.GLP_DB
 
-        glpk.glp_set_col_bnds(self.lp, col + 1, glpk.GLP_DB, lb, ub)  # double-bounded variable
+        if col_type != glpk.GLP_DB:
+            print(f"Warning: Contract col {col} to {lb, ub} skipped (col type is not GLP_DB):\n{self}")
+        else:
+            glpk.glp_set_col_bnds(self.lp, col + 1, glpk.GLP_DB, lb, ub)  # double-bounded variable
 
     def get_col_bounds(self):
         'get column bounds'
@@ -208,7 +210,7 @@ class LpInstance(Freezable):
     def _column_names_str(self):
         'get the line in __str__ for the column names'
 
-        rv = "   "
+        rv = "    "
         dbl_max = sys.float_info.max
 
         for col, name in enumerate(self.names):
@@ -233,12 +235,12 @@ class LpInstance(Freezable):
 
         lp = self.lp
         cols = self.get_num_cols()
-        rv = "min"
+        rv = "min "
 
         for col in range(1, cols + 1):
             val = glpk.glp_get_obj_coef(lp, col)
-            num = str(val)
 
+            num = f"{val:.6f}"
             num = num.rjust(6)[:6] # fix width to exactly 6
             
             if val == 0:
@@ -275,7 +277,7 @@ class LpInstance(Freezable):
         cols = self.get_num_cols()
         
         stat_labels = ["?(0)?", "BS", "NL", "NU", "NF", "NS"]
-        inds =SwigArray.get_int_array(cols + 1)
+        inds = SwigArray.get_int_array(cols + 1)
         vals = SwigArray.get_double_array(cols + 1)
 
         for row in range(1, rows + 1):
@@ -293,7 +295,7 @@ class LpInstance(Freezable):
                         val = vals[index]
                         break
 
-                num = str(val)
+                num = f"{val:.6f}"
                 num = num.rjust(6)[:6] # fix width to exactly 6
 
                 rv += (zero_print(num) if val == 0 else num) + " "
@@ -304,7 +306,7 @@ class LpInstance(Freezable):
             val = glpk.glp_get_row_ub(lp, row)
             rv += " <= "
 
-            num = str(val)
+            num = f"{val:.6f}"
             num = num.rjust(6)[:6] # fix width to exactly 6
 
             rv += (zero_print(num) if val == 0 else num) + " "
@@ -464,7 +466,7 @@ class LpInstance(Freezable):
                     assert lb < ub
                     glpk.glp_set_col_bnds(self.lp, num_cols + i + 1, glpk.GLP_DB, lb, ub)  # double-bounded variable
 
-    def add_dense_row(self, vec, rhs):
+    def add_dense_row(self, vec, rhs, normalize=True):
         '''
         add a row from a dense nd.array, row <= rhs
         '''
@@ -474,6 +476,13 @@ class LpInstance(Freezable):
         assert isinstance(vec, np.ndarray)
         assert len(vec.shape) == 1 or vec.shape[0] == 1
         assert len(vec) == self.get_num_cols(), f"vec had {len(vec)} values, but lpi has {self.get_num_cols()} cols"
+
+        if normalize:
+            norm = np.linalg.norm(vec)
+            assert norm > 0
+
+            vec = vec / norm
+            rhs = rhs / norm
 
         rows_before = self.get_num_rows()
 
@@ -485,6 +494,29 @@ class LpInstance(Freezable):
         glpk.glp_set_mat_row(self.lp, rows_before + 1, vec.size, indices_vec, data_vec)
 
         Timers.toc('add_dense_row')
+
+    def del_cols(self, cols):
+        '''
+        delete columns. passed in cols is python index (not glpk index)
+        '''
+
+        i_vec = SwigArray.get_int_array(len(cols) + 1)
+
+        print(f".lpi del cols debug assert b_. names before = {self.names}, del_cols = {cols}")
+
+        #for i, c in enumerate(reversed(sorted(cols))):
+        for i, c in enumerate(cols):
+            assert self.names[c].startswith('b_')
+            del self.names[c]
+                        
+            i_vec[1 + i] = c + 1
+
+        print(f". names after: {self.names}")
+
+        for name in self.names:
+            assert not name.startswith('b_')
+
+        glpk.glp_del_cols(self.lp, len(cols), i_vec)
 
     def set_constraints_csr(self, data, glpk_indices, indptr, shape):
         '''
@@ -701,6 +733,9 @@ class LpInstance(Freezable):
                     rv = result_nodir
                 else:
                     print("Error: No-dir result was also infeasible!")
+                    
+                    if self.get_num_rows() < 50 and self.get_num_cols() < 50:
+                        print(f"{self}")
             else:
                 print("Using result after reset basis (soltion was now feasible)")
 
