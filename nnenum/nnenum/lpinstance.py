@@ -495,29 +495,6 @@ class LpInstance(Freezable):
 
         Timers.toc('add_dense_row')
 
-    def del_cols(self, cols):
-        '''
-        delete columns. passed in cols is python index (not glpk index)
-        '''
-
-        i_vec = SwigArray.get_int_array(len(cols) + 1)
-
-        print(f".lpi del cols debug assert b_. names before = {self.names}, del_cols = {cols}")
-
-        #for i, c in enumerate(reversed(sorted(cols))):
-        for i, c in enumerate(cols):
-            assert self.names[c].startswith('b_')
-            del self.names[c]
-                        
-            i_vec[1 + i] = c + 1
-
-        print(f". names after: {self.names}")
-
-        for name in self.names:
-            assert not name.startswith('b_')
-
-        glpk.glp_del_cols(self.lp, len(cols), i_vec)
-
     def set_constraints_csr(self, data, glpk_indices, indptr, shape):
         '''
         set the constrains row by row to be equal to the passed-in csr matrix attribues
