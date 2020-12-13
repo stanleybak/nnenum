@@ -8,6 +8,7 @@ import numpy as np
 
 from nnenum.lpinstance import LpInstance
 from nnenum.util import Freezable
+from nnenum.settings import Settings
 from nnenum.timerutil import Timers
 from nnenum import kamenev
 
@@ -33,6 +34,8 @@ class LpStar(Freezable):
         self.init_bm = None
         self.init_bias = None
 
+        self.input_bounds_witnesses = None # a list of min, max for each dim
+
         # cached lp result
         self.last_lp_result = None
 
@@ -40,6 +43,15 @@ class LpStar(Freezable):
 
         # box_bounds may be None if we're initializing in lp_star.copy()
         if box_bounds is not None:
+            if Settings.CONTRACT_LP_TRACK_WITNESSES:
+                min_pt = np.array([a for a, b in box_bounds], dtype=float)
+                max_pt = np.array([b for a, b in box_bounds], dtype=float)
+
+                self.input_bounds_witnesses = []
+
+                for _ in range(len(box_bounds)):
+                    self.input_bounds_witnesses.append([min_pt, max_pt])
+            
             self.lpi = LpInstance()
 
             for i, (lb, ub) in enumerate(box_bounds):
@@ -83,6 +95,12 @@ class LpStar(Freezable):
 
         Timers.tic('copy init bm bias')
 
+        if self.input_bounds_witnesses is not None:
+            rv.input_bounds_witnesses = []
+
+            for a, b in self.input_bounds_witnesses:
+                rv.input_bounds_witnesses.append([a, b])
+
         if self.init_bm is None:
             rv.init_bm = None
         else:
@@ -111,8 +129,97 @@ class LpStar(Freezable):
             rv = rv.astype(self.a_mat.dtype)
 
         return rv
+    
+    def input_box_bounds_old(self, cur_box, should_skip, count_lps=True):
+        '''get input box bounds on this set, compared with the current bounds using lp
+        returns a list of 3-tuples for each of the bounds that was adjusted:
+        (dim, lb, ub)
+        '''
 
-    def input_box_bounds(self, cur_box, max_dim=np.inf, count_lps=True):
+        dims = self.lpi.get_num_cols()
+        rv = []
+        tol = 1e-8
+
+        Timers.tic("star.input_box_bounds_old")
+
+        for dim in range(dims):
+
+            if not should_skip[dim, 0]:
+                # adjust lb
+                vec = np.array([1 if i == dim else 0 for i in range(dims)], dtype=float)
+                Timers.tic('lpi.minimize')
+                res = self.lpi.minimize(vec)
+                Timers.toc('lpi.minimize')
+
+                if self.input_bounds_witnesses:
+                    self.input_bounds_witnesses[dim][0] = res
+
+                if count_lps:
+                    self.num_lps += 1
+
+                if cur_box is None or abs(res[dim] - cur_box[dim][0]) >= tol:
+                    rv.append([dim, res[dim], np.inf])
+
+            if not should_skip[dim, 1]:
+                # adjust ub
+                vec = np.array([-1 if i == dim else 0 for i in range(dims)], dtype=float)
+
+                Timers.tic('lpi.minimize')
+                res = self.lpi.minimize(vec)
+                Timers.toc('lpi.minimize')
+
+                if self.input_bounds_witnesses:
+                    self.input_bounds_witnesses[dim][1] = res
+
+                if count_lps:
+                    self.num_lps += 1
+
+                if cur_box is None or abs(res[dim] - cur_box[dim][1]) >= tol:
+                    if not rv or rv[-1][0] != dim:
+                        rv.append([dim, -np.inf, res[dim]])
+                    else:
+                        rv[-1][2] = res[dim]
+
+        Timers.toc("star.input_box_bounds_old")
+
+        return rv
+
+    def input_box_bounds(self, cur_box, hyperplane_vec, rhs, count_lps=True):
+        'compute input box bounds on the set'
+
+        dims = self.lpi.get_num_cols()
+        should_skip = np.zeros((dims, 2), dtype=bool)
+
+        if self.input_bounds_witnesses is not None:
+            for d in range(dims):
+                min_wit, max_wit = self.input_bounds_witnesses[d]
+
+                assert abs(min_wit[d] - cur_box[d][0]) < 1e-5
+                assert abs(max_wit[d] - cur_box[d][1]) < 1e-5
+
+                if np.dot(hyperplane_vec, min_wit) <= rhs:
+                    should_skip[d, 0] = True
+
+                if np.dot(hyperplane_vec, max_wit) <= rhs:
+                    should_skip[d, 1] = True
+
+        if Settings.CONTRACT_LP_OPTIMIZED and cur_box is not None:
+            rv = self.input_box_bounds_new(cur_box, should_skip, count_lps)
+        else:
+            rv = self.input_box_bounds_old(cur_box, should_skip, count_lps)
+
+        #print("debug check")
+        #should_skip = np.zeros((dims, 2), dtype=bool)
+        #rv2 = self.input_box_bounds_old(cur_box, should_skip, count_lps)
+        #if len(rv) != len(rv2):
+
+        #    print(f"hyperplane_vec <= rhs was {hyperplane_vec} <= {rhs}")
+        #    print(f"box was {cur_box}\nrv was {rv}\nrv2 was {rv2}")
+        #    assert False
+
+        return rv
+
+    def input_box_bounds_new(self, cur_box, should_skip, count_lps=True):
         '''compute new input box bounds on this set, compared with the current bounds using lp
 
         returns a list of 3-tuples for each of the bounds that was adjusted:
@@ -121,62 +228,48 @@ class LpStar(Freezable):
         note: lb may be -np.inf and ub may be np.inf
         '''
 
-        Timers.tic("star.input_box_bounds")
+        assert cur_box is not None
 
-        dims = min(max_dim, self.lpi.get_num_cols())
+        Timers.tic("star.input_box_bounds_new")
+
+        dims = self.lpi.get_num_cols()
         rv = []
 
-        should_skip = np.zeros((dims, 2), dtype=bool)
         tol = 1e-8
+        num_lps = 0
 
-        if cur_box is not None:
-            #vec = np.ones(dims)
+        vec = np.ones((dims, ), dtype=float)
 
-            while True:
-                vec = np.array([1 if not should_skip[i, 0] else 0 for i in range(dims)], dtype=float)
+        for d in range(dims):
+            if should_skip[d, 0]:
+                vec[d] = 0
 
-                Timers.tic('lpi.minimize pre')
-                res = self.lpi.minimize(vec)
-                Timers.toc('lpi.minimize pre')
+        while True:
+            Timers.tic('lpi.minimize pre1')
+            res = self.lpi.minimize(vec)
+            num_lps += 1
+            Timers.toc('lpi.minimize pre1')
 
-                skipped_all = True
-                skipped_some = False
-                
-                for dim in range(dims):
-                    if should_skip[dim, 0]:
-                        continue
-                    
-                    if abs(res[dim] - cur_box[dim][0]) < tol:
-                        should_skip[dim, 0] = True
-                        skipped_some = True
-                    else:
-                        skipped_all = False
+            skipped_all = True
+            skipped_some = False
 
-                if skipped_all or not skipped_some:
-                    break
+            for dim in range(dims):
+                if should_skip[dim, 0]:
+                    continue
 
-            # other side
-            while True:
-                vec = np.array([-1 if not should_skip[i, 1] else 0 for i in range(dims)], dtype=float)
-                Timers.tic('lpi.minimize pre')
-                res = self.lpi.minimize(vec)
-                Timers.toc('lpi.minimize pre')
+                if abs(res[dim] - cur_box[dim][0]) < tol:
 
-                skipped_all = True
-                skipped_some = False
+                    if self.input_bounds_witnesses is not None:
+                        self.input_bounds_witnesses[dim][0] = res
+                        
+                    vec[dim] = 0
+                    should_skip[dim, 0] = True
+                    skipped_some = True
+                else:
+                    skipped_all = False
 
-                for dim in range(dims):
-                    if should_skip[dim, 1]:
-                        continue
-                    
-                    if abs(res[dim] - cur_box[dim][1]) < tol:
-                        should_skip[dim, 1] = True
-                        skipped_some = True
-                    else:
-                        skipped_all = False
-
-                if skipped_all or not skipped_some:
-                    break
+            if skipped_all or not skipped_some:
+                break
 
         for dim in range(dims):
             
@@ -184,43 +277,86 @@ class LpStar(Freezable):
             if not should_skip[dim, 0]:
                 # possible optimization: this may be solving an extra lp if the above loops only involved a single dim
                 
-                vec = np.array([1 if i == dim else 0 for i in range(dims)], dtype=float)
-                Timers.tic('lpi.minimize post')
-                min_val = self.lpi.minimize(vec)[dim]
-                Timers.toc('lpi.minimize post')
+                vec = np.zeros((dims, ), dtype=float)
+                vec[dim] = 1
+                
+                Timers.tic('lpi.minimize post1')
+                res = self.lpi.minimize(vec)
+                min_val = res[dim]
+                num_lps += 1
+                Timers.toc('lpi.minimize post1')
 
-                if count_lps:
-                    self.num_lps += 1
+                if self.input_bounds_witnesses is not None:
+                    self.input_bounds_witnesses[dim][0] = res
 
-                max_val = cur_box[dim][1] if cur_box is not None else np.inf
+                if abs(min_val - cur_box[dim][0]) >= tol:
+                    rv.append([dim, min_val, np.inf])
 
-                if cur_box is None or abs(res[dim] - cur_box[dim][0]) >= tol:
-                    assert not should_skip[dim, 0]
-                    rv.append([dim, min_val, max_val])
+        # other side
+        vec = -1 * np.ones((dims, ), dtype=float)
 
+        for d in range(dims):
+            if should_skip[d, 1]:
+                vec[d] = 0
+        
+        while True:
+            Timers.tic('lpi.minimize pre2')
+            res = self.lpi.minimize(vec)
+            num_lps += 1
+            Timers.toc('lpi.minimize pre2')
+
+            skipped_all = True
+            skipped_some = False
+
+            for dim in range(dims):
+                if should_skip[dim, 1]:
+                    continue
+
+                if abs(res[dim] - cur_box[dim][1]) < tol:
+                    if self.input_bounds_witnesses is not None:
+                        self.input_bounds_witnesses[dim][1] = res
+
+                        vec[dim] = 0
+                    should_skip[dim, 1] = True
+                    skipped_some = True
+                else:
+                    skipped_all = False
+
+            if skipped_all or not skipped_some:
+                break
+
+        for dim in range(dims):
             # adjust ub
             if not should_skip[dim, 1]:
-                vec = np.array([-1 if i == dim else 0 for i in range(dims)], dtype=float)
+                vec = np.zeros((dims, ), dtype=float)
+                vec[dim] = -1
 
-                Timers.tic('lpi.minimize post')
-                max_val = self.lpi.minimize(vec)[dim]
-                Timers.toc('lpi.minimize post')
+                Timers.tic('lpi.minimize post2')
+                res = self.lpi.minimize(vec)
+                max_val = res[dim]
+                num_lps += 1
+                Timers.toc('lpi.minimize post2')
 
-                if count_lps:
-                    self.num_lps += 1
+                if self.input_bounds_witnesses is not None:
+                    self.input_bounds_witnesses[dim][1] = res
 
-                min_val = cur_box[dim][0] if cur_box is not None else -np.inf
+                if abs(max_val - cur_box[dim][1]) >= tol:
 
-                if cur_box is None or abs(res[dim] - cur_box[dim][1]) >= tol:
-                    assert not should_skip[dim, 1]
+                    found = False
 
-                    if not rv or rv[-1][0] != dim:
-                        rv.append([dim, min_val, max_val])
-                    else:
-                        # both bounds changed, update previous val
-                        rv[-1][2] = max_val
+                    for index, (rv_dim, _rv_min, _rv_max) in enumerate(rv):
+                        if rv_dim == dim:
+                            found = True
+                            rv[index][2] = max_val
+                            break
 
-        Timers.toc("star.input_box_bounds")
+                    if not found:
+                        rv.append([dim, -np.inf, max_val])
+
+        if count_lps:
+            self.num_lps += num_lps
+
+        Timers.toc("star.input_box_bounds_new")
 
         return rv
 

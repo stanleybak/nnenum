@@ -666,8 +666,6 @@ def worker_func(worker_index, shared):
 
         # fix timers
         while Timers.stack and Timers.stack[-1].name != timer_name:
-            print(f".enumerate popping timer {Timers.stack[-1].name}, stack len {len(Timers.stack)}")
-                        
             Timers.toc(Timers.stack[-1].name)
 
         Timers.toc(timer_name)

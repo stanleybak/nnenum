@@ -309,8 +309,13 @@ class Prefilter(Freezable):
             Timers.toc("contract_zonotope")
             
         if Settings.CONTRACT_ZONOTOPE_LP:
-            pos.zono.contract_lp(pos_star)
-            neg.zono.contract_lp(neg_star)
+            row = pos_star.a_mat[i]
+            bias = pos_star.bias[i]
+            
+            Timers.tic("contract_zonotope_lp")
+            pos.zono.contract_lp(pos_star, -row, bias)
+            neg.zono.contract_lp(neg_star, row, -bias)
+            Timers.toc("contract_zonotope_lp")
 
         if Settings.EAGER_BOUNDS:
             ### RECOMPUTE LAYER BOUNDS eagerly (for remaining neurons) (and witnesses)
@@ -318,7 +323,7 @@ class Prefilter(Freezable):
             neg.domain_shrank(neg_star, start_time, depth)
 
             # tolerance for lp solver is about 1e-6
-            assert pos.simulation[1][i] >= -1e-4, f"pos sim for {i} was {pos.simulation[1][i]}"
+            assert pos.simulation[1][i] >= -1e-3, f"pos sim for {i} was {pos.simulation[1][i]}"
 
             # neg should exactly be equal to zero, since we assigned a_mat and bias to zero
             assert abs(neg.simulation[1][i]) <= Settings.SPLIT_TOLERANCE, f"neg sim for {i} was {neg.simulation[1][i]}"

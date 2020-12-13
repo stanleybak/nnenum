@@ -57,6 +57,8 @@ class Settings(metaclass=FreezableMeta):
         
         cls.CONTRACT_ZONOTOPE = False # try domain contraction on zonotopes (more accurate prefilter, but slower)
         cls.CONTRACT_ZONOTOPE_LP = False # contract zonotope using LPs (even more accurate prefilter, but even slower)
+        cls.CONTRACT_LP_OPTIMIZED = True # use optimized lp contraction
+        cls.CONTRACT_LP_TRACK_WITNESSES = True # track box bounds witnesses to reduce LP solving
 
         cls.CONTRACT_OVERAPPROX_VIOLATION = False # contract from overapproximation violation?
 

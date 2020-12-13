@@ -111,7 +111,7 @@ class Zonotope(Freezable):
 
         return rv
 
-    def contract_lp(self, star):
+    def contract_lp(self, star, hyperplane_vec, rhs):
         '''do lp zonotope contraction
 
         returns True if domain was tightened
@@ -121,7 +121,7 @@ class Zonotope(Freezable):
 
         cur_box = self.init_bounds
 
-        new_bounds_list = star.input_box_bounds(cur_box, count_lps=True)
+        new_bounds_list = star.input_box_bounds(cur_box, hyperplane_vec, rhs, count_lps=True)
 
         for dim, lb, ub in new_bounds_list:
             self.update_init_bounds(dim, (lb, ub))
