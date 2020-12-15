@@ -19,6 +19,7 @@ class Settings(metaclass=FreezableMeta):
 
     BRANCH_OVERAPPROX, BRANCH_EGO, BRANCH_EGO_LIGHT, BRANCH_EXACT = range(4) # used for BRANCH_MODE
     SPLIT_LARGEST, SPLIT_ONE_NORM, SPLIT_SMALLEST, SPLIT_INORDER = range(4) # used for SPLIT_ORDER
+    #TODO: one norm should acutally be called inf norm
 
     @classmethod
     def reset(cls):
