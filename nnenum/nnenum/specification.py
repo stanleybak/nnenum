@@ -237,6 +237,16 @@ class Specification(Freezable):
             #woutput = np.dot(copy.a_mat, winput) + copy.bias
             #assert self.is_violation(woutput), f"witness output {woutput} was not a violation of {self}"
 
+            # also comput input box bounds
+            Timers.tic('violation_input_box_bounds')
+            #for i, row in enumerate(init_spec):
+            #    row
+            #    rhs = self.rhs[i] - init_bias[i]
+
+            #    rv.input_box_bounds(HERE
+
+            Timers.toc('violation_input_box_bounds')
+
         Timers.toc('get_violation_star')
 
         return rv if is_violation else None

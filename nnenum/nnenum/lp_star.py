@@ -130,7 +130,7 @@ class LpStar(Freezable):
 
         return rv
     
-    def input_box_bounds_old(self, cur_box, should_skip, count_lps=True):
+    def update_input_box_bounds_old(self, cur_box, should_skip, count_lps=True):
         '''get input box bounds on this set, compared with the current bounds using lp
         returns a list of 3-tuples for each of the bounds that was adjusted:
         (dim, lb, ub)
@@ -140,7 +140,7 @@ class LpStar(Freezable):
         rv = []
         tol = 1e-8
 
-        Timers.tic("star.input_box_bounds_old")
+        Timers.tic("star.update_input_box_bounds_old")
 
         for dim in range(dims):
 
@@ -180,37 +180,62 @@ class LpStar(Freezable):
                     else:
                         rv[-1][2] = res[dim]
 
-        Timers.toc("star.input_box_bounds_old")
+        Timers.toc("star.update_input_box_bounds_old")
 
         return rv
 
-    def input_box_bounds(self, cur_box, hyperplane_vec, rhs, count_lps=True):
-        'compute input box bounds on the set'
+    def get_input_box_bounds(self):
+        'gets the input box bounds from witnesses'
+
+        assert self.input_bounds_witnesses is not None
+        dims = self.lpi.get_num_cols()
+        
+        rv = []
+
+        for d in range(dims):
+            min_wit, max_wit = self.input_bounds_witnesses[d]
+            rv.append((min_wit[d], max_wit[d]))
+
+        return rv
+
+    def update_input_box_bounds(self, hyperplane_vec_list, rhs_list, count_lps=True):
+        '''update the input box bounds on the set after some constaints are added
+
+        hyperplane_vec_list and rhs_list (can also be individual items) 
+        define the new constraint that was added (optimized bounds using witnesses)
+        '''
 
         dims = self.lpi.get_num_cols()
         should_skip = np.zeros((dims, 2), dtype=bool)
+
+        # TODO: check if cur_box is the same as get_input_box_bounds
+        cur_box = self.get_input_box_bounds()
+
+        if not isinstance(hyperplane_vec_list, list):
+            hyperplane_vec_list = [hyperplane_vec_list]
+
+            assert not isinstance(rhs_list, list)
+            rhs_list = [rhs_list]
 
         if self.input_bounds_witnesses is not None:
             for d in range(dims):
                 min_wit, max_wit = self.input_bounds_witnesses[d]
 
-                assert abs(min_wit[d] - cur_box[d][0]) < 1e-5
-                assert abs(max_wit[d] - cur_box[d][1]) < 1e-5
+                for hyperplane_vec, rhs in zip(hyperplane_vec_list, rhs_list):
+                    if not should_skip[d, 0] and np.dot(hyperplane_vec, min_wit) <= rhs:
+                        should_skip[d, 0] = True
 
-                if np.dot(hyperplane_vec, min_wit) <= rhs:
-                    should_skip[d, 0] = True
-
-                if np.dot(hyperplane_vec, max_wit) <= rhs:
-                    should_skip[d, 1] = True
+                    if should_skip[d, 1] and np.dot(hyperplane_vec, max_wit) <= rhs:
+                        should_skip[d, 1] = True
 
         if Settings.CONTRACT_LP_OPTIMIZED and cur_box is not None:
-            rv = self.input_box_bounds_new(cur_box, should_skip, count_lps)
+            rv = self.update_input_box_bounds_new(cur_box, should_skip, count_lps)
         else:
-            rv = self.input_box_bounds_old(cur_box, should_skip, count_lps)
+            rv = self.update_input_box_bounds_old(cur_box, should_skip, count_lps)
 
         #print("debug check")
         #should_skip = np.zeros((dims, 2), dtype=bool)
-        #rv2 = self.input_box_bounds_old(cur_box, should_skip, count_lps)
+        #rv2 = self.update_input_box_bounds_old(cur_box, should_skip, count_lps)
         #if len(rv) != len(rv2):
 
         #    print(f"hyperplane_vec <= rhs was {hyperplane_vec} <= {rhs}")
@@ -219,7 +244,7 @@ class LpStar(Freezable):
 
         return rv
 
-    def input_box_bounds_new(self, cur_box, should_skip, count_lps=True):
+    def update_input_box_bounds_new(self, cur_box, should_skip, count_lps=True):
         '''compute new input box bounds on this set, compared with the current bounds using lp
 
         returns a list of 3-tuples for each of the bounds that was adjusted:
@@ -230,7 +255,7 @@ class LpStar(Freezable):
 
         assert cur_box is not None
 
-        Timers.tic("star.input_box_bounds_new")
+        Timers.tic("star.update_input_box_bounds_new")
 
         dims = self.lpi.get_num_cols()
         rv = []
@@ -356,7 +381,7 @@ class LpStar(Freezable):
         if count_lps:
             self.num_lps += num_lps
 
-        Timers.toc("star.input_box_bounds_new")
+        Timers.toc("star.update_input_box_bounds_new")
 
         return rv
 

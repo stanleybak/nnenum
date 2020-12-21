@@ -119,9 +119,8 @@ class Zonotope(Freezable):
 
         Timers.tic("contract_lp")
 
-        cur_box = self.init_bounds
-
-        new_bounds_list = star.input_box_bounds(cur_box, hyperplane_vec, rhs, count_lps=True)
+        #cur_box = self.init_bounds
+        new_bounds_list = star.update_input_box_bounds(hyperplane_vec, rhs, count_lps=True)
 
         for dim, lb, ub in new_bounds_list:
             self.update_init_bounds(dim, (lb, ub))

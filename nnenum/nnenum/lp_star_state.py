@@ -124,51 +124,6 @@ class LpStarState(Freezable):
         self.prefilter = Prefilter()
         self.prefilter.init_from_uncompressed_box(uncompressed_init_box, self.star, init_box)
 
-    def contract_from_violation(self, violation_stars):
-        '''contract from a list of violation stars
-
-        returns True if contracted
-        '''
-
-        Timers.tic('contract_from_violation')
-
-        max_dim = self.star.a_mat.shape[1]
-
-        #self_box = self.star.input_box_bounds(None)
-        
-        zono_box = self.prefilter.zono.init_bounds
-        
-#        print(f"prefilter box bounds: {}")
-        print(f"\nnum violation stars: {len(violation_stars)}")
-
-        vio_box = [[np.inf, -np.inf] for _ in range(max_dim)]
-        
-        for star in violation_stars:
-            single_vio_box = star.input_box_bounds(None, max_dim=max_dim)
-
-            for dim, lb, ub in single_vio_box:
-                vio_box[dim][0] = min(vio_box[dim][0], lb)
-                vio_box[dim][1] = max(vio_box[dim][1], ub)
-
-        tol = 1e-7
-
-        contracted = False
-
-        for i, (lb, ub) in enumerate(vio_box):
-            if lb > zono_box[i][0] + tol or ub < zono_box[i][1] - tol:
-                print(f"contracting {i} from {zono_box[i]} to {lb, ub}")
-                                
-                self.prefilter.zono.update_init_bounds(i, (lb, ub))
-                self.star.lpi.set_col_bounds(i, lb, ub)
-                contracted = True
-
-        Timers.toc('contract_from_violation')
-
-        if contracted:
-            self.prefilter.domain_shrank(self.star)
-
-        return contracted
-
     def is_finished(self, network):
         'is the current star finished?'
 

@@ -145,9 +145,8 @@ def check_round(ss, sets, spec_arg, check_cancel_func=None):
                 unsafe_violation_stars.append(violation_star)
                 unsafe_violation_indices.append(i)
 
-            if not Settings.CONTRACT_OVERAPPROX_VIOLATION:
-                # if contracting violation, we need all violation stars
-                break
+            # just need one violation star
+            break
 
     Timers.toc('overapprox_check_round')
 
@@ -332,9 +331,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
             if rv.concrete_io_tuple is None and Settings.ADVERSARIAL_SEED_ABSTRACT_VIO \
                                             and Settings.ADVERSARIAL_ONNX_PATH and try_seeded_adversarial:
                 rv.concrete_io_tuple = try_seeded_adversarial(dims, abstract_ios)
-
-        if vstars and Settings.CONTRACT_OVERAPPROX_VIOLATION:
-            ss.contract_from_violation(vstars)
 
         if first_round:
             first_round = False

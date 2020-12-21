@@ -61,8 +61,6 @@ class Settings(metaclass=FreezableMeta):
         cls.CONTRACT_LP_OPTIMIZED = True # use optimized lp contraction
         cls.CONTRACT_LP_TRACK_WITNESSES = True # track box bounds witnesses to reduce LP solving
 
-        cls.CONTRACT_OVERAPPROX_VIOLATION = False # contract from overapproximation violation?
-
         # the types of overapproximation to use in each round
         cls.OVERAPPROX_TYPES = [['zono.area'],
                                 ['zono.area', 'zono.ybloat', 'zono.interval'],
