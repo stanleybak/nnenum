@@ -277,11 +277,6 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
     first_round = True
     sets = []
 
-    if Settings.OVERAPPROX_CONTRACT_ZONO_LP:
-        #if len(ss.branch_tuples) % 10 == 0:
-        #    print(f"contracting lp randomly in overapprox")
-        ss.prefilter.zono.contract_lp(ss.star)
-
     for round_num, types in enumerate(overapprox_types):
         assert isinstance(types, list), f"types was not list: {types}"
         sets.clear()
@@ -500,7 +495,7 @@ class StarOverapprox(Freezable):
         # todo: evaluate whether this helps
         check_cancel_func()
 
-        self.violation_star = spec.get_violation_star(self.star)
+        self.violation_star = spec.get_violation_star(self.star, domain_contraction=False)
 
         return self.violation_star is None
 

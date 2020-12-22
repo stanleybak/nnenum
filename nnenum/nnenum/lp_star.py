@@ -184,17 +184,46 @@ class LpStar(Freezable):
 
         return rv
 
+    def check_input_box_bounds_slow(self):
+        '''
+        run a sanity check that the input box bounds witnesses are correct
+        this uses LP and is slow, so it's meant to help with debugging
+        '''
+
+        dims = self.lpi.get_num_cols()
+        should_skip = np.zeros((dims, 2), dtype=bool)
+        correct_bounds_list = self.update_input_box_bounds_old(None, should_skip)
+
+        cur_bounds = self.get_input_box_bounds()
+
+        for d, min_val, max_val in correct_bounds_list:
+
+            assert abs(min_val - cur_bounds[d][0]) < 1e-5
+            assert abs(max_val - cur_bounds[d][1]) < 1e-5
+
     def get_input_box_bounds(self):
         'gets the input box bounds from witnesses'
 
-        assert self.input_bounds_witnesses is not None
-        dims = self.lpi.get_num_cols()
-        
         rv = []
 
-        for d in range(dims):
-            min_wit, max_wit = self.input_bounds_witnesses[d]
-            rv.append((min_wit[d], max_wit[d]))
+        if self.input_bounds_witnesses is not None:
+            dims = self.lpi.get_num_cols()
+
+            assert len(self.input_bounds_witnesses) == dims, \
+                f"dims:{dims}, num witneses: {len(self.input_bounds_witnesses)}"
+
+            for d in range(dims):
+                min_wit, max_wit = self.input_bounds_witnesses[d]
+                rv.append((min_wit[d], max_wit[d]))
+        else:
+            Timers.tic('full input bounds')
+            should_skip = np.zeros((dims, 2), dtype=bool)
+            correct_bounds_list = self.update_input_box_bounds_old(None, should_skip)
+
+            for _d, lb, ub in correct_bounds_list:
+                rv.append((lb, ub))
+
+            Timers.toc('full input bounds')
 
         return rv
 
@@ -206,7 +235,7 @@ class LpStar(Freezable):
         '''
 
         dims = self.lpi.get_num_cols()
-        should_skip = np.zeros((dims, 2), dtype=bool)
+        should_skip = np.ones((dims, 2), dtype=bool)
 
         # TODO: check if cur_box is the same as get_input_box_bounds
         cur_box = self.get_input_box_bounds()
@@ -222,11 +251,11 @@ class LpStar(Freezable):
                 min_wit, max_wit = self.input_bounds_witnesses[d]
 
                 for hyperplane_vec, rhs in zip(hyperplane_vec_list, rhs_list):
-                    if not should_skip[d, 0] and np.dot(hyperplane_vec, min_wit) <= rhs:
-                        should_skip[d, 0] = True
+                    if should_skip[d, 0] and np.dot(hyperplane_vec, min_wit) > rhs:
+                        should_skip[d, 0] = False
 
-                    if should_skip[d, 1] and np.dot(hyperplane_vec, max_wit) <= rhs:
-                        should_skip[d, 1] = True
+                    if should_skip[d, 1] and np.dot(hyperplane_vec, max_wit) > rhs:
+                        should_skip[d, 1] = False
 
         if Settings.CONTRACT_LP_OPTIMIZED and cur_box is not None:
             rv = self.update_input_box_bounds_new(cur_box, should_skip, count_lps)

@@ -83,7 +83,7 @@ class DisjunctiveSpec(Freezable):
 
         return rv
 
-    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False):
+    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False, domain_contraction=True):
         '''does this lp_star violate the spec?
 
         if so, return a new, non-empty star object with the violation region
@@ -98,7 +98,7 @@ class DisjunctiveSpec(Freezable):
                 # skip parts of the disjunctive spec that are already safe
                 continue
             
-            res = spec.get_violation_star(lp_star, normalize=normalize)
+            res = spec.get_violation_star(lp_star, normalize=normalize, domain_contraction=domain_contraction)
 
             if res is not None:
                 break
@@ -197,7 +197,7 @@ class Specification(Freezable):
 
         return might_violate
 
-    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False):
+    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False, domain_contraction=True):
         '''does this lp_star violate the spec?
 
         if so, return a new, non-empty star object with the violation region
@@ -222,9 +222,14 @@ class Specification(Freezable):
         lpi = copy.lpi
 
         init_bias = np.dot(self.mat, copy.bias)
+        hs_list = []
+        rhs_list = []
 
         for i, row in enumerate(init_spec):
-            lpi.add_dense_row(row, self.rhs[i] - init_bias[i], normalize=normalize)
+            rhs = self.rhs[i] - init_bias[i]
+            hs_list.append(row)
+            rhs_list.append(rhs)
+            lpi.add_dense_row(row, rhs, normalize=normalize)
 
         winput = lpi.minimize(None, fail_on_unsat=False)
 
@@ -238,14 +243,10 @@ class Specification(Freezable):
             #assert self.is_violation(woutput), f"witness output {woutput} was not a violation of {self}"
 
             # also comput input box bounds
-            Timers.tic('violation_input_box_bounds')
-            #for i, row in enumerate(init_spec):
-            #    row
-            #    rhs = self.rhs[i] - init_bias[i]
-
-            #    rv.input_box_bounds(HERE
-
-            Timers.toc('violation_input_box_bounds')
+            if domain_contraction:
+                Timers.tic('violation_update_input_box_bounds')
+                rv.update_input_box_bounds(hs_list, rhs_list)
+                Timers.toc('violation_update_input_box_bounds')
 
         Timers.toc('get_violation_star')
 

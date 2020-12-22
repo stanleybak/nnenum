@@ -57,7 +57,7 @@ class Settings(metaclass=FreezableMeta):
         cls.EAGER_BOUNDS = True
         
         cls.CONTRACT_ZONOTOPE = False # try domain contraction on zonotopes (more accurate prefilter, but slower)
-        cls.CONTRACT_ZONOTOPE_LP = False # contract zonotope using LPs (even more accurate prefilter, but even slower)
+        cls.CONTRACT_ZONOTOPE_LP = True # contract zonotope using LPs (even more accurate prefilter, but even slower)
         cls.CONTRACT_LP_OPTIMIZED = True # use optimized lp contraction
         cls.CONTRACT_LP_TRACK_WITNESSES = True # track box bounds witnesses to reduce LP solving
 
@@ -69,7 +69,6 @@ class Settings(metaclass=FreezableMeta):
         cls.OVERAPPROX_NEAR_ROOT_MAX_SPLITS = 2
         cls.OVERAPPROX_TYPES_NEAR_ROOT = cls.OVERAPPROX_TYPES
 
-        cls.OVERAPPROX_CONTRACT_ZONO_LP = True # contract LP during overapproximation steps?
         cls.OVERAPPROX_GEN_LIMIT_MULTIPLIER = 1.5 # don't try approx star if multizono.gens > THIS * last_safe_gens
         cls.OVERAPPROX_MIN_GEN_LIMIT = 50 # minimum generators to use as cap
         cls.OVERAPPROX_LP_TIMEOUT = 1.0 # timeout for LP part of overapproximation, use np.inf for unbounded
