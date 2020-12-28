@@ -190,6 +190,8 @@ class LpStar(Freezable):
         this uses LP and is slow, so it's meant to help with debugging
         '''
 
+        print("Warning: check_input_box_bounds_slow called")
+
         dims = self.lpi.get_num_cols()
         should_skip = np.zeros((dims, 2), dtype=bool)
         correct_bounds_list = self.update_input_box_bounds_old(None, should_skip)
@@ -261,15 +263,6 @@ class LpStar(Freezable):
             rv = self.update_input_box_bounds_new(cur_box, should_skip, count_lps)
         else:
             rv = self.update_input_box_bounds_old(cur_box, should_skip, count_lps)
-
-        #print("debug check")
-        #should_skip = np.zeros((dims, 2), dtype=bool)
-        #rv2 = self.update_input_box_bounds_old(cur_box, should_skip, count_lps)
-        #if len(rv) != len(rv2):
-
-        #    print(f"hyperplane_vec <= rhs was {hyperplane_vec} <= {rhs}")
-        #    print(f"box was {cur_box}\nrv was {rv}\nrv2 was {rv2}")
-        #    assert False
 
         return rv
 

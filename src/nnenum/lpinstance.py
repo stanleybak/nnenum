@@ -120,7 +120,7 @@ class LpInstance(Freezable):
 
             rhs.append(glpk.glp_get_row_ub(self.lp, row + 1))
 
-        col_bounds = self.get_col_bounds()
+        col_bounds = self._get_col_bounds()
 
         # remember to free lp object before overwriting with tuple
         glpk.glp_delete_prob(self.lp)
@@ -128,18 +128,22 @@ class LpInstance(Freezable):
 
         Timers.toc('serialize')
 
-    def set_col_bounds(self, col, lb, ub):
-        'set double-bounded column bounds'
+    # removed this, as get_col_bounds shouldn't be used externally
+    #def set_col_bounds(self, col, lb, ub):
+    #    'set double-bounded column bounds'
 
-        col_type = glpk.glp_get_col_type(self.lp, col + 1)
+    #    col_type = glpk.glp_get_col_type(self.lp, col + 1)
 
-        if col_type != glpk.GLP_DB:
-            print(f"Warning: Contract col {col} to {lb, ub} skipped (col type is not GLP_DB):\n{self}")
-        else:
-            glpk.glp_set_col_bnds(self.lp, col + 1, glpk.GLP_DB, lb, ub)  # double-bounded variable
+    #    if col_type != glpk.GLP_DB:
+    #        print(f"Warning: Contract col {col} to {lb, ub} skipped (col type is not GLP_DB):\n{self}")
+    #    else:
+    #        glpk.glp_set_col_bnds(self.lp, col + 1, glpk.GLP_DB, lb, ub)  # double-bounded variable
 
-    def get_col_bounds(self):
-        'get column bounds'
+    def _get_col_bounds(self):
+        '''get column bounds
+
+        for external use use star's get_input_bounds which may be tighter
+        '''
 
         lp_cols = self.get_num_cols()
 
@@ -160,7 +164,7 @@ class LpInstance(Freezable):
             elif col_type == glpk.GLP_FX:
                 lb = ub = glpk.glp_get_col_lb(self.lp, col + 1)
             else:
-                assert col_type == glpk.GLP_FR, "unsupported col type in get_col_bounds()"
+                assert col_type == glpk.GLP_FR, "unsupported col type in _get_col_bounds()"
 
             col_bounds.append((lb, ub))
 

@@ -176,7 +176,7 @@ class Prefilter(Freezable):
 
         self.simulation = star.minimize_vec(None, return_io=True)
 
-        box_bounds = star.lpi.get_col_bounds()
+        box_bounds = star.get_input_box_bounds()
         
         self.zono = Zonotope(star.bias, star.a_mat, box_bounds)
 
