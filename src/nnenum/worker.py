@@ -239,17 +239,16 @@ class Worker(Freezable):
                 if spec.is_violation(sim_out):
                     sim_in_flat = ss.prefilter.simulation[0]
                     sim_in = ss.star.to_full_input(sim_in_flat)
-                    sim_in = sim_in.astype(ss.star.a_mat.dtype)
 
                     # run through complete network in to out before counting it
                     sim_out = network.execute(sim_in)
                     sim_out = nn_flatten(sim_out)
 
                     if spec.is_violation(sim_out):
-                        concrete_io_tuple = [sim_in_flat, sim_out]
+                        concrete_io_tuple = [sim_in, sim_out]
 
                         if Settings.PRINT_OUTPUT:
-                            print("\nOverapproximation found was a confirmed counterexample.")
+                            print("\nPre-overapproximation simulation found a confirmed counterexample.")
                             print(f"\nUnsafe Base Branch: {self.priv.ss.branch_str()} (Mode: {Settings.BRANCH_MODE})")
 
                         self.found_unsafe(concrete_io_tuple)

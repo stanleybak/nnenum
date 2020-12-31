@@ -44,15 +44,14 @@ def make_init_ss(init, network, spec, start_time):
 
         ss = LpStarState(init_box, spec=spec)
     elif isinstance(init, LpStar):
-        assert isinstance(init, LpStar), 'init must be box or star'
-
-        assert len(init.bias) == network_inputs
-
         ss = LpStarState(spec=spec)
         ss.from_init_star(init)
     else:
-        assert isinstance(init, LpStarState)
+        assert isinstance(init, LpStarState), f"unsupported init type: {type(init)}"
         ss = init
+
+    assert len(ss.star.init_bias) == network_inputs, f"init_bias len: {len(ss.star.init_bias)}" + \
+        f", network inputs: {network_inputs}"
 
     ss.should_try_overapprox = False
 
@@ -208,6 +207,7 @@ def enumerate_network(init, network, spec=None):
 
                 Timers.toc('run workers')
 
+
             rv = shared.result
             rv.total_secs = time.perf_counter() - start
             process_result(shared)
@@ -298,6 +298,10 @@ def process_result(shared):
         
         if enum_ended_early and shared.result.polys:
             print(f"Warning: result polygons / stars is incomplete, since the enumeration ended early")
+
+    # if unsafe, convert concrete inputs / outputs to regular lists
+    shared.result.cinput = list(shared.result.cinput)
+    shared.result.coutput = list(shared.result.coutput)
 
     # deserialize stars if saved
     if shared.result.stars:

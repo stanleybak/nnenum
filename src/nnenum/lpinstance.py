@@ -599,7 +599,7 @@ class LpInstance(Freezable):
 
         return self.minimize(None, fail_on_unsat=False) is not None
 
-    def contains_point(self, pt):
+    def contains_point(self, pt, tol=1e-9):
         '''does this lpi contain the point?
         this is slow, will pull the constraints and check them
         '''

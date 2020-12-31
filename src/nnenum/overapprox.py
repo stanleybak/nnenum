@@ -41,7 +41,7 @@ def try_quick_overapprox(ss, network, spec, start_time, found_adv):
             print(f"Doing quick overapprox with {len(overapprox_types)} rounds...")
         
         rr = do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=check_cancel_func,
-                              overapprox_types=overapprox_types)
+                                  overapprox_types=overapprox_types)
 
         rv = rr.is_safe, rr.concrete_io_tuple
     except OverapproxCanceledException as e:
@@ -221,6 +221,7 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
 
             trimmed_input = cinput[:dims]
+            
             full_input = vstar.to_full_input(trimmed_input)
             exec_output = network.execute(full_input)
             flat_output = np.ravel(exec_output)
@@ -361,6 +362,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
     layer_bounds = ss_init.prefilter.output_bounds.layer_bounds
 
     #print(f". layer bounds {layer_num}:\n{layer_bounds}")
+    print(f".overapprox, star set input bounds: {ss_init.star.get_input_box_bounds()}")
 
     # run first layer with existing bounds
     for s in sets:

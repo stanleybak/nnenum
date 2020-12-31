@@ -117,6 +117,8 @@ class LpStar(Freezable):
     def to_full_input(self, compressed_input):
         'convert possibly compressed input to full input'
 
+        #print(f".to_full_input, init_bm = {self.init_bm}\ninit_bias = {self.init_bias}")
+
         if self.init_bm is None:
             rv = compressed_input.copy()
         else:
