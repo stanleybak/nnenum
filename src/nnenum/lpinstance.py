@@ -452,7 +452,7 @@ class LpInstance(Freezable):
 
         lb = float(lb)
         ub = float(ub)
-        assert lb <= ub
+        assert lb <= ub, f"lb ({lb}) <= ub ({ub}). dif: {ub - lb}"
 
         assert isinstance(names, list)
         num_vars = len(names)

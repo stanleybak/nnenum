@@ -218,6 +218,14 @@ class LpStar(Freezable):
 
             for d in range(dims):
                 min_wit, max_wit = self.input_bounds_witnesses[d]
+
+                if min_wit[d] > max_wit[d]:
+                    # can happen due to numerical error
+                    assert min_wit[d] - 1e-5 < max_wit[d]
+
+                    mid = (min_wit[d] + max_wit[d]) / 2
+                    min_wit[d] = max_wit[d] = mid
+                
                 rv.append((min_wit[d], max_wit[d]))
         else:
             Timers.tic('full input bounds')

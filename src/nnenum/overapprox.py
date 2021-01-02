@@ -362,7 +362,7 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
     layer_bounds = ss_init.prefilter.output_bounds.layer_bounds
 
     #print(f". layer bounds {layer_num}:\n{layer_bounds}")
-    print(f".overapprox, star set input bounds: {ss_init.star.get_input_box_bounds()}")
+    #print(f".overapprox, star set input bounds: {ss_init.star.get_input_box_bounds()}")
 
     # run first layer with existing bounds
     for s in sets:
