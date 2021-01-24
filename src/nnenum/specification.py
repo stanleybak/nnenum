@@ -83,7 +83,7 @@ class DisjunctiveSpec(Freezable):
 
         return rv
 
-    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False, domain_contraction=True):
+    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=True, domain_contraction=True):
         '''does this lp_star violate the spec?
 
         if so, return a new, non-empty star object with the violation region
@@ -197,7 +197,7 @@ class Specification(Freezable):
 
         return might_violate
 
-    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=False, domain_contraction=True):
+    def get_violation_star(self, lp_star, safe_spec_list=None, normalize=True, domain_contraction=True):
         '''does this lp_star violate the spec?
 
         if so, return a new, non-empty star object with the violation region

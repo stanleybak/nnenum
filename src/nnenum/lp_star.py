@@ -194,16 +194,15 @@ class LpStar(Freezable):
 
         print("Warning: check_input_box_bounds_slow called")
 
+        cur_bounds = self.get_input_box_bounds()
+
         dims = self.lpi.get_num_cols()
         should_skip = np.zeros((dims, 2), dtype=bool)
         correct_bounds_list = self.update_input_box_bounds_old(None, should_skip)
 
-        cur_bounds = self.get_input_box_bounds()
-
         for d, min_val, max_val in correct_bounds_list:
-
-            assert abs(min_val - cur_bounds[d][0]) < 1e-5
-            assert abs(max_val - cur_bounds[d][1]) < 1e-5
+            assert abs(min_val - cur_bounds[d][0]) < 1e-5, f"dim {d} min was {cur_bounds[d][0]}, should be {min_val}"
+            assert abs(max_val - cur_bounds[d][1]) < 1e-5, f"dim {d} max was {cur_bounds[d][1]}, should be {max_val}"
 
     def get_input_box_bounds(self):
         'gets the input box bounds from witnesses'

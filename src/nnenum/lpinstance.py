@@ -450,6 +450,8 @@ class LpInstance(Freezable):
     def add_double_bounded_cols(self, names, lb, ub):
         'add a certain number of columns to the LP with the given lower and upper bound'
 
+        assert lb != -np.inf
+
         lb = float(lb)
         ub = float(ub)
         assert lb <= ub, f"lb ({lb}) <= ub ({ub}). dif: {ub - lb}"
@@ -466,6 +468,8 @@ class LpInstance(Freezable):
             for i in range(num_vars):
                 if lb == ub:
                     glpk.glp_set_col_bnds(self.lp, num_cols + i + 1, glpk.GLP_FX, lb, ub)  # fixed variable
+                elif ub == np.inf:
+                    glpk.glp_set_col_bnds(self.lp, num_cols + i + 1, glpk.GLP_LO, lb, ub)  # lower-bounded variable
                 else:
                     assert lb < ub
                     glpk.glp_set_col_bnds(self.lp, num_cols + i + 1, glpk.GLP_DB, lb, ub)  # double-bounded variable
@@ -510,6 +514,9 @@ class LpInstance(Freezable):
         assert shape[0] <= self.get_num_rows()
         assert shape[1] <= self.get_num_cols()
 
+        if glpk_indices:
+            assert isinstance(glpk_indices[0], int), f"indices type was not int: {type(glpk_indices[0])}"
+
         # actually set the constraints row by row
         assert isinstance(data, list), "data was not a list"
 
@@ -517,9 +524,8 @@ class LpInstance(Freezable):
             # we must copy the indices since glpk is offset by 1 :(
             count = int(indptr[row + 1] - indptr[row])
 
-            #indices_list = glpk_indices[indptr[row]:indptr[row+1]]
-            #indices_vec = SwigArray.as_int_array(indices_list)
-            indices_vec = SwigArray.as_int_array(glpk_indices[indptr[row]:indptr[row+1]], count)
+            indices_list = glpk_indices[indptr[row]:indptr[row+1]]
+            indices_vec = SwigArray.as_int_array(indices_list, count)
 
             #data_row_list = [float(d) for d in data[indptr[row]:indptr[row+1]]]
             #data_vec = SwigArray.as_double_array(data_row_list)
@@ -871,7 +877,9 @@ class SwigArray():
             cls.int_array_size = 2**math.ceil(math.log(size, 2)) # allocate in multiples of two
             cls.int_array = glpk.intArray(cls.int_array_size)
 
-            #print(f"allocated int array of size {cls.int_array_size} (requested {size})")
+            #print(f".allocated int array of size {cls.int_array_size} (requested {size})")
+
+        #print(f".returning {cls.int_array} of size {cls.int_array_size} (requested {size})")
 
         return cls.int_array
 
@@ -895,6 +903,7 @@ class SwigArray():
         arr = cls.get_int_array(size + 1)
 
         for i, val in enumerate(list_data):
+            #print(f"setting {i+1} <- val: {val} ({type(val)}")
             arr[i+1] = val
 
         return arr
