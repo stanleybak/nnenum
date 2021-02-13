@@ -216,7 +216,7 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
         rows.append(sum_row)
         
         for row in rows:
-            # this one is alsmost free since objective direction is None
+            # this one is almost free since objective direction is None
             cinput, coutput = vstar.minimize_vec(None, return_io=True)
             assert cur_spec.is_violation(coutput, tol_rhs=1e-4)
 

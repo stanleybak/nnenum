@@ -16,7 +16,6 @@ from nnenum.overapprox import do_overapprox_rounds, make_prerelu_sims, Overappro
 from nnenum.settings import Settings
 from nnenum.util import Freezable, to_time_str
 from nnenum.network import nn_unflatten, nn_flatten
-from nnenum.specification import DisjunctiveSpec
 
 from nnenum.prefilter import LpCanceledException
 from nnenum.agen import AgenState
@@ -734,7 +733,7 @@ class Worker(Freezable):
             if branch_list_in_branch_tuples(exec_branch_list, branch_tuples):
                 rv = full_cinput_flat, exec_output
             else:
-                print(". weakly-tested code: couldn't confirm countereample... tightening constraints")
+                #print(". weakly-tested code: couldn't confirm countereample... tightening constraints")
 
                 # try to make each of the constraints a little tighter
                 star_copy = star.copy()
