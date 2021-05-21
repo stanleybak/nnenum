@@ -1,4 +1,4 @@
-tensorflow==2.2.1 
+tensorflow==2.5.0 
 numpy==1.17.4
 scipy==1.4.1
 foolbox==2.4.0
