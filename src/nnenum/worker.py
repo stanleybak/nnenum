@@ -751,9 +751,8 @@ class Worker(Freezable):
                         rhs[i] = val - tighten_factor
 
                     star_copy.lpi.set_rhs(rhs)
-
                     
-                    res = star_copy.minimize_vec(None, return_io=True)
+                    res = star_copy.minimize_vec(None, return_io=True, fail_on_unsat=False)
 
                     if res is None:
                         # infeasible

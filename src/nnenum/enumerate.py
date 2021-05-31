@@ -504,7 +504,7 @@ class PrivateState(Freezable):
 def worker_func(worker_index, shared):
     'worker function during verification'
 
-    np.seterr(all='raise') # raise exceptions on floating-point errors instead of printing warnings
+    np.seterr(all='raise', under=Settings.UNDERFLOW_BEHAVIOR) # raise exceptions on floating-point errors
 
     if shared.multithreaded:
         reinit_onnx_sessions(shared.network)

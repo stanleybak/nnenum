@@ -464,7 +464,7 @@ class LpStar(Freezable):
 
         return [i, o]
 
-    def minimize_vec(self, vec, return_io=False):
+    def minimize_vec(self, vec, return_io=False, fail_on_unsat=True):
         '''optimize over this set
 
         vec is the vector of outputs we're optimizing over, None means use zero vector
@@ -502,25 +502,29 @@ class LpStar(Freezable):
             #Timers.toc('setup')
 
             #Timers.tic('lpi.minimize')
-            lp_result = self.lpi.minimize(lp_vec)
-            if lp_result.dtype != dtype:
-                lp_result = lp_result.astype(dtype)
-            
-            self.last_lp_result = lp_result
-            
-            self.num_lps += 1
-            #Timers.toc('lpi.minimize')
-            assert len(lp_result) == num_init_vars
+            lp_result = self.lpi.minimize(lp_vec, fail_on_unsat=fail_on_unsat)
 
-            #print("--------")
-            #print(f"lp_result: {lp_result}")
+            if lp_result is None:
+                rv = None
+            else:
+                if lp_result.dtype != dtype:
+                    lp_result = lp_result.astype(dtype)
 
-            #Timers.tic('a_mat mult')
-            rv = np.dot(self.a_mat, lp_result) + self.bias
-            #Timers.toc('a_mat mult')
+                self.last_lp_result = lp_result
+
+                self.num_lps += 1
+                #Timers.toc('lpi.minimize')
+                assert len(lp_result) == num_init_vars
+
+                #print("--------")
+                #print(f"lp_result: {lp_result}")
+
+                #Timers.tic('a_mat mult')
+                rv = np.dot(self.a_mat, lp_result) + self.bias
+                #Timers.toc('a_mat mult')
 
         # return input as well
-        if return_io:
+        if rv is not None and return_io:
             rv = [lp_result, rv]
 
         Timers.toc('star.minimize_vec')
