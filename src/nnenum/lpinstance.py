@@ -485,12 +485,12 @@ class LpInstance(Freezable):
         assert len(vec.shape) == 1 or vec.shape[0] == 1
         assert len(vec) == self.get_num_cols(), f"vec had {len(vec)} values, but lpi has {self.get_num_cols()} cols"
 
-        if normalize:
+        if normalize and not Settings.SKIP_CONSTRAINT_NORMALIZATION:
             norm = np.linalg.norm(vec)
-            assert norm > 0
-
-            vec = vec / norm
-            rhs = rhs / norm
+            
+            if norm > 1e-9:
+                vec = vec / norm
+                rhs = rhs / norm
 
         rows_before = self.get_num_rows()
 

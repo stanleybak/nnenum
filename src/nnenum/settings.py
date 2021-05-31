@@ -105,6 +105,7 @@ class Settings(metaclass=FreezableMeta):
         cls.SKIP_COMPRESSED_CHECK = False # sanity check for compressed inputs when COMPRESS_INIT_BOX is False
         ####
         cls.UNDERFLOW_BEHAVIOR = 'raise' # np.seterr behavior for floating-point underflow
+        cls.SKIP_CONSTRAINT_NORMALIZATION = False # disable constraint normalization in LP (may reduce stability) 
 
         ####
         cls.NUM_LP_PROCESSES = 1 # if > 1, then force multiprocessing during lp step
