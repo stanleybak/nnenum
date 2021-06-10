@@ -117,10 +117,6 @@ def main():
     else:
         set_image_settings()
 
-    print("using debug settings (nnenum.py)...")
-    #Settings.NUM_PROCESSES = 1
-    Settings.TRY_QUICK_OVERAPPROX = False
-
     for init_box, spec in spec_list:
         init_box = np.array(init_box, dtype=input_dtype)
 
