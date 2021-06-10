@@ -79,11 +79,6 @@ class LinearOnnxSubnetworkLayer(Freezable):
 
         return self.output_shape
 
-    def reinit_onnx_session(self):
-        'reinitailzie the onnx session'
-
-        self.sess = ort.InferenceSession(self.model_str)
-
     def transform_star(self, star):
         'transform the star'
 
@@ -805,10 +800,3 @@ def load_onnx_network(filename):
         layers.append(l)
 
     return NeuralNetwork(layers)
-    
-def reinit_onnx_sessions(network):
-    'reinit onnx sessions in the network'
-
-    for l in network.layers:
-        if isinstance(l, LinearOnnxSubnetworkLayer):
-            l.reinit_onnx_session()

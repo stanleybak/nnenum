@@ -7,7 +7,11 @@ The tool is written by Stanley Bak ([homepage](http://stanleybak.com), [twitter]
 The `Dockerfile` shows how to install all the dependencies (mostly python packages) and set up the environment. The tool loads neural networks directly from ONNX files and properties from vnnlib files.
 For example, try running:
 
-'python3 -m nnenum.nnenum examples/acasxu/data/ACASXU_run2a_3_3_batch_2000.onnx examples/acasxu/data/prop_9.vnnlib'
+```
+python3 -m nnenum.nnenum examples/acasxu/data/ACASXU_run2a_3_3_batch_2000.onnx examples/acasxu/data/prop_9.vnnlib
+```
+
+You can see a few more examples in `run_tests.sh`.
 
 
 ### VNN 2020 Neural Network Verification Competition (VNN-COMP) Version

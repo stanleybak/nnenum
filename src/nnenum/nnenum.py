@@ -14,7 +14,7 @@ import numpy as np
 from nnenum.enumerate import enumerate_network
 from nnenum.settings import Settings
 from nnenum.result import Result
-from nnenum.onnx_network import load_onnx_network_optimized
+from nnenum.onnx_network import load_onnx_network_optimized, load_onnx_network
 from nnenum.specification import Specification, DisjunctiveSpec
 from nnenum.vnnlib import get_num_inputs_outputs, read_vnnlib_simple
 
@@ -44,7 +44,6 @@ def make_spec(vnnlib_filename, onnx_filename):
 def set_control_settings():
     'set settings for smaller control benchmarks'
 
-    Settings.reset()
     Settings.TIMING_STATS = False
     Settings.PARALLEL_ROOT_LP = False
     Settings.SPLIT_IF_IDLE = False
@@ -65,13 +64,24 @@ def set_control_settings():
 def set_image_settings():
     'set settings for larger image benchmarks'
 
-    pass
+    Settings.COMPRESS_INIT_BOX = False
+    Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
+    
+    Settings.OVERAPPROX_MIN_GEN_LIMIT = np.inf
+    Settings.SPLIT_IF_IDLE = False
+    Settings.OVERAPPROX_LP_TIMEOUT = np.inf
+    Settings.TIMING_STATS = False
+
+    # contraction doesn't help in high dimensions
+    #Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
+    Settings.CONTRACT_ZONOTOPE = False
+    Settings.CONTRACT_ZONOTOPE_LP = False
 
 def main():
     'main entry point'
 
     if len(sys.argv) < 3:
-        print('usage: "python3 nnenum.py <onnx_file> <vnnlib_file> [timeout=None] [outfile=None]"')
+        print('usage: "python3 nnenum.py <onnx_file> <vnnlib_file> [timeout=None] [outfile=None] [processes=<auto>]"')
         sys.exit(1)
 
     onnx_filename = sys.argv[1]
@@ -85,10 +95,19 @@ def main():
     if len(sys.argv) >= 5:
         outfile = sys.argv[4]
 
+    if len(sys.argv) >= 6:
+        processes = int(sys.argv[5])
+        Settings.NUM_PROCESSES = processes
+
     #
     spec_list, input_dtype = make_spec(vnnlib_filename, onnx_filename)
 
-    network = load_onnx_network_optimized(onnx_filename)
+    try:
+        network = load_onnx_network_optimized(onnx_filename)
+    except AssertionError:
+        # cannot do optimized load due to unsupported layers
+        network = load_onnx_network(onnx_filename)
+        
     result_str = 'none' # gets overridden
 
     num_inputs = len(spec_list[0][0])
@@ -97,6 +116,10 @@ def main():
         set_control_settings()
     else:
         set_image_settings()
+
+    print("using debug settings (nnenum.py)...")
+    #Settings.NUM_PROCESSES = 1
+    Settings.TRY_QUICK_OVERAPPROX = False
 
     for init_box, spec in spec_list:
         init_box = np.array(init_box, dtype=input_dtype)

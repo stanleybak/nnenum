@@ -22,7 +22,6 @@ from nnenum.result import Result
 from nnenum.network import NeuralNetwork, nn_flatten
 from nnenum.worker import Worker
 from nnenum.overapprox import try_quick_overapprox
-from nnenum.onnx_network import reinit_onnx_sessions
 
 from nnenum.prefilter import LpCanceledException
 
@@ -49,8 +48,9 @@ def make_init_ss(init, network, spec, start_time):
         assert isinstance(init, LpStarState), f"unsupported init type: {type(init)}"
         ss = init
 
-    assert len(ss.star.init_bias) == network_inputs, f"init_bias len: {len(ss.star.init_bias)}" + \
-        f", network inputs: {network_inputs}"
+    if ss.star.init_bias is not None:
+        assert len(ss.star.init_bias) == network_inputs, f"init_bias len: {len(ss.star.init_bias)}" + \
+            f", network inputs: {network_inputs}"
 
     ss.should_try_overapprox = False
 
@@ -104,6 +104,7 @@ def enumerate_network(init, network, spec=None):
         "RESULT_SAVE_TIMERS cannot be used if TIMING_STATS is False"
 
     init_ss = None
+    concrete_io_tuple = None
     
     if time.perf_counter() - start < Settings.TIMEOUT:
         init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
@@ -173,10 +174,13 @@ def enumerate_network(init, network, spec=None):
 
                 Timers.toc('run workers')
 
+            assert shared.more_work_queue.qsize() == 0
 
             rv = shared.result
             rv.total_secs = time.perf_counter() - start
             process_result(shared)
+
+            
 
     if rv.total_secs is None:
         rv.total_secs = time.perf_counter() - start
@@ -465,7 +469,6 @@ def worker_func(worker_index, shared):
     np.seterr(all='raise', under=Settings.UNDERFLOW_BEHAVIOR) # raise exceptions on floating-point errors
 
     if shared.multithreaded:
-        reinit_onnx_sessions(shared.network)
         Timers.stack.clear() # reset inherited Timers
         tag = f" (Process {worker_index})"
     else:
@@ -474,7 +477,7 @@ def worker_func(worker_index, shared):
     timer_name = f'worker_func{tag}'
 
     Timers.tic(timer_name)
-
+    
     priv = PrivateState(worker_index)
     priv.start_time = shared.start_time
     w = Worker(shared, priv)
@@ -593,5 +596,4 @@ def worker_func(worker_index, shared):
             Timers.toc(Timers.stack[-1].name)
 
         Timers.toc(timer_name)
-
 

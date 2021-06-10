@@ -318,7 +318,7 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
         if vstars:
             dims = ss.star.lpi.get_num_cols()
                 
-            abstract_ios, rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
+            _abstract_ios, rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
 
         if first_round:
             first_round = False

@@ -15,3 +15,4 @@ __pycache__
 .coverage
 examples/acasxu/out.txt
 examples/acasxu/results/*
+out.txt
