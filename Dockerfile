@@ -6,7 +6,7 @@
 # To get a shell after building the image:
 # docker run -ir nnenum_image bash
 
-FROM tensorflow/tensorflow:2.2.0
+FROM python:3.6
 
 COPY ./requirements.txt /work/requirements.txt
 
@@ -23,3 +23,6 @@ ENV OMP_NUM_THREADS=1
 
 # copy remaining files to docker
 COPY . /work
+
+# cmd, run one of each benchmark
+CMD cd /work && ./run_tests.sh

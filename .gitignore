@@ -13,3 +13,5 @@ __pycache__
 *branch_str.txt
 *.mypy_cache
 .coverage
+examples/acasxu/out.txt
+examples/acasxu/results/*

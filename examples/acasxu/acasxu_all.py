@@ -4,32 +4,25 @@ Measurement script for ACAS Xu networks. Runs all benchmarks and produces a summ
 Stanley Bak, 2020
 '''
 
-import os
 import sys
 import time
 from pathlib import Path
+import subprocess
 
 from termcolor import cprint
-
-from nnenum.settings import Settings
-from acasxu_single import verify_acasxu
 
 def main():
     'main entry point'
 
     start = time.time()
 
-    Settings.TIMING_STATS = False
-    Settings.PARALLEL_ROOT_LP = False
-    Settings.SPLIT_IF_IDLE = False
-    Settings.PRINT_OVERAPPROX_OUTPUT = False
-
     full_filename = 'results/full_acasxu.dat'
     hard_filename = 'results/hard_acasxu.dat'
+    timeout = 600.0
 
     if len(sys.argv) > 1:
-        Settings.TIMEOUT = 60 * float(sys.argv[1])
-        print(f"Running measurements with timeout = {Settings.TIMEOUT} secs")
+        timeout = 60.0 * float(sys.argv[1])
+        print(f"Running measurements with timeout = {timeout} secs")
 
     instances = []
 
@@ -69,39 +62,7 @@ def main():
 
                 cprint(f"\nRunning net {a_prev}-{tau} with spec {spec}", "grey", "on_green")
 
-                if spec == "7":
-                    # ego / 10 processes is beter for deep counterexamples in prop 7
-                    Settings.BRANCH_MODE = Settings.BRANCH_EGO
-                    Settings.NUM_PROCESSES = 10
-
-                    # property 7 is nondeterministic due to work sharing among processes... use median of 10 runs
-                    pretimeout = Settings.TIMEOUT
-                    Settings.TIMEOUT = min(5, pretimeout) # smaller timeout to make it go faster
-                    runs = 10
-                    print(f"\nTrying median of {runs} quick runs")
-                    results = []
-
-                    for i in range(runs):
-                        print(f"\nTrial {i+1}/{runs}:")
-                        res_str, secs = verify_acasxu(net_pair, spec)
-                        results.append((secs, res_str))
-
-                    results.sort()
-                    print(f"results: {results}")
-                    secs, res_str = results[runs // 2] # median
-
-                    print(f"Median: {secs}, {res_str}")
-
-                    Settings.TIMEOUT = pretimeout
-
-                    if res_str == "timeout":
-                        # median was timeout; run full
-                        res_str, secs = verify_acasxu(net_pair, spec)
-                else:
-                    Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
-                    Settings.NUM_PROCESSES = len(os.sched_getaffinity(0))
-                    
-                    res_str, secs = verify_acasxu(net_pair, spec)
+                res_str, secs = verify_acasxu(net_pair, spec, timeout)
 
                 s = f"{a_prev}_{tau}\t{spec}\t{res_str}\t{secs}"
                 f.write(s + "\n")
@@ -115,6 +76,30 @@ def main():
     mins = (time.time() - start) / 60.0
 
     print(f"Completed all measurements in {round(mins, 2)} minutes")
+
+def verify_acasxu(net_pair, spec, timeout):
+    'returns res_str, secs'
+
+    prev, tau = net_pair
+
+    onnx_path = f'./data/ACASXU_run2a_{prev}_{tau}_batch_2000.onnx'
+    spec_path = f'./data/prop_{spec}.vnnlib'
+
+    args = [sys.executable, '-m', 'nnenum.nnenum', onnx_path, spec_path, f'{timeout}', 'out.txt']
+
+    start = time.perf_counter()
+
+    result = subprocess.run(args, check=False)
+
+    if result.returncode == 0:
+        with open('out.txt', 'r') as f:
+            res_str = f.readline()
+    else:
+        res_str = 'error_exit_code_{result.returncode}'
+
+    diff = time.perf_counter() - start
+
+    return res_str, diff
 
 if __name__ == '__main__':
     main()
