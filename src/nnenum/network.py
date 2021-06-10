@@ -837,8 +837,7 @@ def images_to_init_box(min_image, max_image):
 def nn_flatten(image):
     'flatten a multichannel image to a 1-d array'
 
-    # note: fortran-style flattening makes Tran's example network classify correctly, so I guess it's the standard
-    return image.flatten('F')
+    return image.flatten('C')
 
 def nn_unflatten(image, shape):
     '''unflatten to a multichannel image from a 1-d array
@@ -848,7 +847,7 @@ def nn_unflatten(image, shape):
 
     assert len(image.shape) == 1
 
-    rv = image.reshape(shape, order='F')
+    rv = image.reshape(shape, order='C')
 
     return rv
 
