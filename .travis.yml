@@ -12,8 +12,5 @@ services:
   - docker
 
 script:
-# build Docker container
-- docker build -t nnenum .
+- ./run_tests.sh
 
-# run tests
-- docker run nnenum

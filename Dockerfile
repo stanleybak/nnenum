@@ -14,10 +14,11 @@ COPY ./requirements.txt /work/requirements.txt
 WORKDIR /work
 
 # install python package dependencies
+RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 
 # set environment variables
-ENV PYTHONPATH=$PYTHONPATH:/work/nnenum
+ENV PYTHONPATH=$PYTHONPATH:/work/src
 ENV OPENBLAS_NUM_THREADS=1
 ENV OMP_NUM_THREADS=1
 
