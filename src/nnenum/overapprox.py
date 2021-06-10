@@ -12,8 +12,8 @@ from nnenum.prefilter import update_bounds_lp, sort_splits
 from nnenum.specification import DisjunctiveSpec
 from nnenum.network import ReluLayer, FullyConnectedLayer, nn_flatten, nn_unflatten
 
-def try_quick_overapprox(ss, network, spec, start_time, found_adv):
-    'try a quick overapproximation, return True if safe'
+def try_quick_overapprox(ss, network, spec, start_time):
+    'try a quick overapproximation, return is_safe, concrete_io_tuple'
 
     Timers.tic('try_quick_overapprox')
     
@@ -26,9 +26,6 @@ def try_quick_overapprox(ss, network, spec, start_time, found_adv):
 
         if diff > Settings.TIMEOUT:
             raise OverapproxCanceledException('timeout exceeded')
-
-        if found_adv is not None and found_adv.value != 0:
-            raise OverapproxCanceledException('found_adv was set')
         
     try:
         check_cancel_func()
@@ -259,7 +256,7 @@ def test_abstract_violation(dims, vstars, vindices, network, spec):
     return abstract_ios, concrete_io_tuple
         
 def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None, gen_limit=np.inf,
-                         overapprox_types=None, try_seeded_adversarial=None):
+                         overapprox_types=None):
     '''do the multi-round overapproximation analysis
 
     returns an instance of RoundsResult:
@@ -318,15 +315,10 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
         if rv.is_safe:
             break
 
-        if vstars and (Settings.ADVERSARIAL_TEST_ABSTRACT_VIO or Settings.ADVERSARIAL_SEED_ABSTRACT_VIO):
+        if vstars:
             dims = ss.star.lpi.get_num_cols()
                 
-            if Settings.ADVERSARIAL_TEST_ABSTRACT_VIO:
-                abstract_ios, rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
-
-            if rv.concrete_io_tuple is None and Settings.ADVERSARIAL_SEED_ABSTRACT_VIO \
-                                            and Settings.ADVERSARIAL_ONNX_PATH and try_seeded_adversarial:
-                rv.concrete_io_tuple = try_seeded_adversarial(dims, abstract_ios)
+            abstract_ios, rv.concrete_io_tuple = test_abstract_violation(dims, vstars, vindices, network, spec)
 
         if first_round:
             first_round = False

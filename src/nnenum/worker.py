@@ -18,7 +18,6 @@ from nnenum.util import Freezable, to_time_str
 from nnenum.network import nn_unflatten, nn_flatten
 
 from nnenum.prefilter import LpCanceledException
-from nnenum.agen import AgenState
 
 class Worker(Freezable):
     'local data for a worker process'
@@ -115,67 +114,6 @@ class Worker(Freezable):
         if self.priv.branch_tuples_list is not None:
             self.priv.branch_tuples_list.append(f'{self.priv.ss.branch_str()} ({label})')
 
-    def try_seeded_adversarial(self, dims, abstract_ios):
-        '''
-        generate adversarial image from abstract counterexample seeds
-
-        returns concrete_io_tuple or None
-        '''
-
-        Timers.tic('try_seeded_adversarial')
-
-        assert dims == Settings.ADVERSARIAL_ORIG_IMAGE.size
-
-        for cinput, _ in abstract_ios:
-
-            seed_image = nn_unflatten(cinput[:dims], Settings.ADVERSARIAL_ORIG_IMAGE.shape)
-
-            concrete_io_tuple = None
-
-            onnx_path = Settings.ADVERSARIAL_ONNX_PATH
-            assert onnx_path is not None
-
-            if self.priv.agen is None:
-                # initialize
-                ep = Settings.ADVERSARIAL_EPSILON
-                im = Settings.ADVERSARIAL_ORIG_IMAGE
-                l = Settings.ADVERSARIAL_ORIG_LABEL
-
-                Timers.tic("AgenState init")
-                self.priv.agen = AgenState(onnx_path, im, l, ep)
-                Timers.toc("AgenState init")
-
-            a = self.priv.agen.try_seeded(seed_image)
-
-            if a is not None:
-                aimage, ep = a
-
-                if Settings.PRINT_OUTPUT:
-                    print(f"try_seeded_adversarial found violation image with ep={ep}")
-            else:
-                aimage = None
-
-            if aimage is not None:
-                flat_image = nn_flatten(aimage)
-
-                output = self.shared.network.execute(flat_image)
-                flat_output = np.ravel(output)
-
-                olabel = np.argmax(output)
-                confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
-
-                if Settings.PRINT_OUTPUT:
-                    print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
-                    print(f"counterexample was confirmed: {confirmed}")
-
-                if confirmed:
-                    concrete_io_tuple = (flat_image, flat_output)
-                    break
-
-        Timers.toc('try_seeded_adversarial')
-
-        return concrete_io_tuple
-
     def consider_overapprox(self):
         '''conditionally run overapprox analysis
 
@@ -269,12 +207,11 @@ class Worker(Freezable):
                         otypes = Settings.OVERAPPROX_TYPES_NEAR_ROOT
 
                     res = do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func, gen_limit,
-                                               try_seeded_adversarial=self.try_seeded_adversarial,
                                                overapprox_types=otypes)
 
                     if res.concrete_io_tuple is not None:
                         if Settings.PRINT_OUTPUT:
-                            print("\nviolation star found adversarial was a confirmed counterexample.")
+                            print("\nviolation star found a confirmed counterexample.")
                             print(f"\nUnsafe Base Branch: {self.priv.ss.branch_str()} (Mode: {Settings.BRANCH_MODE})")
 
                         self.found_unsafe(res.concrete_io_tuple)

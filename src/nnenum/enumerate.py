@@ -23,7 +23,6 @@ from nnenum.network import NeuralNetwork, nn_flatten
 from nnenum.worker import Worker
 from nnenum.overapprox import try_quick_overapprox
 from nnenum.onnx_network import reinit_onnx_sessions
-from nnenum.agen import try_quick_adversarial
 
 from nnenum.prefilter import LpCanceledException
 
@@ -104,33 +103,19 @@ def enumerate_network(init, network, spec=None):
     assert not Settings.RESULT_SAVE_TIMERS or Settings.TIMING_STATS, \
         "RESULT_SAVE_TIMERS cannot be used if TIMING_STATS is False"
 
-    # adversarial generation process and queue
-    concrete_io_tuple = None
-    q = None
-    p = None
-    found_adv = None
-
-    if Settings.ADVERSARIAL_ONNX_PATH is not None and Settings.ADVERSARIAL_TRY_QUICK:
-        q = multiprocessing.Queue()
-        found_adv = multiprocessing.Value('i', 0)
-        
-        p = multiprocessing.Process(target=gen_adv, args=(q, found_adv, network, Settings.TIMEOUT))
-        p.start()
-        # don't wait for result... run safety check in parallel
-
     init_ss = None
     
-    if concrete_io_tuple is None and time.perf_counter() - start < Settings.TIMEOUT:
+    if time.perf_counter() - start < Settings.TIMEOUT:
         init_ss = make_init_ss(init, network, spec, start) # returns None if timeout
 
         proven_safe = False
         try_quick = Settings.TRY_QUICK_OVERAPPROX or Settings.SINGLE_SET
 
         if init_ss is not None and try_quick and spec is not None:
-            proven_safe, concrete_io_tuple = try_quick_overapprox(init_ss, network, spec, start, found_adv)
+            proven_safe, concrete_io_tuple = try_quick_overapprox(init_ss, network, spec, start)
 
     if concrete_io_tuple is not None:
-        # non-parallel adversarial example was generated
+        # try_quick_overapprox found error
         if Settings.PRINT_OUTPUT:
             print("Proven unsafe before enumerate")
                 
@@ -152,26 +137,7 @@ def enumerate_network(init, network, spec=None):
         rv = Result(network, quick=True)
         rv.result_str = 'safe'
     else:
-        concrete_io_tuple = None
-        
-        if p is not None and q is not None:
-            concrete_io_tuple = q.get()
-            p.join()
-            p.terminate()
-            q.cancel_join_thread()
-            p = None
-            q = None
-
-        if concrete_io_tuple is not None:
-            if Settings.PRINT_OUTPUT:
-                print("Initial quick adversarial search found unsafe image.")
-
-            rv = Result(network, quick=True)
-            rv.result_str = 'unsafe'
-            
-            rv.cinput = concrete_io_tuple[0]
-            rv.coutput = concrete_io_tuple[1]
-        elif Settings.SINGLE_SET:
+        if Settings.SINGLE_SET:
             if Settings.PRINT_OUTPUT:
                 print("SINGLE_SET analysis inconclusive.")
                 
@@ -211,12 +177,6 @@ def enumerate_network(init, network, spec=None):
             rv = shared.result
             rv.total_secs = time.perf_counter() - start
             process_result(shared)
-
-    if p is not None and q is not None:
-        q.cancel_join_thread()
-        p.terminate()
-        p = None
-        q = None
 
     if rv.total_secs is None:
         rv.total_secs = time.perf_counter() - start
@@ -465,8 +425,6 @@ class PrivateState(Freezable):
 
         self.stars_in_progress = 0
 
-        self.agen = None # adversarial example generator
-
         if Settings.SHUFFLE_TIME is not None:
             self.next_shuffle_step = Settings.SHUFFLE_TIME
             self.next_shuffle_time = time.time() + self.next_shuffle_step
@@ -520,44 +478,6 @@ def worker_func(worker_index, shared):
     priv = PrivateState(worker_index)
     priv.start_time = shared.start_time
     w = Worker(shared, priv)
-
-    if worker_index == 1 and Settings.ADVERSARIAL_IN_WORKERS and Settings.ADVERSARIAL_ONNX_PATH:
-        # while worker 0 does overapproximation, worker 1
-        priv.agen, aimage = try_quick_adversarial(1)
-            
-        for i in range(Settings.ADVERSARIAL_WORKERS_MAX_ITER):
-            
-            if aimage is not None:
-                if Settings.PRINT_OUTPUT:
-                    print(f"mixed_adversarial worker {worker_index} found unsafe image after on iteration {i}")
-
-                flat_image = nn_flatten(aimage)
-
-                output = w.shared.network.execute(flat_image)
-                flat_output = np.ravel(output)
-
-                olabel = np.argmax(output)
-                confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
-
-                if Settings.PRINT_OUTPUT:
-                    print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
-                    print(f"counterexample was confirmed: {confirmed}")
-
-                if confirmed:
-                    concrete_io_tuple = (flat_image, flat_output)
-                    w.found_unsafe(concrete_io_tuple)
-                    break
-
-            if shared.should_exit.value != 0:
-                break
-
-            #if shared.finished_initial_overapprox.value == 1 and worker_index != 1:
-                # worker 1 finishes all attempts, other works help with enumeration
-            #    break
-
-            # try again using a mixed strategy
-            random_attacks_only = False
-            aimage = priv.agen.try_mixed_adversarial(i, random_attacks_only)
 
     try:
         w.main_loop()
@@ -674,52 +594,4 @@ def worker_func(worker_index, shared):
 
         Timers.toc(timer_name)
 
-def gen_adv(q, found_adv, network, remaining_secs):
-    '''try a quick adversarial
 
-    puts concrete_io_tuple or None into the queue
-
-    when it's found, the multiprocessing.value (found_adv) is set to 1
-    '''
-
-    concrete_io_tuple = gen_adv_single_threaded(network, remaining_secs)
-
-    if concrete_io_tuple is not None:
-        found_adv.value = 1
-
-    q.put(concrete_io_tuple)
-    q.close()
-
-def gen_adv_single_threaded(network, remaining_secs):
-    'gen adversarial without multiprocessing interface'
-
-    concrete_io_tuple = None
-        
-    start = time.perf_counter()
-    _, aimage = try_quick_adversarial(Settings.ADVERSARIAL_QUICK_NUM_ATTEMPTS, remaining_secs)
-    gen_time = time.perf_counter() - start
-
-    if aimage is not None:
-        if Settings.PRINT_OUTPUT:
-            print("try_quick_adversarial found unsafe image")
-
-        start = time.perf_counter()
-
-        output = network.execute(aimage)
-        flat_output = np.ravel(output)
-
-        olabel = np.argmax(output)
-        confirmed = olabel != Settings.ADVERSARIAL_ORIG_LABEL
-        exec_time = time.perf_counter() - start
-
-        if Settings.PRINT_OUTPUT:
-            print(f"Original label: {Settings.ADVERSARIAL_ORIG_LABEL}, output argmax: {olabel}")
-
-            gen_ms = f"{round(1000*gen_time, 1)}ms"
-            exec_ms = f"{round(1000*exec_time, 1)}ms"
-            print(f"counterexample was confirmed: {confirmed}. Gen: {gen_ms}, Exec: {exec_ms}")
-
-        if confirmed:
-            concrete_io_tuple = (nn_flatten(aimage), flat_output)
-
-    return concrete_io_tuple

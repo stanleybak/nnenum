@@ -117,19 +117,3 @@ class Settings(metaclass=FreezableMeta):
                               'Gemm', 'MatMul', 'Mul', 'Reshape', 'Relu', 'Shape', 'Sub', 'Unsqueeze']
 
         cls.ONNX_BLACKLIST = ['Atan', 'MaxPool', 'Sigmoid', 'Tanh'] # unsupported nonlinear laters
-
-        ###
-        # settings for adversarial generation
-        cls.ADVERSARIAL_TRY_QUICK = True # if settings are provided, try quick adversrial generation at start
-        cls.ADVERSARIAL_QUICK_NUM_ATTEMPTS = 10 # how many attempts
-        cls.ADVERSARIAL_IN_WORKERS = True # do lots of attempted adversarial generation until more work is produced
-        cls.ADVERSARIAL_WORKERS_MAX_ITER = 100 # how many attempts workers should make
-        cls.ADVERSARIAL_TEST_ABSTRACT_VIO = True # try executing abstract violations
-        cls.ADVERSARIAL_SEED_ABSTRACT_VIO = False # try adversarial examples seeded from abstract violations
-
-
-        cls.ADVERSARIAL_ONNX_PATH = None # path to .onnx file with corresponidng .onnx.pb file
-        cls.ADVERSARIAL_EPSILON = None
-        cls.ADVERSARIAL_ORIG_IMAGE = None
-        cls.ADVERSARIAL_ORIG_LABEL = None
-        cls.ADVERSARIAL_TARGET = None # can optionally be set to specific class, default: any misclassification
