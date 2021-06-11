@@ -14,7 +14,6 @@ COPY ./requirements.txt /work/requirements.txt
 WORKDIR /work
 
 # install python package dependencies
-RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
 # set environment variables
