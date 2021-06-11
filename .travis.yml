@@ -1,12 +1,11 @@
 
 # configuration file for continuous integration testing using travis-ci.org
 
-dist: xenial
-
-language: python
-
 dist:
- - trusty
+ - xenial
+ 
+language: 
+ - python
 
 services:
   - docker
