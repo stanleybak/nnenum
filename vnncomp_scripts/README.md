@@ -1,5 +1,5 @@
-These are the scripts needed to run the tool for use with VNNCOMP.
+1. Tool Name: nnenum
 
-*** Manual Setup ***
+2. Manual Setup or Licenses: None. Everything is done automatically in install_tool.sh
 
-There is no manual setup. Everything is done automatically in install_tool.sh
+3. Use CPU/GPU AWS Instance? CPU
