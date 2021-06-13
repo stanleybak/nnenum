@@ -66,11 +66,12 @@ def set_image_settings():
 
     Settings.COMPRESS_INIT_BOX = False
     Settings.BRANCH_MODE = Settings.BRANCH_OVERAPPROX
+    Settings.TRY_QUICK_OVERAPPROX = False
     
     Settings.OVERAPPROX_MIN_GEN_LIMIT = np.inf
     Settings.SPLIT_IF_IDLE = False
     Settings.OVERAPPROX_LP_TIMEOUT = np.inf
-    Settings.TIMING_STATS = False
+    Settings.TIMING_STATS = True
 
     # contraction doesn't help in high dimensions
     #Settings.OVERAPPROX_CONTRACT_ZONO_LP = False

@@ -225,6 +225,15 @@ class Zonotope(Freezable):
 
         return rv
 
+    def make_gens(self):
+        'pos_1_gens may need to be updated if matrix size changed due to assignment'
+        
+        if self.pos1_gens is None or self.pos1_gens.shape[0] != self.mat_t.shape[1]:
+            self.neg1_gens = np.array([i[0] for i in self.init_bounds], dtype=self.dtype)
+            self.pos1_gens = np.array([i[1] for i in self.init_bounds], dtype=self.dtype)
+
+            assert self.pos1_gens.shape[0] == self.mat_t.shape[1]
+        
     def box_bounds(self):
         '''compute box bounds for the zonotope
 
@@ -233,27 +242,9 @@ class Zonotope(Freezable):
 
         Timers.tic('zono.box_bounds')
 
-        mat_t = self.mat_t
-        size = self.center.size
+        self.make_gens()
 
-        # pos_1_gens may need to be updated if matrix size changed due to assignment
-        if self.pos1_gens is None or self.pos1_gens.shape[0] != self.mat_t.shape[1]:
-            self.neg1_gens = np.array([i[0] for i in self.init_bounds], dtype=self.dtype)
-            self.pos1_gens = np.array([i[1] for i in self.init_bounds], dtype=self.dtype)
-
-            assert self.pos1_gens.shape[0] == self.mat_t.shape[1]
-
-        pos_mat = np.clip(mat_t, 0, np.inf)
-        neg_mat = np.clip(mat_t, -np.inf, 0)
-
-        pos_pos = np.dot(self.pos1_gens, pos_mat.T)
-        neg_neg = np.dot(self.neg1_gens, neg_mat.T)
-        pos_neg = np.dot(self.pos1_gens, neg_mat.T)
-        neg_pos = np.dot(self.neg1_gens, pos_mat.T)
-
-        rv = np.zeros((size, 2), dtype=self.dtype)
-        rv[:, 0] = self.center + pos_neg + neg_pos
-        rv[:, 1] = self.center + pos_pos + neg_neg
+        rv = zono_box_bounds(self.mat_t, self.center, self.pos1_gens, self.neg1_gens, self.dtype)
         
         Timers.toc('zono.box_bounds')
 
@@ -436,3 +427,24 @@ class Zonotope(Freezable):
 
         return kamenev.get_verts(2, max_func, epsilon=epsilon)
 
+#@njit(cache=True)
+def zono_box_bounds(mat_t, center, pos1_gens, neg1_gens, dtype):
+    'pure zono box bounds function'
+
+    size = center.size
+
+    #pos_mat = np.clip(mat_t, 0, np.inf)
+    #neg_mat = np.clip(mat_t, -np.inf, 0)
+    pos_mat = np.maximum(mat_t, 0)
+    neg_mat = np.minimum(mat_t, 0)
+
+    pos_pos = np.dot(pos1_gens, pos_mat.T)
+    neg_neg = np.dot(neg1_gens, neg_mat.T)
+    pos_neg = np.dot(pos1_gens, neg_mat.T)
+    neg_pos = np.dot(neg1_gens, pos_mat.T)
+
+    rv = np.zeros((size, 2), dtype=dtype)
+    rv[:, 0] = center + pos_neg + neg_pos
+    rv[:, 1] = center + pos_pos + neg_neg
+
+    return rv

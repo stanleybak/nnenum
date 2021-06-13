@@ -110,16 +110,15 @@ class LinearOnnxSubnetworkLayer(Freezable):
     def transform_zono(self, zono):
         'transform the zono'
 
-        zono_copy = zono.deep_copy()
-
         cols = []
 
         for col in range(zono.mat_t.shape[1]):
             #print(f".transforming zono: {col} / {zono.mat_t.shape[1]})")
             vec = zono.mat_t[:, col]
             vec = nn_unflatten(vec, self.input_shape)
-            
+
             res = self.execute(vec)
+
             res = res - self.zero_output
             res = nn_flatten(res)
 

@@ -11,6 +11,7 @@ from nnenum.util import Freezable
 from nnenum.prefilter import update_bounds_lp, sort_splits
 from nnenum.specification import DisjunctiveSpec
 from nnenum.network import ReluLayer, FullyConnectedLayer, nn_flatten, nn_unflatten
+from nnenum.zonotope import zono_box_bounds
 
 def try_quick_overapprox(ss, network, spec, start_time):
     'try a quick overapproximation, return is_safe, concrete_io_tuple'
@@ -387,6 +388,8 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
                 layer_bounds, split_indices = s.tighten_bounds(layer_bounds, split_indices, sim,
                                                                check_cancel_func, depth)
 
+                assert layer_bounds is not None
+
             #print(f". layer bounds {layer_num}:\n{layer_bounds}")
 
             # bounds are now as tight as they will get
@@ -535,8 +538,10 @@ class ZonoOverapprox(Freezable):
 
         if self.get_num_gens() + len(split_indices) > self.max_gens:
             raise OverapproxCanceledException(f'{self.type_string} gens exceeds limit (> {self.max_gens})')
-        
+
+        Timers.tic('update_zono')
         update_zono(self.zono, self.relu_update_func, layer_bounds, split_indices, zero_indices)
+        Timers.toc('update_zono')
 
     def transform_linear(self, layer):
         'affine transformation'
@@ -552,16 +557,13 @@ class ZonoOverapprox(Freezable):
         returns (layer_bounds, split_indices), split_indices can be None
         '''
 
-        box_bounds = self.zono.box_bounds()
-
-        if layer_bounds is None:
-            layer_bounds = box_bounds
-        else:
-            layer_bounds[:, 0] = np.maximum(layer_bounds[:, 0], box_bounds[:, 0])
-            layer_bounds[:, 1] = np.minimum(layer_bounds[:, 1], box_bounds[:, 1])
+        Timers.tic('tighten_bounds_zono')
+        self.zono.make_gens() # need to manually call befor jit'd box_bounds
+        layer_bounds = tighten_bounds_zono(layer_bounds, self.zono)
+        Timers.toc('tighten_bounds_zono')
 
         return layer_bounds, None
-
+        
     def check_spec(self, spec, _check_cancel_func):
         'returns is_safe?'
 
@@ -574,6 +576,20 @@ class ZonoOverapprox(Freezable):
 
         return self.zono.mat_t.shape[1]
 
+def tighten_bounds_zono(layer_bounds, zono):
+    'tighten bounds using zonotope'
+    
+    #box_bounds = zono.box_bounds()
+    box_bounds = zono_box_bounds(zono.mat_t, zono.center, zono.pos1_gens, zono.neg1_gens, zono.dtype)
+
+    if layer_bounds is None:
+        layer_bounds = box_bounds
+    else:
+        layer_bounds[:, 0] = np.maximum(layer_bounds[:, 0], box_bounds[:, 0])
+        layer_bounds[:, 1] = np.minimum(layer_bounds[:, 1], box_bounds[:, 1])
+
+    return layer_bounds
+
 def update_zono(z, relu_update_func, bounds, splits, zeros):
     'update a zono with the current bounds'
 
@@ -585,29 +601,29 @@ def update_zono(z, relu_update_func, bounds, splits, zeros):
     center = z.center
 
     # these are the bounds on the input for each neuron in the current layer
-    Timers.tic('assign_zeros')
+    #Timers.tic('assign_zeros')
     center[zeros] = 0
     gen_mat_t[zeros, :] = 0
-    Timers.toc('assign_zeros')
+    #Timers.toc('assign_zeros')
 
     if splits.size > 0:
         new_generators = np.zeros((gen_mat_t.shape[0], len(splits)), dtype=z.dtype)
 
-        Timers.tic('relu_update')
+        #Timers.tic('relu_update')
         for i, split_index in enumerate(splits):
             lb, ub = bounds[split_index]
 
             # need to add a new generator for the overapproximation
             relu_update_func(lb, ub, split_index, gen_mat_t, center, new_generators[:, i])
-        Timers.toc('relu_update')
+        #Timers.toc('relu_update')
 
-        Timers.tic('stack_new_generators')
+        #Timers.tic('stack_new_generators')
         # need to update zonotope with new generators
         z.init_bounds += [(-1, 1) for _ in range(len(splits))]
 
         z.mat_t = np.hstack([z.mat_t, new_generators])
 
-        Timers.toc('stack_new_generators')
+        #Timers.toc('stack_new_generators')
 
 def relu_update_interval_zono(_lb, ub, output_dim, gen_mat_t, center, new_gen):
     '''update one dimension (output) of a zonotope due to a relu split
