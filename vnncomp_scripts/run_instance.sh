@@ -23,5 +23,8 @@ echo "Running benchmark instance in category '$CATEGORY' with onnx file '$ONNX_F
 DIR=$(dirname $(dirname $(realpath $0)))
 export PYTHONPATH="$PYTHONPATH:$DIR/src"
 
+export OPENBLAS_NUM_THREADS=1
+export OMP_NUM_THREADS=1
+
 # run the tool to produce the results file
 python3 -m nnenum.nnenum "$ONNX_FILE" "$VNNLIB_FILE" "$TIMEOUT" "$RESULTS_FILE"
