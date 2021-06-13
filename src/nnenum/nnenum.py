@@ -1,7 +1,7 @@
 '''
 nnenum vnnlib front end
 
-usage: "python3 nnenum.py <onnx_file> <vnnlib_file> [timeout=None]"
+usage: "python3 nnenum.py <onnx_file> <vnnlib_file> [timeout=None] [outfile=None]"
 
 Stanley Bak
 June 2021
@@ -108,7 +108,7 @@ def main():
     except AssertionError:
         # cannot do optimized load due to unsupported layers
         network = load_onnx_network(onnx_filename)
-        
+
     result_str = 'none' # gets overridden
 
     num_inputs = len(spec_list[0][0])
@@ -127,7 +127,7 @@ def main():
                 break
 
             Settings.TIMEOUT = timeout
-            
+
         res = enumerate_network(init_box, network, spec)
         result_str = res.result_str
 
@@ -138,9 +138,18 @@ def main():
         if result_str != "safe":
             break
 
+    # rename for VNNCOMP21:
+        
+    if result_str == "safe":
+        result_str = "holds"
+    elif "unsafe" in result_str:
+        result_str = "violated"
+
     if outfile is not None:
         with open(outfile, 'w') as f:
             f.write(result_str)
+            
+    #print(result_str)
 
     if result_str == 'error':
         sys.exit(Result.results.index('error'))

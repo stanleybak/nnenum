@@ -286,7 +286,7 @@ def load_onnx_network_optimized(filename):
             b = np.frombuffer(init.raw_data, dtype='<f4') # little endian float32
                 # note shapes are not reversed here... acasxu input is 1, 1, 1, 5, but dim_value is 1, 1, 1, 5
             shape = tuple(d for d in init.dims) # note dims reversed, acasxu has 5, 50 but want 5 cols
-            b = nn_unflatten(b, shape)
+            b = nn_unflatten(b, shape, order='F')
 
             if op == 'Sub':
                 b = -1 * b
@@ -310,7 +310,7 @@ def load_onnx_network_optimized(filename):
             b = np.frombuffer(init.raw_data, dtype='<f4') # little endian float32
             shape = tuple(d for d in reversed(init.dims)) # note dims reversed, acasxu has 5, 50 but want 5 cols
 
-            b = nn_unflatten(b, shape)
+            b = nn_unflatten(b, shape, order='F')
 
             layer = MatMulLayer(len(layers), b, layers[-1].get_output_shape())
             
@@ -328,13 +328,13 @@ def load_onnx_network_optimized(filename):
             assert weight_init.data_type == onnx_type_float
             b = np.frombuffer(weight_init.raw_data, dtype='<f4') # little endian float32
             shape = tuple(d for d in reversed(weight_init.dims)) # note dims reversed, acasxu has 5, 50 but want 5 cols
-            weight_mat = nn_unflatten(b, shape)
+            weight_mat = nn_unflatten(b, shape, order='F')
 
             # bias
             assert bias_init.data_type == onnx_type_float
             b = np.frombuffer(bias_init.raw_data, dtype='<f4') # little endian float32
             shape = tuple(d for d in reversed(bias_init.dims)) # note dims reversed, acasxu has 5, 50 but want 5 cols
-            bias_vec = nn_unflatten(b, shape)
+            bias_vec = nn_unflatten(b, shape, order='F')
 
             for a in cur_node.attribute:
                 assert a.name in ['alpha', 'beta', 'transB'], "general Gemm node unsupported"

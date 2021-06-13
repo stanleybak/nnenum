@@ -834,12 +834,12 @@ def images_to_init_box(min_image, max_image):
 
     return rv
 
-def nn_flatten(image):
+def nn_flatten(image, order='C'):
     'flatten a multichannel image to a 1-d array'
 
-    return image.flatten('C')
+    return image.flatten(order)
 
-def nn_unflatten(image, shape):
+def nn_unflatten(image, shape, order='C'):
     '''unflatten to a multichannel image from a 1-d array
 
     this uses reshape, so may not be a copy
@@ -847,7 +847,7 @@ def nn_unflatten(image, shape):
 
     assert len(image.shape) == 1
 
-    rv = image.reshape(shape, order='C')
+    rv = image.reshape(shape, order=order)
 
     return rv
 
