@@ -3,7 +3,7 @@
 # four arguments, first is "v1", second is a benchmark category identifier string such as "acasxu", third is path to the .onnx file and fourth is path to .vnnlib file
 # Stanley Bak, Feb 2021
 
-TOOL_NAME=simple_adv_gen
+TOOL_NAME=nnenum
 VERSION_STRING=v1
 
 # check arguments
