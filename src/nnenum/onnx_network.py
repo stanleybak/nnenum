@@ -273,7 +273,8 @@ def load_onnx_network_optimized(filename):
 
     while cur_node is not None:
         assert cur_node.input[0] == cur_input_name, \
-            f'input[0] should be previous output {cur_input_name} in node {cur_node.name}'
+            f"cur_node.input[0] ({cur_node.input[0]}) should be previous output ({cur_input_name}) in " + \
+            f"node:\n{cur_node.name}"
         
         op = cur_node.op_type
         layer = None
@@ -305,6 +306,7 @@ def load_onnx_network_optimized(filename):
         elif op == 'MatMul':
             assert len(cur_node.input) == 2
             init = init_map[cur_node.input[1]]
+            
             assert init.data_type == onnx_type_float
 
             b = np.frombuffer(init.raw_data, dtype='<f4') # little endian float32

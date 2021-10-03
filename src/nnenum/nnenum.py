@@ -61,6 +61,20 @@ def set_control_settings():
     Settings.OVERAPPROX_LP_TIMEOUT = 0.02
     Settings.OVERAPPROX_MIN_GEN_LIMIT = 70
 
+def set_exact_settings():
+    'set settings for smaller control benchmarks'
+
+    Settings.TIMING_STATS = True
+    Settings.TRY_QUICK_OVERAPPROX = False
+
+    Settings.CONTRACT_ZONOTOPE_LP = True
+    Settings.CONTRACT_LP_OPTIMIZED = True
+    Settings.CONTRACT_LP_TRACK_WITNESSES = True
+
+    Settings.OVERAPPROX_BOTH_BOUNDS = False
+
+    Settings.BRANCH_MODE = Settings.BRANCH_EXACT
+
 def set_image_settings():
     'set settings for larger image benchmarks'
 
@@ -100,23 +114,36 @@ def main():
         processes = int(sys.argv[5])
         Settings.NUM_PROCESSES = processes
 
+    if len(sys.argv) >= 7:
+        settings_str = sys.argv[6]
+    else:
+        settings_str = "auto"
+
     #
     spec_list, input_dtype = make_spec(vnnlib_filename, onnx_filename)
 
     try:
         network = load_onnx_network_optimized(onnx_filename)
-    except AssertionError:
+    except:
         # cannot do optimized load due to unsupported layers
         network = load_onnx_network(onnx_filename)
 
     result_str = 'none' # gets overridden
 
     num_inputs = len(spec_list[0][0])
-    
-    if num_inputs < 700:
+
+    if settings_str == "auto":
+        if num_inputs < 700:
+            set_control_settings()
+        else:
+            set_image_settings()
+    elif settings_str == "control":
         set_control_settings()
-    else:
+    elif settings_str == "image":
         set_image_settings()
+    else:
+        assert settings_str == "exact"
+        set_exact_settings()
 
     for init_box, spec in spec_list:
         init_box = np.array(init_box, dtype=input_dtype)
