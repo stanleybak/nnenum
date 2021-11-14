@@ -278,7 +278,13 @@ def load_onnx_network_optimized(filename):
         
         op = cur_node.op_type
         layer = None
-        
+
+        if layers:
+            prev_shape = layers[-1].get_output_shape()
+        else:
+            s_node = graph.input[0].type.tensor_type.shape
+            prev_shape = tuple(d.dim_value if d.dim_value != 0 else 1 for d in s_node.dim)
+            
         if op in ['Add', 'Sub']:
             assert len(cur_node.input) == 2
             init = init_map[cur_node.input[1]]
@@ -295,11 +301,6 @@ def load_onnx_network_optimized(filename):
             layer = AddLayer(len(layers), b)
         elif op == 'Flatten':
             assert cur_node.attribute[0].i == 1 # flatten along columns
-            if layers:
-                prev_shape = layers[-1].get_output_shape()
-            else:
-                s_node = graph.input[0].type.tensor_type.shape
-                prev_shape = tuple(d.dim_value for d in s_node.dim)                 
 
             layer = FlattenLayer(len(layers), prev_shape)
             
@@ -314,12 +315,12 @@ def load_onnx_network_optimized(filename):
 
             b = nn_unflatten(b, shape, order='F')
 
-            layer = MatMulLayer(len(layers), b, layers[-1].get_output_shape())
+            layer = MatMulLayer(len(layers), b, prev_shape)
             
         elif op == 'Relu':
             assert layers, "expected previous layer before relu layer"
             
-            layer = ReluLayer(len(layers), layers[-1].get_output_shape())
+            layer = ReluLayer(len(layers), prev_shape)
         elif op == 'Gemm':
             assert len(cur_node.input) == 3
             
@@ -349,7 +350,7 @@ def load_onnx_network_optimized(filename):
                     assert a.i == 1
                     weight_mat = weight_mat.transpose().copy()
 
-            layer = FullyConnectedLayer(len(layers), weight_mat, bias_vec, layers[-1].get_output_shape())
+            layer = FullyConnectedLayer(len(layers), weight_mat, bias_vec, prev_shape)
         else:
             assert False, f"unsupported onnx op_type {op} in node {cur_node.name}"
 
