@@ -49,6 +49,7 @@ class Settings(metaclass=FreezableMeta):
         cls.TIMING_STATS = False # compute and print detailed timing stats
 
         cls.CHECK_SINGLE_THREAD_BLAS = True
+        # idea... replace this with threadpoolctl: https://github.com/joblib/threadpoolctl
         
         cls.UPDATE_SHARED_VARS_INTERVAL = 0.05 # interval for each thread to update shared state
 
