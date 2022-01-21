@@ -260,7 +260,7 @@ class Prefilter(Freezable):
         if Settings.TEST_FUNC_BEFORE_ASSIGNMENT is not None:
             Settings.TEST_FUNC_BEFORE_ASSIGNMENT()
 
-        zero_indices = np.nonzero(self.output_bounds.layer_bounds[:, 1] < -Settings.SPLIT_TOLERANCE)[0]
+        zero_indices = np.nonzero(self.output_bounds.layer_bounds[:, 1] <= Settings.SPLIT_TOLERANCE)[0]
         self.assign_zeros(star, zero_indices)
 
     def split_relu(self, neuron_index, pos_star, neg_star, self_gets_positive, start_time, depth):
