@@ -1,0 +1,1 @@
+This network / code is based on the "GGN" vnncomp 2020 benchmark, which is in the vcnn/eth folder of the vnn2020 branch of nnenum.

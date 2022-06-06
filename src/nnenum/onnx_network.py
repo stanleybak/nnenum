@@ -39,6 +39,8 @@ class LinearOnnxSubnetworkLayer(Freezable):
                 
         self.input_name = inputs[0].name
 
+        #print(onnx_submodel)
+
         self.model_str = onnx_submodel.SerializeToString()
         self.sess = ort.InferenceSession(self.model_str)
 
@@ -231,6 +233,8 @@ def load_onnx_network_optimized(filename):
 
     # find the node with input "input"
     all_input_names = sum([[str(i) for i in n.input] for n in graph.node], [])
+
+    print(f"all input names: {all_input_names}")
 
     all_initializer_names = [i.name for i in graph.initializer]
     all_output_names = sum([[str(o) for o in n.output] for n in graph.node], [])

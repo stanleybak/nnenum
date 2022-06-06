@@ -365,7 +365,12 @@ def run_overapprox_round(network, ss_init, sets, prerelu_sims, check_cancel_func
 
         if not ss_init.branch_tuples and Settings.PRINT_OUTPUT and Settings.PRINT_OVERAPPROX_OUTPUT:
             layer_start = time.perf_counter()
-            print(f"Layer {layer_index + 1}/{len(remaining_layers)}: {type(layer).__name__}...", end='', flush=True)
+            extra = ''
+
+            if isinstance(sets[0], ZonoOverapprox):
+                extra = f' (zono shape: {sets[0].zono.mat_t.shape})'
+            
+            print(f"Layer {layer_index + 1}/{len(remaining_layers)}: {type(layer).__name__}{extra}...", end='', flush=True)
         
         if isinstance(layer, ReluLayer):
             sim = None if prerelu_sims is None else prerelu_sims[layer_num]
