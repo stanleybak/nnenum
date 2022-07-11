@@ -165,16 +165,32 @@ def main():
         if result_str != "safe":
             break
 
-    # rename for VNNCOMP21:
-        
     if result_str == "safe":
-        result_str = "holds"
+        result_str = "unsat"
     elif "unsafe" in result_str:
-        result_str = "violated"
+        result_str = "sat"
 
     if outfile is not None:
-        with open(outfile, 'w') as f:
+        with open(outfile, 'w', encoding="utf-8") as f:
             f.write(result_str)
+
+            if result_str == "sat":
+                # print counterexamples
+                
+                for i, x in enumerate(res.cinput):
+                    if i == 0:
+                        f.write('\n(')
+                    else:
+                        f.write('\n')
+                    
+                    f.write(f"(X_{i} {x})")
+
+                ###########
+
+                for i, y in enumerate(res.coutput):
+                    f.write(f"\n(Y_{i} {y})")
+
+                f.write(')')
             
     #print(result_str)
 
