@@ -18,6 +18,9 @@ VNNLIB_FILE=$4
 
 echo "Preparing $TOOL_NAME for benchmark instance in category '$CATEGORY' with onnx file '$ONNX_FILE' and vnnlib file '$VNNLIB_FILE'"
 
+# run maxpool conversion
+python3 -m nnenum.convert_maxpool "$ONNX_FILE"
+
 # kill any zombie processes
 killall -q python3
 

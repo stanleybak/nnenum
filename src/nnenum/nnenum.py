@@ -11,6 +11,8 @@ import sys
 
 import numpy as np
 
+from pathlib import Path
+
 from nnenum.enumerate import enumerate_network
 from nnenum.settings import Settings
 from nnenum.result import Result
@@ -64,7 +66,7 @@ def set_control_settings():
 def set_exact_settings():
     'set settings for smaller control benchmarks'
 
-    Settings.TIMING_STATS = True
+    #Settings.TIMING_STATS = True
     Settings.TRY_QUICK_OVERAPPROX = False
 
     Settings.CONTRACT_ZONOTOPE_LP = True
@@ -85,7 +87,7 @@ def set_image_settings():
     Settings.OVERAPPROX_MIN_GEN_LIMIT = np.inf
     Settings.SPLIT_IF_IDLE = False
     Settings.OVERAPPROX_LP_TIMEOUT = np.inf
-    Settings.TIMING_STATS = True
+    #Settings.TIMING_STATS = True
 
     # contraction doesn't help in high dimensions
     #Settings.OVERAPPROX_CONTRACT_ZONO_LP = False
@@ -118,6 +120,19 @@ def main():
         settings_str = sys.argv[6]
     else:
         settings_str = "auto"
+
+    ####################################
+    ####################################
+    ####################################
+    # VNN-COMP 2022 SPECIFIC
+    
+    if Path(onnx_filename + ".converted").is_file():
+        onnx_filename = onnx_filename + ".converted"
+        print(f"NOTE: Using converted onnx path: {onnx_filename}")
+        
+    ####################################
+    ####################################
+    ####################################
 
     #
     spec_list, input_dtype = make_spec(vnnlib_filename, onnx_filename)
@@ -154,6 +169,16 @@ def main():
                 break
 
             Settings.TIMEOUT = timeout
+
+        ####################################
+        ####################################
+        ####################################
+        # VNN-COMP 2022 SPECIFIC
+        Settings.TIMING_STATS = False
+        Settings.PRINT_PROGRESS = False
+        ####################################
+        ####################################
+        ####################################
 
         res = enumerate_network(init_box, network, spec)
         result_str = res.result_str

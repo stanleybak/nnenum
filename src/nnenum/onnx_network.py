@@ -234,7 +234,7 @@ def load_onnx_network_optimized(filename):
     # find the node with input "input"
     all_input_names = sum([[str(i) for i in n.input] for n in graph.node], [])
 
-    print(f"all input names: {all_input_names}")
+    #print(f"all input names: {all_input_names}")
 
     all_initializer_names = [i.name for i in graph.initializer]
     all_output_names = sum([[str(o) for o in n.output] for n in graph.node], [])
