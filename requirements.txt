@@ -5,7 +5,7 @@ onnx==1.9.0
 onnxruntime==1.8.0
 skl2onnx==1.7.0
 swiglpk
-dnnv @ git+https://github.com/stanleybak/DNNV.git@da6e816a9475e076e820307a521255a30d7a9301
+dnnv @ git+https://github.com/stanleybak/DNNV.git@f362e5848fb80773a2f1111c68feb8d9daa91140
 termcolor
 
 
