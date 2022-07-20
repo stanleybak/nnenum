@@ -18,6 +18,10 @@ VNNLIB_FILE=$4
 
 echo "Preparing $TOOL_NAME for benchmark instance in category '$CATEGORY' with onnx file '$ONNX_FILE' and vnnlib file '$VNNLIB_FILE'"
 
+# setup environment variable for tool (doing it earlier won't be persistent with docker)"
+DIR=$(dirname $(dirname $(realpath $0)))
+export PYTHONPATH="$PYTHONPATH:$DIR/src"
+
 # run maxpool conversion
 python3 -m nnenum.convert_maxpool "$ONNX_FILE"
 
