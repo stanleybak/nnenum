@@ -14,7 +14,8 @@ import onnx
 import time
 
 from dnnv.nn import parse
-from dnnv.nn.transformers.simplifiers import (simplify, ReluifyMaxPool)
+from dnnv.nn.transformers.simplifiers import simplify, ReluifyMaxPool
+#from dnnv.nn.transformers.simplifiers.reluify_maxpool import 
 from pathlib import Path
 
 def main():
@@ -47,7 +48,7 @@ def main():
             print(f"creating {out_filename}...")
             t = time.perf_counter()
             op_graph = parse(Path(filename))
-            simplified_op_graph1 = simplify(op_graph, ReluifyMaxPool(op_graph))
+            simplified_op_graph1 = simplify(op_graph, reluify_maxpool(op_graph))
             simplified_op_graph1.export_onnx(out_filename)
             diff = time.perf_counter() - t
             print(f"convert runtime: {diff}")
