@@ -6,7 +6,7 @@
 # To get a shell after building the image:
 # docker run -ir nnenum_image bash
 
-FROM python:3.6
+FROM python:3.10
 
 COPY ./requirements.txt /work/requirements.txt
 
