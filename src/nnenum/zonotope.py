@@ -129,7 +129,7 @@ class Zonotope(Freezable):
 
         return new_bounds_list
 
-    def update_init_bounds(self, i, new_bounds, skip_check=False):
+    def update_init_bounds(self, i, new_bounds):
         'update init bounds in the zonotope'
         
         assert isinstance(new_bounds, tuple)
@@ -137,10 +137,11 @@ class Zonotope(Freezable):
 
         self.init_bounds_nparray = None
 
-        ep = 1e-4
+        ep = Settings.CONTRACT_LP_CHECK_EPSILON
+        skip_check = ep is None
 
         if skip_check:
-            lb = new_bounds[0]
+            lb = max(self.init_bounds[i][0], new_bounds[0])
         elif new_bounds[0] != -np.inf:
             assert new_bounds[0] + ep >= self.init_bounds[i][0], f"new lower bound ({new_bounds[0]} was worse " + \
                                                              f"then before {self.init_bounds[i][0]}"
@@ -150,11 +151,10 @@ class Zonotope(Freezable):
             lb = self.init_bounds[i][0]
 
         if skip_check:
-            ub = new_bounds[1]
+            ub = min(self.init_bounds[i][1], new_bounds[1])
         elif new_bounds[1] != np.inf:
             assert new_bounds[1] - ep <= self.init_bounds[i][1], f"new upper bound ({new_bounds[1]}) was worse" + \
                                                                  f"then before {self.init_bounds[i][1]}"
-
             ub = min(self.init_bounds[i][1], new_bounds[1])
         else:
             ub = self.init_bounds[i][1]

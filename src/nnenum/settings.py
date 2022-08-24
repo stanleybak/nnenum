@@ -61,6 +61,7 @@ class Settings(metaclass=FreezableMeta):
         cls.CONTRACT_ZONOTOPE_LP = True # contract zonotope using LPs (even more accurate prefilter, but even slower)
         cls.CONTRACT_LP_OPTIMIZED = True # use optimized lp contraction
         cls.CONTRACT_LP_TRACK_WITNESSES = True # track box bounds witnesses to reduce LP solving
+        cls.CONTRACT_LP_CHECK_EPSILON = 1e-4 # numerical error tolerated when doing contractions before error, None=skip
 
         # the types of overapproximation to use in each round
         cls.OVERAPPROX_TYPES = [['zono.area'],
