@@ -1,8 +1,11 @@
 
-# configuration file for continuous integration testing using travis-ci.org
+# configuration file for continuous integration testing using travis-ci.com
 
-env:
+dist:
  - jammy
+ 
+os:
+ - linux
  
 language: 
  - python
