@@ -1,14 +1,12 @@
 
 # configuration file for continuous integration testing using travis-ci.org
 
-dist:
+env:
  - jammy
  
 language: 
  - python
  
-python: 3.10
-
 services:
   - docker
 
