@@ -2,7 +2,7 @@
 # configuration file for continuous integration testing using travis-ci.org
 
 dist:
- - xenial
+ - jammy
  
 language: 
  - python
