@@ -10,12 +10,15 @@ from nnenum.util import Freezable
 class Result(Freezable):
     'computation result object'
 
-    manager = multiprocessing.Manager()
+    manager = None # created on first init
 
     # possible result strings in result_str
     results = ["none", "error", "timeout", "safe", "unsafe (unconfirmed)", "unsafe"]
 
     def __init__(self, nn, quick=False):
+        if Result.manager is None:
+            Result.manager = multiprocessing.Manager()
+        
         # result string, one of Result.results
         # can be safe/unsafe only if a spec is provided to verification problem
         # "unsafe (unconfirmed)" means that the output set appeared to violate the spec, but no concrete trace
