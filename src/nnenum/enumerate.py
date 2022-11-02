@@ -174,7 +174,7 @@ def enumerate_network(init, network, spec=None):
 
                 Timers.toc('run workers')
 
-            assert shared.more_work_queue.qsize() == 0
+            assert shared.more_work_queue.empty()
 
             rv = shared.result
             rv.total_secs = time.perf_counter() - start
