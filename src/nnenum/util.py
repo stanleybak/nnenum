@@ -79,6 +79,11 @@ class FakeQueue(Freezable):
 
         return rv
 
+    def empty(self):
+        'is the queue empty'
+
+        return self.qsize() == 0
+
     def qsize(self):
         'queue size'
 
