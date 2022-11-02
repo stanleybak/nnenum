@@ -6,6 +6,7 @@ Settings.NUM_PROCESSES = 1
 '''
 
 import os
+import multiprocessing
 
 import numpy as np
 
@@ -26,7 +27,14 @@ class Settings(metaclass=FreezableMeta):
         'assign default settings'
 
         # settings / optimizations
-        cls.NUM_PROCESSES = len(os.sched_getaffinity(0)) # use multiple cores
+        num_cores = multiprocessing.cpu_count()
+
+        try:
+            num_cores = len(os.sched_getaffinity(0)) # doesn't work on some unix platforms
+        except AttributeError:
+            pass
+        
+        cls.NUM_PROCESSES = num_cores # use multiple cores
         cls.TIMEOUT = np.inf # verification timeout, in seconds (np.inf = no timeout)
 
         cls.SINGLE_SET = False # only do single-set overapproximation (no splitting)
