@@ -275,9 +275,9 @@ class Worker(Freezable):
 
         Timers.tic('shuffle')
         
-        if self.priv.worker_index == 0:
+        #if self.priv.worker_index == 0:
             # print queues
-            qsize = self.shared.more_work_queue.qsize()
+        #    qsize = self.shared.more_work_queue.qsize()
 
         #self.priv.next_shuffle_step *= 2 # exponential backoff
         self.priv.next_shuffle_time += self.priv.next_shuffle_step
@@ -460,7 +460,10 @@ class Worker(Freezable):
                 layers = list(self.shared.cur_layers)
                 neurons = list(self.shared.cur_neurons)
 
-                qsize = self.shared.more_work_queue.qsize()
+                try:
+                    qsize = self.shared.more_work_queue.qsize()
+                except NotImplementedError:
+                    qsize = "Empty" if self.shared.more_work_queue.empty() else "Non-Empty"
 
                 finished_frac = self.shared.finished_work_frac.value
 
