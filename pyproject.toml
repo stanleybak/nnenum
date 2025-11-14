@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nnenum"
+version = "1.0.0"
+description = "NNENUM: Neural Network Enumeration Tool"
+readme = "README.md"
+requires-python = ">=3.8,<3.11"
+license = { text = "GPL-3.0-or-later" }
+
+authors = [
+  {name = "Stanley Bak"}
+]
+
+dependencies = [
+  "numpy==1.23.2",
+  "scipy==1.9.0",
+  "threadpoolctl==3.1.0",
+  "onnx==1.12.0",
+  "onnxruntime==1.12.1",
+  "skl2onnx==1.12",
+  "swiglpk",
+  "termcolor",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

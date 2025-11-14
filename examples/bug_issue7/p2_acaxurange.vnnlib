@@ -1,0 +1,34 @@
+;,,,,,
+;,,,,,
+(assert (<= X_0 60760.0))
+(assert (>= X_0 0))
+
+; 
+(assert (<= X_1 3.141593))
+(assert (>= X_1 -3.141593))
+
+; 
+(assert (<= X_2 3.141593))
+(assert (>= X_2 -3.141593))
+
+; 
+(assert (<= X_3 1200.0))
+(assert (>= X_3 100.0))
+
+; 
+(assert (<= X_4 1200.0))
+(assert (>= X_4 0.0))
+
+(assert (<= Y_0 Y_5) )
+(assert (<= Y_1 Y_6) )
+(assert (<= Y_2 Y_7) )
+(assert (<= Y_3 Y_8) )
+(assert (<= Y_4 Y_9) )
+
+
+;(assert (>= Y_5 Y_0) )
+;(assert (>= Y_6 Y_1) )
+;(assert (>= Y_7 Y_2) )
+;(assert (>= Y_8 Y_3) )
+;(assert (>= Y_9 Y_4) )
+
