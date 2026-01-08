@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-echo "Running tests one by one. If 'Passed all tests.' is printed at then end, then we were successful."
+echo "Running tests one by one. If 'Passed all tests.' is printed at the end, then we were successful."
 
 python3 -m nnenum.nnenum examples/test/test_sat.onnx examples/test/test_prop.vnnlib 60 out.txt
 grep "violated" out.txt
