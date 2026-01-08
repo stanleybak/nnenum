@@ -16,3 +16,4 @@ __pycache__
 examples/acasxu/out.txt
 examples/acasxu/results/*
 out.txt
+*nnenum.egg-info*

@@ -283,6 +283,7 @@ def do_overapprox_rounds(ss, network, spec, prerelu_sims, check_cancel_func=None
                 sets.append(z)
             else:
                 assert type_str.startswith('star.'), f"unknown type_str: {type_str}"
+
                 s = StarOverapprox(ss, type_str, gen_limit)
                 sets.append(s)
 

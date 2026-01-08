@@ -686,7 +686,7 @@ def get_io_shapes(model):
     # this model is not a valud model since the outputs don't have shape type info...
     # but it still will execute! skip the check_model step
     new_onnx_model = make_model_with_graph(model, graph, check_model=False)
-    
+
     sess = ort.InferenceSession(new_onnx_model.SerializeToString())
 
     res = sess.run(None, input_map)

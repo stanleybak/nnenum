@@ -6,7 +6,18 @@
 The tool is written by Stanley Bak ([homepage](http://stanleybak.com), [twitter](https://twitter.com/StanleyBak)).
 
 ### Getting Started
-The `Dockerfile` shows how to install all the dependencies (mostly python packages) and set up the environment. The tool loads neural networks directly from ONNX files and properties to check from `vnnlib` files.
+
+**Installation:**
+```bash
+pip install .
+```
+
+Or for development:
+```bash
+pip install -e .
+```
+
+The tool loads neural networks directly from ONNX files and properties to check from `vnnlib` files.
 For example, try running:
 
 ```

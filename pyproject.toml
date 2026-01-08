@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nnenum"
-version = "1.0.0"
+version = "1.0.1"
 description = "NNENUM: Neural Network Enumeration Tool"
 readme = "README.md"
-requires-python = ">=3.8,<3.11"
+requires-python = ">=3.8"
 license = { text = "GPL-3.0-or-later" }
 
 authors = [
@@ -15,12 +15,12 @@ authors = [
 ]
 
 dependencies = [
-  "numpy==1.23.2",
-  "scipy==1.9.0",
-  "threadpoolctl==3.1.0",
-  "onnx==1.12.0",
-  "onnxruntime==1.12.1",
-  "skl2onnx==1.12",
+  "numpy>=1.26.0",
+  "scipy>=1.11.0",
+  "threadpoolctl>=3.1.0",
+  "onnx>=1.15.0",
+  "onnxruntime==1.19.0",
+  "skl2onnx>=1.16.0",
   "swiglpk",
   "termcolor",
 ]
