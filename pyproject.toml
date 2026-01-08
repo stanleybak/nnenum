@@ -7,7 +7,7 @@ name = "nnenum"
 version = "1.0.1"
 description = "NNENUM: Neural Network Enumeration Tool"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { text = "GPL-3.0-or-later" }
 
 authors = [
